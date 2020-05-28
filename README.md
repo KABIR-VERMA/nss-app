@@ -8,3 +8,6 @@
 - firbase 
   id - nssemailapplication.123@gmail.com
   password - QwErTy123
+  
+## How to use
+Make a branch from dev in format yourname/feature/feature_name and create pull request to testing branch and later we can merge bug free code.
