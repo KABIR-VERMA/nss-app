@@ -7,7 +7,9 @@ import HoursNavigation from './HoursNavigation';
 import TeamNavigation from './TeamNavigation';
 import React ,{Component}from 'react'
 import {  SafeAreaView } from 'react-navigation';
-import {View, ScrollView, StyleSheet, Image} from 'react-native';
+import {View, ScrollView, Text, TouchableOpacity, StyleSheet, Image, AsyncStorage, Alert} from 'react-native';
+import { Button} from "react-native-elements";
+
 
 
 const RootDrawerNavigator = createDrawerNavigator({
@@ -36,7 +38,25 @@ const RootDrawerNavigator = createDrawerNavigator({
               <Image source={require('../assets/nss.jpg')} style={{height: 150, width:150, resizeMode: 'stretch'}}></Image>
             </View>
           <ScrollView>
+            
             <DrawerItems {...props} />
+            <View style={{margin:8}}>
+                <Button title="Logout" type="clear" buttonStyle={{ justifyContent: "flex-start" }} onPress={()=>
+                    Alert.alert(
+                        'Log out',
+                        'Do you want to logout?',
+                        [
+                        {text: 'Cancel', onPress: () => {return null}},
+                        {text: 'Confirm', onPress: () => {
+                                        AsyncStorage.clear();
+                                        props.navigation.navigate('Auth')
+                        }},
+                        ],
+                    { cancelable: false }
+                    )  
+                } />
+            </View>
+             
           </ScrollView>
         </SafeAreaView>
       )
