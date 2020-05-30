@@ -1,12 +1,12 @@
 import { createStackNavigator } from "react-navigation-stack";
-import ContactUs from "../screens/ContactUs";
+import Contact from "../screens/ContactUs";
 import Header from "../shared/Header";
 import React from 'react';
 
 const ContactUsNavigation = createStackNavigator(
   {
-    ContactUs: { 
-      screen: ContactUs,
+    Contact: { 
+      screen: Contact,
       navigationOptions:({navigation})=> {
         return{
           headerTitle: ()=><Header navigation={navigation} title={'Contact NSS'}/>,

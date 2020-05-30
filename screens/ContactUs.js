@@ -3,9 +3,9 @@ import { Text} from "react-native";
 import { withFirebaseHOC } from "../config/Firebase";
 
 
-function ContactUs(){
+function Contact(){
     return(
         <Text>Contact Us</Text>
     );
 }
-export default withFirebaseHOC(ContactUs);
+export default withFirebaseHOC(Contact);

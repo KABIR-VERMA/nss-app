@@ -16,17 +16,17 @@ const RootDrawerNavigator = createDrawerNavigator({
     Home : {
         screen: AppNavigation
     },
-    AboutUs:{
-        screen:AboutUsNavigation
-    },
-    ContactUs:{
-        screen:ContactUsNavigation
+    About:{
+        screen:AboutUsNavigation,
     },
     Gallery:{
         screen:GalleryNavigation
     },
     Team:{
         screen: TeamNavigation
+    },
+    Contact:{
+        screen:ContactUsNavigation
     },
     Hours:{
         screen:HoursNavigation

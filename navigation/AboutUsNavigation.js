@@ -1,12 +1,12 @@
 import { createStackNavigator } from "react-navigation-stack";
-import AboutUs from "../screens/AboutUs";
+import About from "../screens/AboutUs";
 import Header from "../shared/Header";
 import React from 'react';
 
 const AboutUsNavigation = createStackNavigator(
   {
-    AboutUs: { 
-      screen: AboutUs,
+    About: { 
+      screen: About,
       navigationOptions:({navigation})=> {
         return{
           headerTitle: ()=><Header navigation={navigation} title={'About NSS'}/>,
