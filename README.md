@@ -3,6 +3,7 @@
 ## Installation
 - Clone this repo
 - to install dependencies: `npm install`
+- installation required -1. `npm install react-navigation-drawer` 
 
 ## Database
 - firbase 
