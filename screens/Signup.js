@@ -17,7 +17,12 @@ const validationSchema = Yup.object().shape({
   email: Yup.string()
     .label("Email")
     .email("Enter a valid email")
-    .required("Please enter a registered email"),
+    .required("Please enter a registered email")
+    .test("email", "Please enter a valid IITD email", (str) => {
+      if (str && str.length > 10 && str.substr(-10) == "iitd.ac.in") {
+        return true;
+      }
+    }),
   password: Yup.string()
     .label("Password")
     .required()
