@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  ScrollView
-} from "react-native";
+import React, { Component, Fragment } from "react";
+import { StyleSheet, SafeAreaView, View, TouchableOpacity } from "react-native";
 import { Button, CheckBox } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
@@ -22,14 +16,8 @@ const validationSchema = Yup.object().shape({
     .min(2, "Must have at least 2 characters"),
   email: Yup.string()
     .label("Email")
-    .email("Enter a valid IIT-D email")
-    .test("iitd email","Enter a valid IIT-D email", val=>{
-      if(val.substr(-10)=='iitd.ac.in')
-      {
-        return true;
-      }
-    })
-    .required("Enter a valid IIT-D email"),
+    .email("Enter a valid email")
+    .required("Please enter a registered email"),
   password: Yup.string()
     .label("Password")
     .required()
@@ -37,73 +25,77 @@ const validationSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Confirm Password must matched Password")
     .required("Confirm Password is required"),
-  check: Yup.boolean().oneOf([true], "Please check the agreement")
+  check: Yup.boolean().oneOf([true], "Please check the agreement"),
 });
 
-function Signup({ navigation, firebase }) {
-  const [passwordVisibility, setPasswordVisibility] = useState(true);
-  const [passwordIcon, setPasswordIcon] = useState("ios-eye");
-  const [confirmPasswordIcon, setConfirmPasswordIcon] = useState("ios-eye");
-  const [confirmPasswordVisibility, setConfirmPasswordVisibility] = useState(
-    true
-  );
+class Signup extends Component {
+  state = {
+    passwordVisibility: true,
+    confirmPasswordVisibility: true,
+    passwordIcon: "ios-eye",
+    confirmPasswordIcon: "ios-eye",
+  };
 
-  function goToLogin() {
-    return navigation.navigate("Login");
-  }
+  goToLogin = () => this.props.navigation.navigate("Login");
 
-  function handlePasswordVisibility() {
-    if (passwordIcon === "ios-eye") {
-      setPasswordIcon("ios-eye-off");
-      setPasswordVisibility(!passwordVisibility);
-    } else if (passwordIcon === "ios-eye-off") {
-      setPasswordIcon("ios-eye");
-      setPasswordVisibility(!passwordVisibility);
-    }
-  }
+  handlePasswordVisibility = () => {
+    this.setState((prevState) => ({
+      passwordIcon:
+        prevState.passwordIcon === "ios-eye" ? "ios-eye-off" : "ios-eye",
+      passwordVisibility: !prevState.passwordVisibility,
+    }));
+  };
 
-  function handleConfirmPasswordVisibility() {
-    if (confirmPasswordIcon === "ios-eye") {
-      setConfirmPasswordIcon("ios-eye-off");
-      setConfirmPasswordVisibility(!confirmPasswordVisibility);
-    } else if (confirmPasswordIcon === "ios-eye-off") {
-      setConfirmPasswordIcon("ios-eye");
-      setConfirmPasswordVisibility(!confirmPasswordVisibility);
-    }
-  }
+  handleConfirmPasswordVisibility = () => {
+    this.setState((prevState) => ({
+      confirmPasswordIcon:
+        prevState.confirmPasswordIcon === "ios-eye" ? "ios-eye-off" : "ios-eye",
+      confirmPasswordVisibility: !prevState.confirmPasswordVisibility,
+    }));
+  };
 
-  async function handleOnSignup(values, actions) {
+  handleOnSignup = async (values, actions) => {
     const { name, email, password } = values;
 
     try {
-      const response = await firebase.signupWithEmail(email, password);
+      const response = await this.props.firebase.signupWithEmail(
+        email,
+        password
+      );
 
       if (response.user.uid) {
         const { uid } = response.user;
         const userData = { email, name, uid };
-        await firebase.createNewUser(userData);
-        navigation.navigate("App");
+        await this.props.firebase.createNewUser(userData);
+        this.props.navigation.navigate("App");
       }
     } catch (error) {
+      // console.error(error)
       actions.setFieldError("general", error.message);
     } finally {
       actions.setSubmitting(false);
     }
-  }
+  };
 
-  return (
-    <KeyboardAvoidingView style={styles.container} enabled behavior="padding">
-      <ScrollView>
+  render() {
+    const {
+      passwordVisibility,
+      confirmPasswordVisibility,
+      passwordIcon,
+      confirmPasswordIcon,
+    } = this.state;
+    return (
+      <SafeAreaView style={styles.container}>
         <Formik
           initialValues={{
             name: "",
             email: "",
             password: "",
             confirmPassword: "",
-            check: false
+            check: false,
           }}
           onSubmit={(values, actions) => {
-            handleOnSignup(values, actions);
+            this.handleOnSignup(values, actions);
           }}
           validationSchema={validationSchema}
         >
@@ -116,9 +108,9 @@ function Signup({ navigation, firebase }) {
             touched,
             handleBlur,
             isSubmitting,
-            setFieldValue
+            setFieldValue,
           }) => (
-            <>
+            <Fragment>
               <FormInput
                 name="name"
                 value={values.name}
@@ -150,7 +142,7 @@ function Signup({ navigation, firebase }) {
                 onBlur={handleBlur("password")}
                 secureTextEntry={passwordVisibility}
                 rightIcon={
-                  <TouchableOpacity onPress={handlePasswordVisibility}>
+                  <TouchableOpacity onPress={this.handlePasswordVisibility}>
                     <Ionicons name={passwordIcon} size={28} color="grey" />
                   </TouchableOpacity>
                 }
@@ -166,7 +158,9 @@ function Signup({ navigation, firebase }) {
                 onBlur={handleBlur("confirmPassword")}
                 secureTextEntry={confirmPasswordVisibility}
                 rightIcon={
-                  <TouchableOpacity onPress={handleConfirmPasswordVisibility}>
+                  <TouchableOpacity
+                    onPress={this.handleConfirmPasswordVisibility}
+                  >
                     <Ionicons
                       name={confirmPasswordIcon}
                       size={28}
@@ -199,39 +193,39 @@ function Signup({ navigation, firebase }) {
                 />
               </View>
               <ErrorMessage errorValue={errors.general} />
-            </>
+            </Fragment>
           )}
         </Formik>
         <Button
           title="Have an account? Login"
-          onPress={goToLogin}
+          onPress={this.goToLogin}
           titleStyle={{
-            color: "#039BE5"
+            color: "#039BE5",
           }}
           type="clear"
         />
-      </ScrollView>
-    </KeyboardAvoidingView>
-  );
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    marginTop: 50
+    marginTop: 50,
   },
   logoContainer: {
     marginBottom: 15,
-    alignItems: "center"
+    alignItems: "center",
   },
   buttonContainer: {
-    margin: 25
+    margin: 25,
   },
   checkBoxContainer: {
     backgroundColor: "#fff",
-    borderColor: "#fff"
-  }
+    borderColor: "#fff",
+  },
 });
 
 export default withFirebaseHOC(Signup);
