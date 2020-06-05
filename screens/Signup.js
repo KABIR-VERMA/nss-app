@@ -70,8 +70,8 @@ class Signup extends Component {
 
       if (response.user.uid) {
         const { uid } = response.user;
-        // const { isAdmin } = false;
-        const userData = { email, name, uid };
+        const isAdmin = false;
+        const userData = { email, name, uid, isAdmin };
         await this.props.firebase.createNewUser(userData);
         await this.props.firebase.verifyEmail();
         // console.log(this.props.firebase.isUserVerified());
