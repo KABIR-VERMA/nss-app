@@ -70,9 +70,16 @@ class Signup extends Component {
 
       if (response.user.uid) {
         const { uid } = response.user;
+        // const { isAdmin } = false;
         const userData = { email, name, uid };
         await this.props.firebase.createNewUser(userData);
-        this.props.navigation.navigate("App");
+        await this.props.firebase.verifyEmail();
+        // console.log(this.props.firebase.isUserVerified());
+        console.log("User created and email verification sent!");
+        // this.props.firebase.signOut();
+        // TODO
+        // Add a new screeen showing - A verification email has been sent, Please verify then login
+        this.props.navigation.navigate("Initial");
       }
     } catch (error) {
       // console.error(error)

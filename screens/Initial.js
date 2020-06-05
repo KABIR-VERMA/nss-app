@@ -16,7 +16,7 @@ class Initial extends Component {
       this.loadLocalAsync();
 
       await this.props.firebase.checkUserAuth((user) => {
-        if (user) {
+        if (user && this.props.firebase.isUserVerified()) {
           // if the user has previously logged in
           this.props.navigation.navigate("App");
         } else {

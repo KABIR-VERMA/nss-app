@@ -52,7 +52,7 @@ class Login extends Component {
         password
       );
 
-      if (response.user) {
+      if (response.user && this.props.firebase.isUserVerified()) {
         this.props.navigation.navigate("App");
       }
     } catch (error) {
