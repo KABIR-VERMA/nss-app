@@ -52,9 +52,9 @@ class ProjectListScreen extends Component {
                 e.forEach(doc => {
 
                    
-                    console.log(doc.data());
+                    // console.log(doc.data());
                     items.push(doc.data());
-                     console.log('-----------',items);
+                    //  console.log('-----------',items);
 
                 });
 
@@ -98,7 +98,7 @@ class ProjectListScreen extends Component {
 
     render() {
         let categoryTitle = this.props.navigation.getParam('title');
-        console.log(this.state.projectList);
+        // console.log(this.state.projectList);
         return (
 
             <SafeAreaView style={styles.container}>
@@ -113,15 +113,7 @@ class ProjectListScreen extends Component {
 
         );
     }
-    list = () => {
-        return this.state.projectList.map(element => {
-          return (
-            <View style={{ margin: 10 }}>
-              <Text>{element.title}</Text>
-            </View>
-          );
-        });
-      };
+    
 
 
 }
