@@ -50,11 +50,13 @@ class ProjectListScreen extends Component {
 
                 // console.log(typeOf(items));
                 e.forEach(doc => {
-
-                   
                     // console.log(doc.data());
                     items.push(doc.data());
                     //  console.log('-----------',items);
+                    this.setState({
+                        projectList: items,
+                    })
+                    this.forceUpdate();
 
                 });
 
@@ -62,36 +64,8 @@ class ProjectListScreen extends Component {
                 console.log(error);
 
             })
-        this.setState({
-            projectList: items,
-        })
-
-
-
-
-        // let result = await new Promise((resolve, reject) => {
-        //     // console.log(db);
-        //     var items = [];
-        //     firebase.firestore().collection('Projects')
-        //         .get().then((e) => {
-
-        //             // console.log(typeOf(items));
-        //             e.forEach(doc => {
-        //                 console.log(doc.data());
-        //                 items.push(doc.data());
-        //                 // console.log('-----------',items);
-
-        //             });
-        //             resolve([...items]);
-        //         }).catch(error => {
-        //             console.log(error);
-        //             reject([]);
-        //         })
-        // });
-        // console.log(result);
-        // this.setState({ projectList: result })
-        // console.log(this.projectList);
-
+       
+        console.log('--',this.state.projectList);
     }
     
 
@@ -102,10 +76,11 @@ class ProjectListScreen extends Component {
         return (
 
             <SafeAreaView style={styles.container}>
+
                 <Text>{categoryTitle}</Text>
                 <FlatList
                     data={this.state.projectList}
-                    renderItem={({ item }) =><Text>hello</Text>}
+                    renderItem={(itemdata) =><Text>{itemdata.item.title}</Text>}
                     keyExtractor={item => item.id}
                 />
 
