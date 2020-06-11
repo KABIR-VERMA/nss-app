@@ -9,6 +9,7 @@ const ProjectDetailScreen =props =>{
         <Text>
         ProjectDetailScreen</Text>
         </View>
+        
 
     );
 }

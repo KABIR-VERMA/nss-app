@@ -11,7 +11,7 @@ const CategoryScreen = props => {
   console.log(typeof (PROJECTCATEGORIES));
   // ----------category is list of categories--------------
 
-  console.log('we r here 2');
+  
   return (
     <SafeAreaView>
       <FlatList
@@ -23,7 +23,16 @@ const CategoryScreen = props => {
               title={itemData.item.title}
               color='#ffcc99'
               onSelect={() => {
-                props.navigation.navigate('Project', { screen: 'ProjectList', });
+               console.log('we r in navigation');
+               try{
+                 props.navigation.navigate('ProjectList',{
+                   
+                     title:itemData.item.title,
+                   },
+                 );
+               }catch(error){
+                 console.log(error);
+               }
               }}
 
             />
@@ -35,6 +44,21 @@ const CategoryScreen = props => {
         title="BAck to home screen"
         onPress={() => {
           props.navigation.navigate('Home');
+        }}
+        titleStyle={{
+          color: "#F57C00"
+        }}
+        type="clear"
+      />
+      <Button
+        title="Add Project"
+        onPress={() => {
+          console.log('add project');
+          try{
+            props.navigation.navigate('AddProject');
+          }catch(error){
+            console.log(error);
+          }
         }}
         titleStyle={{
           color: "#F57C00"
