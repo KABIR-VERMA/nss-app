@@ -5,6 +5,8 @@ import ContactUsNavigation from './ContactUsNavigation';
 import GalleryNavigation from './GalleryNavigation';
 import HoursNavigation from './HoursNavigation';
 import TeamNavigation from './TeamNavigation';
+
+import ProjectNavigation from "./ProjectNavigation";
 import React ,{Component}from 'react'
 import {  SafeAreaView } from 'react-navigation';
 import {View, ScrollView, Text, TouchableOpacity, StyleSheet, Image, AsyncStorage, Alert} from 'react-native';
@@ -22,6 +24,10 @@ const RootDrawerNavigator = createDrawerNavigator({
     Gallery:{
         screen:GalleryNavigation
     },
+    Project:{
+        screen:ProjectNavigation
+    },
+
     Team:{
         screen: TeamNavigation
     },

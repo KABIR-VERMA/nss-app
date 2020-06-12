@@ -4,6 +4,8 @@ import { withFirebaseHOC } from "../config/Firebase";
 
 
 function Gallery(){
+
+    console.log('hello world');
     return(
         <Text>Gallery</Text>
     );

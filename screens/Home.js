@@ -12,6 +12,7 @@ class Home extends Component {
       console.log(error);
     }
   };
+
   render() {
     return (
       <View style={styles.container}>
