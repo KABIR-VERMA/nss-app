@@ -13,14 +13,10 @@ class Home extends Component {
     }
   };
 
-  //
-   
-  
   render() {
     return (
       <View style={styles.container}>
         <Text>Home</Text>
-
         <Button
           title="Signout"
           onPress={this.handleSignout}
