@@ -12,7 +12,7 @@ const CategoryScreen = props => {
   console.log(typeof (PROJECTCATEGORIES));
   // ----------category is list of categories--------------
 
-  
+
   return (
     <SafeAreaView>
       <FlatList
@@ -24,18 +24,17 @@ const CategoryScreen = props => {
               title={itemData.item.title}
               color={itemData.item.color}
               onSelect={() => {
-               console.log('we r in navigation');
-               try{
-                 props.navigation.navigate('ProjectList',{
-                   
-                     title:itemData.item.title,
-                   },
-                 );
-               }catch(error){
-                 console.log(error);
-               }
-              }}
+                console.log('we r in navigation');
+                try {
+                  props.navigation.navigate('ProjectList', {
 
+                    title: itemData.item.title,
+                  },
+                  );
+                } catch (error) {
+                  console.log(error);
+                }
+              }}
             />
             // <View style={styles.screen}><Text>{itemData.item.title}</Text></View>
           );
@@ -55,9 +54,9 @@ const CategoryScreen = props => {
         title="Add Project"
         onPress={() => {
           console.log('add project');
-          try{
+          try {
             props.navigation.navigate('AddProject');
-          }catch(error){
+          } catch (error) {
             console.log(error);
           }
         }}
@@ -67,13 +66,7 @@ const CategoryScreen = props => {
         type="clear"
       />
     </SafeAreaView>
-
-
-
   );
-
-
-
 }
 
 
