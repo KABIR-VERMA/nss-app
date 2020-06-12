@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, SafeAreaView, TextComponent, Button } from 'react-native';
+
 import PROJECTCATEGORIES from '../../data/dummy-data';
 import { log } from 'react-native-reanimated';
 import ProjectCategoryGridTile from '../../components/ProjectGridTile';
@@ -21,7 +22,7 @@ const CategoryScreen = props => {
           return (
             <ProjectCategoryGridTile
               title={itemData.item.title}
-              color='#ffcc99'
+              color={itemData.item.color}
               onSelect={() => {
                console.log('we r in navigation');
                try{

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, Button,Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TextInput, Button,Image, Alert } from 'react-native';
 import { Formik } from 'formik';
 // import firestore from '@react-native-firebase/firestore';
 import firebase from "firebase";
@@ -9,6 +9,10 @@ import { boolean } from 'yup';
 const AddProjectScreen = props => {
 
     const db=firebase.firestore().collection('Projects');
+
+   
+   
+
     // console.log(db);
     
     
@@ -18,8 +22,22 @@ const AddProjectScreen = props => {
         <Formik
             initialValues={{ title: ''} ,{category:''},{address:''}, {iconUrl:''}, {imageUrl:''},{description:'',}}
             onSubmit={values =>{ 
-                console.log(values)
-                db.add(values)}}
+                Alert.alert(
+                    "Check before adding",
+                    "Are you sure you want to add to database?",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      { text: "Yes", onPress: () => db.add(values) }
+                    ],
+                    { cancelable: false }
+                  );
+               
+        
+                }}
         >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
                 <View >

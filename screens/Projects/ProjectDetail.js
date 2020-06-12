@@ -3,11 +3,14 @@ import {View,Text,StyleSheet} from 'react-native';
 
 
 const ProjectDetailScreen =props =>{
+    const project=props.navigation.getParam('project');
+    console.log(project);
 
     return(
         <View style={styles.screen}>
         <Text>
-        ProjectDetailScreen</Text>
+        {project.title}</Text>
+        <Text>{project.address}</Text>
         </View>
         
 

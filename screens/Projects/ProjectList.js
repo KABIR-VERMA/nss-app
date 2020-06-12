@@ -1,5 +1,7 @@
 import React, { useState, Component } from 'react';
-import { View, Text, StyleSheet, FlatList, SafeAreaView, Item } from 'react-native';
+import { View, Text, StyleSheet, FlatList, SafeAreaView, TouchableScale, LinearGradient } from 'react-native';
+import { ListItem } from 'react-native-elements'
+
 import firebase from "firebase";
 import { withFirebaseHOC } from "../../config/Firebase";
 import { render } from 'react-dom';
@@ -38,14 +40,14 @@ class ProjectListScreen extends Component {
     // console.log(projectList);
     constructor(props) {
         super();
-        this.categoryTitle=props.navigation.getParam('title');
+        this.categoryTitle = props.navigation.getParam('title');
         this.state = {
             projectList: [],
         };
     }
     componentDidMount() {
         let items = [];
-        firebase.firestore().collection('Projects').where('category','==',this.categoryTitle)
+        firebase.firestore().collection('Projects').where('category', '==', this.categoryTitle)
             .get().then((e) => {
 
                 // console.log(typeOf(items));
@@ -64,10 +66,10 @@ class ProjectListScreen extends Component {
                 console.log(error);
 
             })
-       
-        console.log('--',this.state.projectList);
+
+        console.log('--', this.state.projectList);
     }
-    
+
 
 
     render() {
@@ -75,20 +77,52 @@ class ProjectListScreen extends Component {
         // console.log(this.state.projectList);
         return (
 
-            <SafeAreaView style={styles.container}>
+            <SafeAreaView style={styles.container} >
+                <View >
+                    <View style={styles.heading}><Text style={styles.headingText}>{categoryTitle}</Text></View>
 
-                <Text>{categoryTitle}</Text>
-                <FlatList
-                    data={this.state.projectList}
-                    renderItem={(itemdata) =><Text>{itemdata.item.title}</Text>}
-                    keyExtractor={item => item.id}
-                />
+                    <FlatList
+                        data={this.state.projectList}
+                        renderItem={(itemdata) => <View>
+
+                            <ListItem
+                                style={styles.listItem}
+                                Component={TouchableScale}
+                                onPress={()=>{
+                                    console.log('we pressed')
+                                    this.props.navigation.navigate('ProjectDetail',{
+                                        project:itemdata.item
+                                    })
+                                }
+                                }
+                                friction={90} //
+                                tension={100} // These props are passed to the parent component (here TouchableScale)
+                                activeScale={0.95} //
+                                linearGradientProps={{
+                                    colors: ['#FF9800', '#F44336'],
+                                    start: { x: 1, y: 0 },
+                                    end: { x: 0.2, y: 0 },
+                                }}
+                                ViewComponent={LinearGradient} // Only if no expo
+                                leftAvatar={{ rounded: true, source: { uri: itemdata.item.iconUrl } }}
+                                title={itemdata.item.title}
+                                titleStyle={{ color: 'white', fontWeight: 'bold' }}
+                                subtitleStyle={{ color: 'white' }}
+                                subtitle={itemdata.item.address}
+                                chevron={{ color: 'white' }}
+                            />
+                        </View>}
+                        keyExtractor={item => item.id}
+                    />
+                </View>
+
+
 
             </SafeAreaView>
 
         );
     }
-    
+
 
 
 }
@@ -100,6 +134,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    headingText: {
+        fontSize: 18,
+        // fontFamily: 'Gill Sans',
+        textAlign: 'center',
+        margin: 10,
+        color: '#ffffff',
+        backgroundColor: 'blue',
+    },
+    listItem: {
+        marginHorizontal: 5,
+        justifyContent: 'center',
+        marginVertical: 1,
     }
 });
 
