@@ -17,7 +17,7 @@ const ProjectNavigation = createStackNavigator(
             screen: CategoryScreen,
             navigationOptions: ({ navigation }) => {
                 return {
-                    headerTitle: () => <Header navigation={navigation} title={'Projects'} />,
+                    headerTitle: () => <Header navigation={navigation} title={'Projects'} drawer={true}/>,
                 }
             }
         },
@@ -25,13 +25,17 @@ const ProjectNavigation = createStackNavigator(
             screen: ProjectListScreen,
             navigationOptions: ({ navigation }) => {
                 return {
-                    headerTitle: () => <Header navigation={navigation} title={'Projects'} />,
+                    headerTitle: () => <Header navigation={navigation} title={'Projects'} drawer={false}/>,
                 }
             }
         },
         AddProject: {
             screen: AddProjectScreen,
-
+            navigationOptions: ({ navigation }) => {
+                return {
+                    headerTitle: () => <Header navigation={navigation} title={'Add Project'} drawer={false}/>,
+                }
+            }
         },
 
         ProjectDetail: {
