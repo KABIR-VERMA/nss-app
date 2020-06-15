@@ -9,7 +9,7 @@ const AboutUsNavigation = createStackNavigator(
       screen: About,
       navigationOptions:({navigation})=> {
         return{
-          headerTitle: ()=><Header navigation={navigation} title={'About NSS'}/>,
+          headerTitle: ()=><Header navigation={navigation} title={'About NSS'} drawer={true}/>,
         }
       } 
     }

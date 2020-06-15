@@ -9,7 +9,7 @@ const HoursNavigation = createStackNavigator(
       screen: Hours,
       navigationOptions:({navigation})=> {
         return{
-          headerTitle: ()=><Header navigation={navigation} title={'Hours NSS'}/>,
+          headerTitle: ()=><Header navigation={navigation} title={'Hours NSS'} drawer={true}/>,
         }
       } 
     }

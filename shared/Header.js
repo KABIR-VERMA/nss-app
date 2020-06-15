@@ -3,12 +3,13 @@ import {StyleSheet , Text,  View} from 'react-native';
 import {MaterialIcons} from 'react-native-vector-icons';
 
 
-export default function Header({navigation, title}) {
+export default function Header({navigation, title, drawer}) {
+    var isdrawer=drawer;
     return(
         <View style={styles.header}>
-            <MaterialIcons name='menu' size={28} onPress={navigation.openDrawer} style={styles.icon}/>
+            {isdrawer && <MaterialIcons name='menu' size={28} onPress={navigation.openDrawer} style={styles.icon}/>}
             <View>
-    <Text style={styles.headerText}>{title}</Text>
+                <Text style={styles.headerText}>{title}</Text>
             </View>
         </View>
     );    

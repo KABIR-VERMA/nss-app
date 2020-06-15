@@ -9,7 +9,7 @@ const AppNavigation = createStackNavigator(
       screen: Home,
       navigationOptions:({navigation})=> {
         return{
-          headerTitle: ()=><Header navigation={navigation} title={'NSS IIT-D'}/>,
+          headerTitle: ()=><Header navigation={navigation} title={'NSS IIT-D'} drawer={true}/>,
         }
       }
     }

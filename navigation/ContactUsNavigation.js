@@ -9,7 +9,7 @@ const ContactUsNavigation = createStackNavigator(
       screen: Contact,
       navigationOptions:({navigation})=> {
         return{
-          headerTitle: ()=><Header navigation={navigation} title={'Contact NSS'}/>,
+          headerTitle: ()=><Header navigation={navigation} title={'Contact NSS'} drawer={true}/>,
         }
       } 
     }

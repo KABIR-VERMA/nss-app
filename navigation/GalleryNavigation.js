@@ -9,7 +9,7 @@ const GalleryNavigation = createStackNavigator(
       screen: Gallery,
       navigationOptions:({navigation})=> {
         return{
-          headerTitle: ()=><Header navigation={navigation} title={'Gallery NSS'}/>,
+          headerTitle: ()=><Header navigation={navigation} title={'Gallery NSS'} drawer={true}/>,
         }
       } 
     }
