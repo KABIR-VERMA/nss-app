@@ -17,20 +17,32 @@ const Firebase = {
   signOut: () => {
     return firebase.auth().signOut();
   },
-  checkUserAuth: user => {
+  checkUserAuth: (user) => {
     return firebase.auth().onAuthStateChanged(user);
   },
-  passwordReset: email => {
+  passwordReset: (email) => {
     return firebase.auth().sendPasswordResetEmail(email);
   },
   // firestore
-  createNewUser: userData => {
+  createNewUser: (userData) => {
     return firebase
       .firestore()
       .collection("users")
       .doc(`${userData.uid}`)
       .set(userData);
-  }
+  },
+  //get current user
+  getUser: () => {
+    return firebase.auth().currentUser;
+  },
+  // check if user is verified
+  isUserVerified: () => {
+    return firebase.auth().currentUser.emailVerified;
+  },
+  // send a verification email to the user
+  verifyEmail: () => {
+    return firebase.auth().currentUser.sendEmailVerification({});
+  },
 };
 
 export default Firebase;

@@ -12,6 +12,11 @@ const validationSchema = Yup.object().shape({
     .label("Email")
     .email("Enter a valid email")
     .required("Please enter a registered email")
+    .test("email", "Please enter a valid IITD email", (str) => {
+      if (str && str.length > 10 && str.substr(-10) == "iitd.ac.in") {
+        return true;
+      }
+    }),
 });
 
 function ForgotPassword({ navigation, firebase }) {
@@ -45,7 +50,7 @@ function ForgotPassword({ navigation, firebase }) {
           isValid,
           touched,
           handleBlur,
-          isSubmitting
+          isSubmitting,
         }) => (
           <>
             <FormInput
@@ -80,16 +85,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    marginTop: 150
+    marginTop: 150,
   },
   text: {
     color: "#333",
     fontSize: 24,
-    marginLeft: 25
+    marginLeft: 25,
   },
   buttonContainer: {
-    margin: 25
-  }
+    margin: 25,
+  },
 });
 
 export default withFirebaseHOC(ForgotPassword);
