@@ -12,7 +12,9 @@ const styles = StyleSheet.create({
     marginLeft: 25
   },
   errorText: {
-    color: "red"
+    color: "yellow",
+    padding: '1%',
+    paddingBottom: '0.5%'
   }
 });
 

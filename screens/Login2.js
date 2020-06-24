@@ -7,10 +7,8 @@ import {
   Image,
   KeyboardAvoidingView,
   ScrollView,
-  Text,
-  ActivityIndicator,
 } from "react-native";
-import { Button, Overlay } from "react-native-elements";
+import { Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -21,8 +19,6 @@ import ErrorMessage from "../components/ErrorMessage";
 import AppLogo from "../components/AppLogo";
 import { withFirebaseHOC } from "../config/Firebase";
 import Signup from "./Signup";
-import { Left } from "native-base";
-import Gradient from "../components/Gradient";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -41,38 +37,10 @@ const validationSchema = Yup.object().shape({
 });
 
 class Login extends Component {
-  static navigationOptions = ({ navigation }) => {
-    //return header with Custom View which will replace the original header
-    return {
-      header: (
-        <View
-          style={{
-            height: 45,
-            marginTop: 20,
-            backgroundColor: "red",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              textAlign: "center",
-              fontWeight: "bold",
-              fontSize: 18,
-            }}
-          >
-            This is Custom Header
-          </Text>
-        </View>
-      ),
-    };
-  };
-
   state = {
     passwordVisibility: true,
     rightIcon: "ios-eye",
     login: true,
-    pressedLogin: false,
   };
 
   goToSignup = () => this.props.navigation.navigate("Signup");
@@ -87,7 +55,6 @@ class Login extends Component {
   };
 
   handleOnLogin = async (values, actions) => {
-    this.setState({ pressedLogin: true });
     const { email, password } = values;
     try {
       const response = await this.props.firebase.loginWithEmail(
@@ -101,36 +68,20 @@ class Login extends Component {
     } catch (error) {
       actions.setFieldError("general", error.message);
     } finally {
-      this.setState({ pressedLogin: false });
       actions.setSubmitting(false);
     }
   };
 
   render() {
     const { passwordVisibility, rightIcon } = this.state;
-    return (
-      <Gradient.diagonalGradient>
-        <Overlay
-          isVisible={this.state.pressedLogin}
-          fullScreen={true}
-          overlayStyle={{
-            backgroundColor: "transparent",
-            opacity: 0.5,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <ActivityIndicator size="large" color={bgcolor} />
-        </Overlay>
+    if (this.state.login == true) {
+      return (
         <ScrollView style={styles.container}>
-          {this.state.login ? (
-            <Image
-              // source={require("../assets/IconWithBgColor.png")}
-              source={require("../assets/NSSlogoPng.png")}
-              resizeMode="contain"
-              style={styles.logo}
-            />
-          ) : null}
+          <Image
+            source={require("../assets/IconWithBgColor.png")}
+            resizeMode="contain"
+            style={styles.logo}
+          />
 
           {/* <HideWithKeyboard style={styles.logoContainer}>
             <AppLogo />
@@ -141,15 +92,19 @@ class Login extends Component {
               borderWidth: 1,
               borderRadius: 10,
               borderColor: "white",
-              paddingTop: this.state.login ? "20%" : "5%",
+              paddingTop: "30%",
               padding: "4%",
-              marginTop: this.state.login ? "30.5%" : "10%",
+              marginTop: "24.6%",
             }}
           >
-            {this.signUpLogInTab()}
-
             {this.state.login == true ? (
               <View style={{ flex: 1 }}>
+                <Button
+                  title="Hello"
+                  onPress={() => {
+                    this.setState({ login: false });
+                  }}
+                ></Button>
                 <Formik
                   initialValues={{ email: "", password: "" }}
                   onSubmit={(values, actions) => {
@@ -216,22 +171,20 @@ class Login extends Component {
                     </Fragment>
                   )}
                 </Formik>
-                {/* <Button
-                title="Don't have an account? Sign Up"
-                onPress={this.goToSignup}
-                titleStyle={{
-                  color: "#F57C00",
-                }}
-                type="clear"
-              /> */}
                 <Button
-                  title="Forgot Password ?"
+                  title="Don't have an account? Sign Up"
+                  onPress={this.goToSignup}
+                  titleStyle={{
+                    color: "#F57C00",
+                  }}
+                  type="clear"
+                />
+                <Button
+                  title="Forgot Password"
                   onPress={this.goToForgotPassword}
                   titleStyle={{
-                    // color: "#F57C00",
-                    color: "white",
+                    color: "#F57C00",
                   }}
-                  style={{}}
                   type="clear"
                 />
               </View>
@@ -240,61 +193,11 @@ class Login extends Component {
             )}
           </View>
         </ScrollView>
-      </Gradient.diagonalGradient>
-    );
+      );
+    } else {
+      return <Signup></Signup>;
+    }
   }
-
-  signUpLogInTab = () => {
-    return (
-      <View
-        style={{
-          justifyContent: "space-evenly",
-          alignItems: "center",
-          flexDirection: "row",
-          marginBottom: this.state.login ? "8%" : "3%",
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ login: true });
-          }}
-          style={[
-            styles.tabButton,
-            { borderBottomWidth: this.state.login ? 1 : 0 },
-          ]}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              opacity: !this.state.login ? 0.6 : 1,
-            }}
-          >
-            Log in
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ login: false });
-          }}
-          style={[
-            styles.tabButton,
-            { borderBottomWidth: this.state.login ? 0 : 1 },
-          ]}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20,
-              opacity: this.state.login ? 0.6 : 1,
-            }}
-          >
-            Sign in
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
 }
 
 const bgcolor = "#426885";
@@ -302,6 +205,8 @@ const bgcolor = "#426885";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // backgroundColor: "#fff",
+    backgroundColor: bgcolor,
     padding: "5%",
   },
   logo: {
@@ -309,20 +214,14 @@ const styles = StyleSheet.create({
     height: "25%",
     alignSelf: "center",
     position: "absolute",
-    top: "5%",
+    top: "1%",
   },
   logoContainer: {
     marginBottom: 15,
     alignItems: "center",
   },
   buttonContainer: {
-    margin: 10,
-  },
-
-  tabButton: {
-    padding: "5%",
-    paddingHorizontal: "10%",
-    borderBottomColor: "white",
+    margin: 25,
   },
 });
 

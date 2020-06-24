@@ -1,0 +1,37 @@
+{
+    "data": [
+        {
+            "index": 0,
+            "item": {
+                "address": "IITD",
+                "category": "Education",
+                "description": "In the words of Mahatma Gandhi, �Literary Education is of no value if it is not able to build up a sound character.� Keeping the above thought in mind, The Neem School Project was initiated by NSS IITD in collaboration with the White Swan Foundation to ensure quality value education in slum children. We, as a part of the Neem school, visit slums near IITD and try to inculcate the values of honesty, integrity, kindness, helping- nature, cleanliness, hygiene and a lot more through fun filled activities like painting, story-telling, games, etc. The NSS volunteers, called the Value Initiators, interact with the Value Multipliers, i.e. children in age group of 6-14 years and aim at developing good moral character and conduct in the children.",
+                "iconUrl": "http://nss.iitd.ac.in/images/Project_Logos/neem.png",
+                "imageUrl": "http://nss.iitd.ac.in/images/proj_pics/neem.jpg",
+                "title": "Neem School"
+            }
+        },
+        {
+            "index": 1,
+            "item": {
+                "address": "KV IITD",
+                "category": "Education",
+                "description": "To the world you may be just a teacher, but to your students you are a HERO. The foundation of every nation is the education of its youth. Believing in this core value, our prime focus at VIDYA is to teach students from classes 4th to 10th and inculcate the fundamental concepts of all subjects, especially Mathematics and Science. Teaching is a wonderful activity, not only the students learn but we, as their tutor and guide, learn a lot too. Volunteers of our teaching projects have demonstrated to have a lot of fun while teaching the kids. We follow a simple and flexible technique of teaching with adoption of interactive learning methodologies, focused on activity based teaching and learning experience. Our contribution includes helping the kids with their regular homework and providing remedial sessions for their doubts and conceptual understanding of the subject. We do believe in 'all work and no play makes jack a dull boy'. Abiding by this, an equal importance is also given to co-curricular activities which not only freshen up minds of the students but also help them develop inter-personal skills. In order to achieve targets and ensure a good learning exercise, our volunteers go to Kendriya Vidyalaya, near Kailash hostel on all weekdays from 3-5 pm. Volunteers are expected to be regular and enjoying the task they have taken up. And as NSS, we try to provide you the atmosphere to help you develop the memorable experience.",
+                "iconUrl": "http://nss.iitd.ac.in/images/Project_Logos/VIDYA.png",
+                "imageUrl": "http://nss.iitd.ac.in/images/proj_pics/vidya.jpg",
+                "title": "NSS IIT Delhi Project"
+            }
+        },
+        {
+            "index": 2,
+            "item": {
+                "address": "IITD",
+                "category": "Education",
+                "description": "The aim of this initiative is to provide a platform for bringing the researchers involved in high end research happening in the labs at IIT Delhi to the students of 9th-12th grade, to pique their interest towards science and innovation, and provide them a chance to interact with the faculty of IIT Delhi.",
+                "iconUrl": "http://nss.iitd.ac.in/images/Project_Logos/ScienceSpeaks.png",
+                "imageUrl": "",
+                "title": "Science Speaks"
+            }
+        }
+    ]
+}

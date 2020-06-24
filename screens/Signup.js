@@ -124,7 +124,7 @@ class Signup extends Component {
           }) => (
             <Fragment>
               <FormInput
-                name="name"
+                name="Name"
                 value={values.name}
                 onChangeText={handleChange("name")}
                 placeholder="Enter your full name"
@@ -134,7 +134,7 @@ class Signup extends Component {
               />
               <ErrorMessage errorValue={touched.name && errors.name} />
               <FormInput
-                name="email"
+                name="E-mail"
                 value={values.email}
                 onChangeText={handleChange("email")}
                 placeholder="Enter email"
@@ -145,7 +145,7 @@ class Signup extends Component {
               />
               <ErrorMessage errorValue={touched.email && errors.email} />
               <FormInput
-                name="password"
+                name="Password"
                 value={values.password}
                 onChangeText={handleChange("password")}
                 placeholder="Enter password"
@@ -161,7 +161,7 @@ class Signup extends Component {
               />
               <ErrorMessage errorValue={touched.password && errors.password} />
               <FormInput
-                name="password"
+                name="Password"
                 value={values.confirmPassword}
                 onChangeText={handleChange("confirmPassword")}
                 placeholder="Confirm password"
@@ -190,6 +190,8 @@ class Signup extends Component {
                 iconType="material"
                 uncheckedIcon="check-box-outline-blank"
                 title="Agree to terms and conditions"
+                textStyle={{ color: "white" }}
+                checkedColor="white"
                 checkedTitle="You agreed to our terms and conditions"
                 checked={values.check}
                 onPress={() => setFieldValue("check", !values.check)}
@@ -199,7 +201,7 @@ class Signup extends Component {
                   buttonType="outline"
                   onPress={handleSubmit}
                   title="SIGNUP"
-                  buttonColor="#F57C00"
+                  buttonColor="#7256B1"
                   disabled={!isValid || isSubmitting}
                   loading={isSubmitting}
                 />
@@ -208,35 +210,35 @@ class Signup extends Component {
             </Fragment>
           )}
         </Formik>
-        <Button
+        {/* <Button
           title="Have an account? Login"
           onPress={this.goToLogin}
           titleStyle={{
             color: "#039BE5",
           }}
           type="clear"
-        />
+        /> */}
       </SafeAreaView>
     );
   }
 }
 
+const bgcolor = "#426885";
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 50,
   },
   logoContainer: {
     marginBottom: 15,
     alignItems: "center",
   },
   buttonContainer: {
-    margin: 25,
+    marginTop: "3%",
   },
   checkBoxContainer: {
-    backgroundColor: "#fff",
-    borderColor: "#fff",
+    backgroundColor: "transparent",
+    borderColor: "transparent",
   },
 });
 
