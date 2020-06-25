@@ -1,6 +1,8 @@
 import { createStackNavigator } from "react-navigation-stack";
 import Home from "../screens/Home";
+import AddEventScreen from "../screens/AddEvent"
 import Header from "../shared/Header";
+
 import React from "react";
 
 const bgcolor = "#426885";
@@ -18,6 +20,20 @@ const AppNavigation = createStackNavigator({
         ),
       };
     },
+  },
+  AddEventScreen : {
+    screen: AddEventScreen,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerStyle: { backgroundColor: bgcolor },
+        // headerTitleStyle: { textDecorationColor: 'white' },
+        // headerTintColor: "white",
+        headerTitle: () => (
+          <Header navigation={navigation} title={"NSS IIT-D"} drawer={false} />
+        ),
+      };
+    },
+    
   },
 });
 
