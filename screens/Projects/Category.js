@@ -167,6 +167,8 @@ const styles = StyleSheet.create({
     borderRadius: (width * 0.8) / 4,
     justifyContent: "center",
     alignItems: "center",
+    borderColor: 'white',
+    borderWidth: 1,
   },
   text: {
     color: "white",

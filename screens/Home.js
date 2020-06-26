@@ -201,7 +201,7 @@ class Home extends Component {
             onPress={() => {
               console.log("navigate")
               try {
-                this.props.navigation.navigate("AddEvent");
+                this.props.navigation.navigate("AddEventScreen");
               } catch (error) {
                 console.log(error);
               }
