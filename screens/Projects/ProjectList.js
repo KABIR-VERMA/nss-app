@@ -6,17 +6,19 @@ import {
   FlatList,
   SafeAreaView,
   TouchableScale,
-  LinearGradient,
+  // LinearGradient,
+  TouchableOpacity,
+  Image,
+  Dimensions,
 } from "react-native";
 import { ListItem, Icon } from "react-native-elements";
 import DropDownItem from "react-native-drop-down-item";
 import Expo from "expo";
 import { Ionicons } from "@expo/vector-icons";
-
 import firebase from "firebase";
 import { withFirebaseHOC } from "../../config/Firebase";
 import Gradient from "../../components/Gradient";
-
+import Carousel, { Pagination } from "react-native-snap-carousel";
 import dummyData from "./dummyData.json";
 
 // import { render } from "react-dom";
@@ -26,187 +28,198 @@ import dummyData from "./dummyData.json";
 // import ProjectCategoryGridTile from '../../components/ProjectGridTile';
 // import { SafeAreaView } from 'react-navigation';
 
+var width = Dimensions.get("window").width;
+var height = Dimensions.get("window").height;
+
 class ProjectListScreen extends React.Component {
-  //    constructor(props){
-  //     let categoryTitle = props.navigation.getParam('title');
-  //    }
-  // const [projectList,setList]=useState([])
+  // static navigationOptions = ({ navigation, screenProps }) => ({
+  //   title: navigation.state.params.name + "'s Profile!",
+  //   headerRight: <Button color={screenProps.tintColor} />,
 
-  // categoryTitle = props.navigation.getParam('title');
-
-  //  firebase.firestore().collection('Projects').where('category','==',categoryTitle).get().then((e)=>{
-  //     let items=[]
-
-  //     e.forEach((doc)=>{
-  //         // console.log(typeof(doc.data()));
-  //         let ele={};
-  //         ele=doc.data()
-  //         items.push(ele);
-
-  //         // projectList.push(ele);
-  //     })
-  //     setList(items);
-  //     setList([...projectList,setList]);
   // });
-  // console.log(projectList);
+  // static navigationOptions = ({ navigation, navigationOptions }) => {
+  //   const { params } = navigation.state;
+  //   return {
+  //     title: params ? params.name : "Project",
+  //     /* These values are used instead of the shared configuration! */
+  //     headerStyle: {
+  //       backgroundColor: "Red",
+  //     },
+  //     // headerTintColor: navigationOptions.headerStyle.backgroundColor,
+  //   };
+  // };
 
   constructor(props) {
     super();
     this.categoryTitle = props.navigation.getParam("title");
     this.state = {
       projectList: [],
+      activeSlide: 0,
+      isOpened: [],
     };
   }
 
-  static navigationOptions = ({ navigation, screenProps }) => ({
-    title: navigation.state.params.name + "'s Profile!",
-    headerRight: <Button color={screenProps.tintColor} />,
-  });
-
-  static navigationOptions = {
-    title: "Great",
-  };
-
   componentDidMount() {
     let items = [];
-    // firebase
-    //   .firestore()
-    //   .collection("Projects")
-    //   .where("category", "==", this.categoryTitle)
-    //   .get()
-    //   .then((e) => {
-    //     // console.log(typeOf(items));
-    //     e.forEach((doc) => {
-    //       // console.log(doc.data());
-    //       items.push(doc.data());
-    //       //  console.log('-----------',items);
-    //       this.setState({
-    //         projectList: items,
-    //       });
-    //       //   this.forceUpdate();
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-
-    // console.log("--", this.state.projectList);
+    // var data = dummyData.data;
+    var isOpened = [];
+    for (let i = 0; i < dummyData.length; i++) {
+      isOpened.push(false);
+    }
+    // this.setState({ isOpened: isOpened, projectList: data });
+    firebase
+      .firestore()
+      .collection("Projects")
+      .where("category", "==", this.categoryTitle)
+      .get()
+      .then((e) => {
+        e.forEach((doc) => {
+          items.push(doc.data());
+          this.setState({
+            projectList: items,
+            isOpened: isOpened,
+          });
+          //   this.forceUpdate();
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   render() {
     let categoryTitle = this.props.navigation.getParam("title");
-    // console.log(this.state.projectList);
+    // console.log("this.state", this.state);
     return (
       <Gradient.diagonalGradient>
-        <SafeAreaView style={styles.container}>
-          {/* <View style={styles.heading}>
-              <Text style={styles.headingText}>{categoryTitle}</Text>
-            </View> */}
+        {this.state.projectList.length > 0 ? (
           <FlatList
-            // data={this.state.projectList}
-            data={dummyData.data}
-            renderItem={(itemdata) => this.renderFlatListItem(itemdata)}
-            keyExtractor={(item) => item.index}
+            style={{ flex: 1 }}
+            data={this.state.projectList}
+            renderItem={({ item, index }) =>
+              this.renderFlatListItem(item, index)
+            }
+            keyExtractor={(item, ind) => ind.toString()}
           />
-        </SafeAreaView>
+        ) : null}
       </Gradient.diagonalGradient>
     );
   }
 
-  renderFlatListItem = (itemdata) => {
-    var project = itemdata.item;
-
+  renderHeaderFlatListItem = (project, ind) => {
     return (
-      <DropDownItem
-        key={itemdata.index}
-        // style={styles.dropDownItem}
-        contentVisible={false}
-        // invisibleImage={IC_ARR_DOWN}
-        // visibleImage={require('../../assets/avatar.png')}
-        header={
-          <View
-            style={[
-              styles.screen,
-              {
-                flexDirection: "row",
-                padding: "2%",
-                paddingBottom: "10%",
-                borderTopWidth: itemdata.index == 0 ? 1 : 0,
-                borderBottomWidth: 1,
-                borderColor: "white",
-              },
-            ]}
-          >
-            <View>
-              <Text
-                style={{ fontSize: 20, color: "white", alignSelf: "center" }}
-              >
-                {project.item.title}
-              </Text>
-              <Text
-                style={{ fontSize: 20, color: "white", alignSelf: "center" }}
-              >
-                ({project.item.address})
-              </Text>
-            </View>
-            <Ionicons
-              name="ios-arrow-down"
-              size={24}
-              color="white"
-              style={{
-                position: "absolute",
-                right: "3%",
-                // alignSelf: "flex-end",
-              }}
-            />
-          </View>
-        }
+      <View
+        style={[
+          styles.dropDownHeader,
+          {
+            borderTopWidth: 1,
+            borderBottomWidth:
+              ind == this.state.projectList.length - 1
+                ? 1
+                : this.state.isOpened[ind]
+                ? 0.3
+                : 0,
+            borderBottomColor: this.state.isOpened[ind]
+              ? "grey"
+              : ind == this.state.projectList.length - 1
+              ? "white"
+              : "none",
+          },
+        ]}
       >
-        <Text
-          style={[
-            // styles.txt,
-            {
-              fontSize: 20,
-            },
-          ]}
-        >
-          {/* {param.body} */}
-        </Text>
-      </DropDownItem>
+        <Image source={{ uri: project.iconUrl }} style={styles.projectIcon} />
+        <View>
+          <Text style={styles.ProjectTitle}>{project.title}</Text>
+          <Text style={{ fontSize: 14, color: "white", alignSelf: "center" }}>
+            ({project.address})
+          </Text>
+        </View>
+        <Ionicons
+          name="ios-arrow-down"
+          size={24}
+          color="white"
+          style={{ position: "absolute", right: "3%" }}
+        />
+      </View>
     );
   };
 
-  flatListItem = (itemdata) => {
+  renderFlatListItem = (project, ind) => {
     return (
-      <View>
-        <ListItem
-          style={styles.listItem}
-          Component={TouchableScale}
+      <View style={{}}>
+        <TouchableOpacity
           onPress={() => {
-            console.log("we pressed");
-            this.props.navigation.navigate("ProjectDetail", {
-              project: itemdata.item,
-            });
+            var open = this.state.isOpened;
+            open[ind] = !open[ind];
+            this.setState({ isOpened: open });
           }}
-          friction={90} //
-          tension={100} // These props are passed to the parent component (here TouchableScale)
-          activeScale={0.95} //
-          linearGradientProps={{
-            colors: ["#FF9800", "#F44336"],
-            start: { x: 1, y: 0 },
-            end: { x: 0.2, y: 0 },
-          }}
-          ViewComponent={LinearGradient} // Only if no expo
-          leftAvatar={{
-            rounded: true,
-            source: { uri: itemdata.item.iconUrl },
-          }}
-          title={itemdata.item.title}
-          titleStyle={{ color: "white", fontWeight: "bold" }}
-          subtitleStyle={{ color: "white" }}
-          subtitle={itemdata.item.address}
-          chevron={{ color: "white" }}
-        />
+        >
+          {this.renderHeaderFlatListItem(project, ind)}
+        </TouchableOpacity>
+        {this.state.isOpened[ind] ? (
+          <View style={{ paddingBottom: "3%" }}>
+            {this.imageSlidingView(project.imageArray)}
+            <Text style={styles.text}>{project.description}</Text>
+            {this.imageSlidingView(project.imageArray)}
+          </View>
+        ) : null}
+      </View>
+    );
+  };
+
+  imageSlidingView = (arr) => {
+    return (
+      <View style={[styles.screen, { paddingTop: "8%" }]}>
+        <View style={[styles.screen, { flexDirection: "row" }]}>
+          <Ionicons
+            name="md-arrow-dropleft"
+            size={30}
+            color="white"
+            style={{ padding: "2%" }}
+          />
+          <Carousel
+            style={{}}
+            sliderWidth={width / 1.1}
+            // sliderHeight={height / 5}
+            itemWidth={width / 2}
+            data={arr}
+            renderItem={({ item }) => {
+              return (
+                <Image source={{ uri: item }} style={styles.carouselImage} />
+              );
+            }}
+            // onBeforeSnapToItem={(index) =>
+            //   this.setState({ activeSlide: index })
+            // }
+            loop={arr.lenght > 3 ? true : false}
+            decelerationRate={1}
+            firstItem={arr.length > 2 ? Math.floor(arr.length / 2) : 0}
+            // hasParallaxImages={true}
+          />
+          <Ionicons
+            name="md-arrow-dropright"
+            size={30}
+            color="white"
+            style={{ padding: "2%" }}
+          />
+        </View>
+        {/* <View style={{ top: -20 }}>
+          <Pagination
+            dotsLength={arr.length}
+            activeDotIndex={this.state.activeSlide}
+            containerStyle={{ backgroundColor: "transparent" }}
+            dotStyle={{
+              width: 10,
+              height: 10,
+              borderRadius: 5,
+              marginHorizontal: 3,
+              backgroundColor: "white",
+            }}
+            inactiveDotStyle={{}}
+            inactiveDotOpacity={0.4}
+            inactiveDotScale={0.6}
+          />
+        </View> */}
       </View>
     );
   };
@@ -219,13 +232,43 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  headingText: {
-    fontSize: 18,
-    // fontFamily: 'Gill Sans',
+  text: {
     textAlign: "center",
-    margin: 10,
-    color: "#ffffff",
-    backgroundColor: "blue",
+    color: "white",
+    margin: "6%",
+    marginVertical: "3%",
+    fontSize: 15,
+  },
+
+  dropDownHeader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+    padding: "1%",
+    paddingBottom: "8%",
+    borderColor: "white",
+  },
+
+  projectIcon: {
+    position: "absolute",
+    left: "3%",
+    height: "90%",
+    width: "20%",
+    resizeMode: "contain",
+  },
+
+  ProjectTitle: {
+    fontSize: 17,
+    color: "white",
+    alignSelf: "center",
+    fontWeight: "bold",
+  },
+
+  carouselImage: {
+    height: height / 5,
+    width: width / 2,
+    resizeMode: "stretch",
   },
 
   listItem: {
@@ -236,3 +279,31 @@ const styles = StyleSheet.create({
 });
 
 export default withFirebaseHOC(ProjectListScreen);
+
+// renderFlatListItem = () => {
+// return (
+//   <DropDownItem
+//     // key={itemdata.index}
+//     Key={itemdata.index}
+//     contentVisible={false}
+//     // invisibleImage={IC_ARR_DOWN}
+//     // visibleImage={require('../../assets/avatar.png')}
+//     header={this.renderHeaderFlatListItem(project)}
+//   >
+//     <View style={{ left: -11 }}>
+//       {/* {this.imageSlidingView(project.item.imageArr)} */}
+//       <Text
+//         style={{
+//           fontSize: 15,
+//           textAlign: "center",
+//           color: "white",
+//           top: -10,
+//           padding: 2,
+//         }}
+//       >
+//         {project.item.description}
+//       </Text>
+//     </View>
+//   </DropDownItem>
+// );
+// }

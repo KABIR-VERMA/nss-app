@@ -20,6 +20,7 @@ const diagonalBG = ({ children }) => {
 export default gradients = {
   buttonGradient: ["#7255b1", "#6c67c9", "#6b6cd1", "#6971d8"],
   bgGradient: ["#456c8b", "#40637f", "#334f65", "#253a4b"],
+  headerGradient: ["#404c59", "#3b4753", "#36404c", "#303a45"],
+  // headerGradient: ["red", "green", "blue"],
   diagonalGradient: diagonalBG,
 };
-

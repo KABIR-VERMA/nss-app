@@ -38,6 +38,7 @@ class Initial extends Component {
       Font.loadAsync({
         ...Icon.Ionicons.font,
       }),
+      Font.loadAsync("Arial")
     ]);
   };
 
