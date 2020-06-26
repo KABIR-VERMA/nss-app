@@ -6,7 +6,10 @@ import { Text, View, TouchableOpacity } from "react-native";
 import Gradient from "./Gradient";
 
 const FormButton = ({ title, buttonType, buttonColor, ...rest }) => (
-  <LinearGradient colors={Gradient.buttonGradient} style={{ borderRadius: 10 }}>
+  <LinearGradient
+    colors={Gradient.buttonGradient}
+    style={{ justifyContent: "center", alignItems: "center", borderRadius: 10 }}
+  >
     <TouchableOpacity {...rest} style={{ padding: "3%" }}>
       <Text style={{ color: "white", textAlign: "center", fontSize: 20 }}>
         {title}

@@ -7,13 +7,15 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Linking,
 } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, Overlay } from "react-native-elements";
 import { withFirebaseHOC } from "../config/Firebase";
 import { Table, TableWrapper, Row } from "react-native-table-component";
 import { LinearGradient } from "expo-linear-gradient";
 import Gradient from "../components/Gradient";
 import firebase from "firebase";
+import FormButton from "../components/FormButton";
 
 const bgcolor = "#426885";
 // rgb(66, 104, 133)
@@ -28,11 +30,11 @@ const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
 
 class Home extends Component {
   state = {
-    tableData: null,
+    tableData: [],
     tableHeader: null,
+    overlayItem: null,
+    overlay: false,
   };
-  
-
 
   handleSignout = async () => {
     try {
@@ -44,36 +46,35 @@ class Home extends Component {
   };
 
   componentDidMount = () => {
-    var tableData = [];
-    var header = [
-      this.generateCell("S.no", 0),
-      this.generateCell("Name", 1),
-      this.generateCell("Date", 2),
-      this.generateCell("Status", 1),
-    ];
-    console.log("Home page")
-    firebase.firestore().collection("Events").get().then((e) => {
-      var i=1;
-     
-      
-      e.forEach((doc) => {
-        const rowData=[]
-        console.log(doc.data());
-        rowData.push(this.generateCell(i,0))
-        rowData.push(this.generateCell(doc.data().title,1))
-        rowData.push(this.generateCell(doc.data().date,2))
-        //----link is given for apply button----//
-        rowData.push(this.generateCell(doc.data().link,3))
-        console.log(rowData)
-        tableData.push(rowData);
-        i++;
-        this.forceUpdate();
-      });
-    })
-    .catch((error) => {
+    console.log("Home page");
+    firebase
+      .firestore()
+      .collection("Events")
+      .get()
+      .then((e) => {
+        var i = 1;
+        e.forEach((doc) => {
+          const rowData = [];
+          // console.log(doc.data());
+          console.log("Date", doc.data().Date);
+          rowData.push(this.generateCell(i, 0));
+          rowData.push(this.generateCell(doc.data().title, 1));
+          rowData.push(this.generateCell(doc.data().date, 2));
+          //----link is given for apply button----//
+          rowData.push(
+            this.generateCell(doc.data().link, 3, false, doc.data())
+          );
+          i++;
+          // tableData.push(rowData);
+          // this.forceUpdate();
+          this.setState({ tableData: [...this.state.tableData, rowData] });
+        });
+      })
+      .catch((error) => {
         console.log(error);
-    });
+      });
 
+    // this.setState({ tableData: tableData, tableHeader: header });
 
     // for (let i = 0; i < 30; i += 1) {
     //   const rowData = [];
@@ -83,13 +84,12 @@ class Home extends Component {
     //   }
     //   tableData.push(rowData);
     // }
-    this.setState({ tableData: tableData, tableHeader: header });
-    console.log(tableData);
+    // console.log(tableData);
   };
 
-  generateCell = (text, column, head = false) => {
+  generateCell = (text, column, head = false, item = null) => {
     if (column == 3) {
-      return this.applyButton("");
+      return this.applyButton(item);
     }
     return (
       <View
@@ -106,7 +106,13 @@ class Home extends Component {
           },
         ]}
       >
-        <Text style={{ color: "white", fontWeight: head ? "bold" : "normal" }}>
+        <Text
+          style={{
+            textAlign: "center",
+            color: "white",
+            fontWeight: head ? "bold" : "normal",
+          }}
+        >
           {text}
         </Text>
       </View>
@@ -120,13 +126,7 @@ class Home extends Component {
     tabheader.push(this.generateCell("Date", 2, true));
     tabheader.push(this.generateCell("Status", -1, true));
     return (
-      <View
-        style={{
-          width: "90%",
-          height: "50%",
-          marginTop: "5%",
-        }}
-      >
+      <View style={{ width: "90%", height: "40%", marginTop: "5%" }}>
         <Table borderStyle={{ borderColor: "white" }}>
           <Row
             key={100000}
@@ -134,7 +134,7 @@ class Home extends Component {
             widthArr={rowWidth}
             style={{ minHeight: 35 }}
             textStyle={{ textAlign: "center", color: "white" }}
-        />
+          />
         </Table>
         <ScrollView style={{}}>
           <Table borderStyle={{ borderColor: "white" }}>
@@ -153,23 +153,22 @@ class Home extends Component {
     );
   };
 
-  applyButton = (link) => {
+  applyButton = (item) => {
     return (
       <View
         style={[
           styles.container,
-          {
-            borderColor: "white",
-            borderWidth: 0.5,
-            borderRightWidth: 0,
-          },
+          { borderColor: "white", borderWidth: 0.5, borderRightWidth: 0 },
         ]}
       >
         <TouchableOpacity
-          onPress={() => this.handleApply(link)}
+          onPress={() => this.handleApply(item)}
           style={styles.applyButton}
         >
-          <LinearGradient colors={Gradient.buttonGradient} style={{ borderRadius: 10 }} >
+          <LinearGradient
+            colors={Gradient.buttonGradient}
+            style={{ borderRadius: 10 }}
+          >
             <Text style={{ color: "white", textAlign: "center" }}>Apply</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -177,18 +176,110 @@ class Home extends Component {
     );
   };
 
-  handleApply = (link) => {
-    alert("Hello");
+  handleApply = (item) => {
+    this.setState({ overlayItem: item, overlay: true });
+  };
+
+  renderOverlay = () => {
+    const item = this.state.overlayItem;
+    console.log("item", item);
+    return (
+      <Overlay
+        fullScreen
+        overlayBackgroundColor="rgba(0,0,0,0.7)"
+        isVisible={this.state.overlay}
+        overlayStyle={{
+          padding: "10%",
+          paddingBottom: "5%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <LinearGradient
+          colors={Gradient.bgGradient}
+          style={{
+            minHeight: "50%",
+            borderRadius: 20,
+            borderColor: "white",
+            borderWidth: 1,
+            padding: "5%",
+          }}
+        >
+          <ScrollView>
+            <View style={styles.container}>
+              <Text style={{ color: "white", fontSize: 25, textAlign: 'center' }}>{item.title}</Text>
+              <Text style={{ marginTop: "4%", color: "white", fontSize: 20 }}>
+                Event Date: {item.date}
+              </Text>
+
+              <Text
+                style={{
+                  color: "white",
+                  fontSize: 16,
+                  textAlign: "center",
+                  marginTop: 20,
+                }}
+              >
+                {item.description}
+              </Text>
+            </View>
+          </ScrollView>
+          <View
+            style={{
+              marginTop: 10,
+              justifyContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <View style={{ marginRight: "10%" }}>
+              <FormButton
+                title="Close"
+                onPress={() => {
+                  this.setState({ overlay: false, overlayItem: null });
+                }}
+              />
+            </View>
+            <FormButton
+              title="Apply"
+              onPress={() => {
+                this.setState({ overlay: false, overlayItem: null });
+                Linking.openURL(item.link);
+              }}
+            />
+          </View>
+        </LinearGradient>
+      </Overlay>
+    );
+  };
+
+  addEventButton = () => {
+    return (
+      <View style={{}} >
+        <FormButton
+          title="Add Event"
+          onPress={() => {
+            console.log("navigate");
+            try {
+              this.props.navigation.navigate("AddEventScreen");
+            } catch (error) {
+              console.log(error);
+            }
+          }}
+        />
+      </View>
+    );
   };
 
   render() {
     return (
       <Gradient.diagonalGradient>
+        {this.state.overlay ? this.renderOverlay() : null}
         <View style={styles.container}>
           <Image
             resizeMode="contain"
             // source={require("../assets/IconWithBgColor.png")}
-            source={require('../assets/NSSlogoPng.png')}
+            source={require("../assets/NSSlogoPng.png")}
             style={{ width: "20%", height: "15%" }}
           />
           <Text style={styles.header}>NSS, IIT Delhi</Text>
@@ -196,22 +287,7 @@ class Home extends Component {
           <Text style={styles.description}>{description}</Text>
           <View style={styles.hr} />
           {this.state.tableData ? this.tableView(this.state.tableData) : null}
-          <Button
-            title="Add Event"
-            onPress={() => {
-              console.log("navigate")
-              try {
-                this.props.navigation.navigate("AddEventScreen");
-              } catch (error) {
-                console.log(error);
-              }
-            }}
-            titleStyle={{
-              color: "#F57C00",
-            }}
-            type="clear"
-          />
-
+          {this.addEventButton()}
         </View>
       </Gradient.diagonalGradient>
     );

@@ -14,6 +14,7 @@ import { Formik } from "formik";
 import firebase from "firebase";
 import { boolean } from "yup";
 import Gradient from "../../components/Gradient";
+import FormButton from "../../components/FormButton";
 
 const AddProjectScreen = (props) => {
   const db = firebase.firestore().collection("Projects");
@@ -95,7 +96,8 @@ const AddProjectScreen = (props) => {
                 multiline={true}
                 placeholder="description"
               />
-              <Button onPress={handleSubmit} title="Submit" />
+
+              <FormButton title="Submit" onPress={handleSubmit}/>
             </View>
           )}
         </Formik>

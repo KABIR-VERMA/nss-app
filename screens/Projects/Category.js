@@ -19,6 +19,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import Gradient from "../../components/Gradient";
 import { LinearGradient } from "expo-linear-gradient";
 import { Icon } from "native-base";
+import FormButton from "../../components/FormButton";
 // import CategoryGridTile from "../../components/ProjectGridTile";
 
 var height = Dimensions.get("window").height;
@@ -125,24 +126,16 @@ class CategoryScreen extends Component {
 
   addProjectButton = () => {
     return (
-      <TouchableOpacity
+      <FormButton
+        title="Add Project"
         onPress={() => {
-          console.log("add project");
           try {
             this.props.navigation.navigate("AddProject");
           } catch (error) {
             console.log(error);
           }
         }}
-        style={{
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "orange",
-          padding: "3%",
-        }}
-      >
-        <Text style={styles.text}>Add Project</Text>
-      </TouchableOpacity>
+      />
     );
   };
 }
@@ -167,7 +160,7 @@ const styles = StyleSheet.create({
     borderRadius: (width * 0.8) / 4,
     justifyContent: "center",
     alignItems: "center",
-    borderColor: 'white',
+    borderColor: "white",
     borderWidth: 1,
   },
   text: {
