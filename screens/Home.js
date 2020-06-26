@@ -13,6 +13,7 @@ import { withFirebaseHOC } from "../config/Firebase";
 import { Table, TableWrapper, Row } from "react-native-table-component";
 import { LinearGradient } from "expo-linear-gradient";
 import Gradient from "../components/Gradient";
+import firebase from "firebase";
 
 const bgcolor = "#426885";
 // rgb(66, 104, 133)
@@ -30,6 +31,8 @@ class Home extends Component {
     tableData: null,
     tableHeader: null,
   };
+  
+
 
   handleSignout = async () => {
     try {
@@ -48,15 +51,40 @@ class Home extends Component {
       this.generateCell("Date", 2),
       this.generateCell("Status", 1),
     ];
-    for (let i = 0; i < 30; i += 1) {
-      const rowData = [];
-      for (let j = 0; j < 4; j += 1) {
-        if (j == 0) rowData.push(this.generateCell(i + 1, j));
-        else rowData.push(this.generateCell("hello", j));
-      }
-      tableData.push(rowData);
-    }
+    console.log("Home page")
+    firebase.firestore().collection("Events").get().then((e) => {
+      var i=1;
+     
+      
+      e.forEach((doc) => {
+        const rowData=[]
+        console.log(doc.data());
+        rowData.push(this.generateCell(i,0))
+        rowData.push(this.generateCell(doc.data().title,1))
+        rowData.push(this.generateCell(doc.data().date,2))
+        //----link is given for apply button----//
+        rowData.push(this.generateCell(doc.data().link,3))
+        console.log(rowData)
+        tableData.push(rowData);
+        i++;
+        this.forceUpdate();
+      });
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+
+
+    // for (let i = 0; i < 30; i += 1) {
+    //   const rowData = [];
+    //   for (let j = 0; j < 4; j += 1) {
+    //     if (j == 0) rowData.push(this.generateCell(i + 1, j));
+    //     else rowData.push(this.generateCell("hello", j));
+    //   }
+    //   tableData.push(rowData);
+    // }
     this.setState({ tableData: tableData, tableHeader: header });
+    console.log(tableData);
   };
 
   generateCell = (text, column, head = false) => {
@@ -106,7 +134,7 @@ class Home extends Component {
             widthArr={rowWidth}
             style={{ minHeight: 35 }}
             textStyle={{ textAlign: "center", color: "white" }}
-          />
+        />
         </Table>
         <ScrollView style={{}}>
           <Table borderStyle={{ borderColor: "white" }}>
@@ -141,7 +169,7 @@ class Home extends Component {
           onPress={() => this.handleApply(link)}
           style={styles.applyButton}
         >
-          <LinearGradient colors={Gradient.buttonGradient} style={{borderRadius: 10}} >
+          <LinearGradient colors={Gradient.buttonGradient} style={{ borderRadius: 10 }} >
             <Text style={{ color: "white", textAlign: "center" }}>Apply</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -168,6 +196,22 @@ class Home extends Component {
           <Text style={styles.description}>{description}</Text>
           <View style={styles.hr} />
           {this.state.tableData ? this.tableView(this.state.tableData) : null}
+          <Button
+            title="Add Event"
+            onPress={() => {
+              console.log("navigate")
+              try {
+                this.props.navigation.navigate("AddEvent");
+              } catch (error) {
+                console.log(error);
+              }
+            }}
+            titleStyle={{
+              color: "#F57C00",
+            }}
+            type="clear"
+          />
+
         </View>
       </Gradient.diagonalGradient>
     );
