@@ -1,11 +1,12 @@
 import React from "react"
 import {View, Button, Stylesheet, TextInput,  Dimensions, TouchableOpacity, Text, Switch, Image, StyleSheet} from "react-native"
 import { withFirebaseHOC } from "../config/Firebase"
-import {Icon, withTheme} from 'react-native-elements'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome'
+import { Thumbnail } from "native-base"
 
 const {width, height} =Dimensions.get('window')
+
 
 const styles = StyleSheet.create({
     upperContainer:{
@@ -29,6 +30,9 @@ const styles = StyleSheet.create({
         top:height*(275/1970),
         marginLeft:(175/1050)*width,
         borderRadius:width/100,
+    },
+    item:{
+        textAlign:'center'
     },
     button:{
         width:(375/1050)*width,
@@ -69,15 +73,34 @@ const styles = StyleSheet.create({
     }
 })
 
+function Item(props)
+{
+    return(
+            <Text style={{textAlign:'center',color:'white', fontSize:20}}>
+                {props.title} {props.val}
+            </Text>
+    )
+}
+
+
 class CheckHours extends React.Component{
     constructor(props){
         super(props)
         this.state={
+            mode:'enter',
             buttonPress :false,
-            EntryNumber: '20',
-            buttonDisable: true
+            EntryNumber: '2019MT6074',
+            buttonDisable: true,
+            resultFetched:false,
+            name:'',
+            hrs_completed:'',
+            hrs_total:'',
+            hrs_left:'',
+            success:'',
+            error:''
         }
         this.handleChangeText= this.handleChangeText.bind(this)
+        this.handleButton= this.handleButton.bind(this)
     }
 
     handleChangeText(EntryNumber){
@@ -88,7 +111,79 @@ class CheckHours extends React.Component{
             this.setState({EntryNumber,buttonDisable:false})
     }
 
+    view(){
+        if(this.state.success===0)
+        {
+            return(
+                <View>
+                <Text>
+                    Error : {this.state.error}
+                </Text>
+                <Button
+                title='OK' 
+                color='#6e63c4' 
+                onPress={()=>this.handleButton('OK')}
+                />
+                </View>
+            )
+        }
+        else if(this.state.success===1){
+            return(<View>
+                <Text style={{textAlign:'center', fontSize: 25, color:'white'}}>
+                    {this.state.name}
+                </Text>
+                <Item title='Completed Hours : ' val={this.state.hrs_completed}/>
+                <Item title='Hours Left              : ' val={this.state.hrs_left}/>
+                <Item title='Total Hours              : ' val={this.state.hrs_total}/>
+                <Button
+                title='OK' 
+                color='#6e63c4' 
+                onPress={()=>this.handleButton('OK')}
+                />
+            </View>)
+        }
+        else{
+            return(<Text>
+                Loading...
+            </Text>)
+        }
+    }
+
+
+    handleButton(name){
+        if(name==='check'){
+            this.setState({mode:'ok'})
+            fetch('https://nss-hours.herokuapp.com/hours?entry='+this.state.EntryNumber)
+            .then(res=>res.json())
+            .then(data=>{
+                this.setState({resultFetched:true, ...data})
+            })
+        }
+        else{
+            const newdata={
+                name:'',
+                hrs_completed:'',
+                hrs_total:'',
+                hrs_left:'',
+                success:'',
+                error:''
+            }
+            this.setState({mode:'enter', resultFetched:false,...newdata})
+        }
+    }
+
     render(){
+        const search = <View>
+                        <Text style={styles.text2}>ENTRY NUMBER</Text>
+                            <TextInput onChangeText={this.handleChangeText} value={this.state.EntryNumber} style={styles.textbox}/>
+                            <TouchableOpacity 
+                            disabled={this.state.buttonDisable} 
+                            style={{...styles.button, top:height/12, left: width/6}} 
+                            onPress={()=>this.handleButton('check')}>
+                                <Image name='check' style={styles.button} source={require('../assets/CheckButton1.jpg')}/>
+                        </TouchableOpacity></View>
+        const loading = <Text>Loading...</Text>
+
         return(
             <View style={{flexDirection:'column', height:height*(0.85)}}>
                 <View style={styles.upperContainer}>
@@ -98,14 +193,7 @@ class CheckHours extends React.Component{
                         <Text style={styles.text1}>
                             CHECK NSS HOURS
                         </Text>   
-                        <Text style={styles.text2}>
-                            ENTRY NUMBER
-                        </Text>
-                        <TextInput onChangeText={this.handleChangeText} value={this.state.EntryNumber} style={styles.textbox}/>
-
-                        <TouchableOpacity disabled={this.state.buttonDisable} style={{...styles.button, top:height/12, left: width/6}} onPress={()=>{alert("You pressed 'Check !'")}}>
-                            <Image style={styles.button} source={require('../assets/CheckButton1.jpg')}/>
-                        </TouchableOpacity>
+                        {this.state.mode==='enter'?search:this.view()}
                 </View>
             </View>
         )
