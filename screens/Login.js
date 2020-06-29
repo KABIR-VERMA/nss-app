@@ -289,7 +289,7 @@ class Login extends Component {
               opacity: this.state.login ? 0.6 : 1,
             }}
           >
-            Sign in
+            Sign Up
           </Text>
         </TouchableOpacity>
       </View>

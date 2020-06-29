@@ -204,7 +204,7 @@ class Team extends Component {
   };
 
   renderSection = (section, index) => {
-    console.log(section);
+    // console.log(section);
     if (index == 0) {
       return this.imageSlidingView(section.data);
     }
@@ -293,13 +293,21 @@ class Team extends Component {
             <Body style={{ backgroundColor: "transparent" }}>
               {item.name != "" && <Text style={styles.text}>{item.name}</Text>}
               {item.phone != "" && (
-                <Text style={styles.text}>{item.phone}</Text>
+                <Text
+                  style={{ color: "yellow" }}
+                  onPress={() => {
+                    Linking.openURL(`tel:${item.phone}`);
+                  }}
+                >
+                  {item.phone}
+                </Text>
               )}
               {item.email != "" && (
                 <Text
-                  style={styles.text}
-                  adjustsFontSizeToFit
-                  numberOfLines={1}
+                  style={{ color: "yellow" }}
+                  onPress={() => {
+                    Linking.openURL(`mailto:${item.email}`);
+                  }}
                 >
                   {item.email}
                 </Text>
@@ -452,7 +460,6 @@ var styles = StyleSheet.create({
   },
   cardImage: {
     height: Math.round(Dimensions.get("window").width / 2),
-
     width: null,
     flex: 1,
   },

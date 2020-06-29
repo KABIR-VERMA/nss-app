@@ -161,7 +161,7 @@ class Signup extends Component {
               />
               <ErrorMessage errorValue={touched.password && errors.password} />
               <FormInput
-                name="Password"
+                name="Confirm Password"
                 value={values.confirmPassword}
                 onChangeText={handleChange("confirmPassword")}
                 placeholder="Confirm password"

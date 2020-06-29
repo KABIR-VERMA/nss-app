@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^2.2.2",
     "@react-native-firebase/app": "^7.2.0",
     "@react-native-firebase/firestore": "^7.1.5",
     "expo": "~37.0.3",

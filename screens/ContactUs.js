@@ -14,7 +14,7 @@ class Contact extends React.Component {
             style={{
               color: "white",
               textAlign: "center",
-              fontSize: 45,
+              fontSize: 38,
               fontFamily: "",
               marginTop: "20%",
             }}
@@ -28,7 +28,7 @@ class Contact extends React.Component {
               Linking.openURL("fb://page/110459238983201");
             }}
           >
-            <Zocial name="facebook" size={80} color="white" />
+            <Zocial name="facebook" size={70} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             style={{ marginTop: "6%" }}
@@ -38,7 +38,7 @@ class Contact extends React.Component {
               );
             }}
           >
-            <Ionicons name="logo-instagram" size={90} color="white" />
+            <Ionicons name="logo-instagram" size={80} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
             style={{ marginTop: "6%" }}
@@ -48,7 +48,17 @@ class Contact extends React.Component {
               );
             }}
           >
-            <Ionicons name="logo-youtube" size={80} color="white" />
+            <Ionicons name="logo-youtube" size={70} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginTop: "6%", padding: "3%" }}
+            onPress={() => {
+              Linking.openURL(`mailto:nssgsec@admin.iitd.ac.in`);
+            }}
+          >
+            <Text style={{ fontSize: 23, color: "white" }}>
+              Email: nssgsec@admin.iitd.ac.in
+            </Text>
           </TouchableOpacity>
         </View>
       </Gradient.diagonalGradient>

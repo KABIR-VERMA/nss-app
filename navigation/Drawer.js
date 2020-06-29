@@ -40,7 +40,7 @@ const RootDrawerNavigator = createDrawerNavigator(
     Team: {
       screen: TeamNavigation,
     },
-    Contact: {
+    "Contact Us": {
       screen: ContactUsNavigation,
     },
     Hours: {

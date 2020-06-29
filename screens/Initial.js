@@ -4,6 +4,7 @@ import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import * as Icon from "@expo/vector-icons";
 import { withFirebaseHOC } from "../config/Firebase";
+import firebase from "firebase";
 
 class Initial extends Component {
   state = {
@@ -19,6 +20,7 @@ class Initial extends Component {
         if (user && this.props.firebase.isUserVerified()) {
           // if the user has previously logged in
           this.props.navigation.navigate("App");
+          
         } else {
           // if the user has previously signed out from the app
           this.props.navigation.navigate("Auth");
@@ -38,7 +40,6 @@ class Initial extends Component {
       Font.loadAsync({
         ...Icon.Ionicons.font,
       }),
-      
     ]);
   };
 

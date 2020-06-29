@@ -57,14 +57,13 @@ class AddTeam extends Component {
   };
 
   addMember = async (values, actions) => {
-    const { name, phone, email, website, hostel, bio } = values;
+    const { name, phone, email, hostel, bio } = values;
     const profile_image = this.state.imageurl;
     const designation = this.state.selected;
     const memeberData = {
       name,
       phone,
       email,
-      website,
       hostel,
       bio,
       profile_image,
@@ -157,7 +156,6 @@ class AddTeam extends Component {
               name: "",
               phone: "",
               email: "",
-              website: "",
               hostel: "",
               bio: "",
             }}
@@ -248,7 +246,8 @@ class AddTeam extends Component {
                 />
                 <ErrorMessage errorValue={touched.email && errors.email} />
 
-                <FormInput
+                {/* {Removed Website} */}
+                {/* <FormInput
                   name="Website"
                   value={values.website}
                   onChangeText={handleChange("website")}
@@ -257,7 +256,7 @@ class AddTeam extends Component {
                   iconColor="#2C384A"
                   onBlur={handleBlur("name")}
                 />
-                <ErrorMessage errorValue={touched.website && errors.website} />
+                <ErrorMessage errorValue={touched.website && errors.website} /> */}
 
                 <FormInput
                   name="Hostel"
@@ -281,7 +280,7 @@ class AddTeam extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <Icon name="md-print" style={{color: 'white'}}/>
+                  <Icon name="md-attach" style={{color: 'white'}}/>
                   <Text
                     style={{
                       fontSize: 16,

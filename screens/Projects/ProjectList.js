@@ -9,6 +9,7 @@ import {
   // LinearGradient,
   TouchableOpacity,
   Image,
+  Linking,
   Dimensions,
 } from "react-native";
 import { ListItem, Icon } from "react-native-elements";
@@ -19,7 +20,7 @@ import firebase from "firebase";
 import { withFirebaseHOC } from "../../config/Firebase";
 import Gradient from "../../components/Gradient";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import dummyData from "./dummyData.json";
+import { Card, CardItem, Body } from "native-base";
 
 // import { render } from "react-dom";
 // import { render } from 'react-dom';
@@ -56,17 +57,13 @@ class ProjectListScreen extends React.Component {
       projectList: [],
       activeSlide: 0,
       isOpened: [],
+      teamMembers: null,
     };
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     let items = [];
-    // var data = dummyData.data;
     var isOpened = [];
-    for (let i = 0; i < dummyData.length; i++) {
-      isOpened.push(false);
-    }
-    // this.setState({ isOpened: isOpened, projectList: data });
     firebase
       .firestore()
       .collection("Projects")
@@ -75,6 +72,7 @@ class ProjectListScreen extends React.Component {
       .then((e) => {
         e.forEach((doc) => {
           items.push(doc.data());
+          isOpened.push(false);
           this.setState({
             projectList: items,
             isOpened: isOpened,
@@ -85,7 +83,27 @@ class ProjectListScreen extends React.Component {
       .catch((error) => {
         console.log(error);
       });
-  }
+
+    let query = firebase
+      .firestore()
+      .collection("TeamMember")
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          console.log("No matching documents.");
+          return;
+        }
+        var teamMembers = {};
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          teamMembers[data.name] = data;
+        });
+        this.setState({ teamMembers });
+      })
+      .catch((err) => {
+        console.log("Error getting documents", err);
+      });
+  };
 
   render() {
     let categoryTitle = this.props.navigation.getParam("title");
@@ -158,69 +176,136 @@ class ProjectListScreen extends React.Component {
         </TouchableOpacity>
         {this.state.isOpened[ind] ? (
           <View style={{ paddingBottom: "3%" }}>
-            {this.imageSlidingView(project.imageArray)}
-            <Text style={styles.text}>{project.description}</Text>
-            {this.imageSlidingView(project.imageArray)}
+            {project.imageArray != "-"
+              ? this.imageSlidingView(project.imageArray)
+              : null}
+            {project.description != "-" ? (
+              <Text style={styles.text}>{project.description}</Text>
+            ) : null}
+            {project.members != "-" ? (
+              <View>
+                <Text
+                  style={{ ...styles.text, fontSize: 17, textAlign: "left" }}
+                >
+                  Contact Details:
+                </Text>
+                {this.imageSlidingView(project.members, true)}
+              </View>
+            ) : null}
           </View>
         ) : null}
       </View>
     );
   };
 
-  imageSlidingView = (arr) => {
-    return (
-      <View style={[styles.screen, { paddingTop: "8%" }]}>
-        <View style={[styles.screen, { flexDirection: "row" }]}>
-          <Ionicons
-            name="md-arrow-dropleft"
-            size={30}
-            color="white"
-            style={{ padding: "2%" }}
-          />
-          <Carousel
-            style={{}}
-            sliderWidth={width / 1.1}
-            // sliderHeight={height / 5}
-            itemWidth={width / 2}
-            data={arr}
-            renderItem={({ item }) => {
-              return (
-                <Image source={{ uri: item }} style={styles.carouselImage} />
-              );
-            }}
-            // onBeforeSnapToItem={(index) =>
-            //   this.setState({ activeSlide: index })
-            // }
-            loop={arr.lenght > 3 ? true : false}
-            decelerationRate={1}
-            firstItem={arr.length > 2 ? Math.floor(arr.length / 2) : 0}
-            // hasParallaxImages={true}
-          />
-          <Ionicons
-            name="md-arrow-dropright"
-            size={30}
-            color="white"
-            style={{ padding: "2%" }}
-          />
+  imageSlidingView = (arr, team = false) => {
+    if (arr) {
+      return (
+        <View style={[styles.screen, { paddingTop: "8%" }]}>
+          <View style={[styles.screen, { flexDirection: "row" }]}>
+            <Ionicons
+              name="md-arrow-dropleft"
+              size={30}
+              color="white"
+              style={{ padding: "2%" }}
+            />
+            <Carousel
+              style={{}}
+              sliderWidth={width / 1.1}
+              // sliderHeight={height / 5}
+              itemWidth={width / 1.6}
+              data={arr}
+              renderItem={({ item }) => {
+                if (team) {
+                  return this.singleTeamMemberItem(item);
+                }
+                return (
+                  <Image source={{ uri: item }} style={styles.carouselImage} />
+                );
+              }}
+              // onBeforeSnapToItem={(index) =>
+              //   this.setState({ activeSlide: index })
+              // }
+              loop={arr.length > 3 ? true : false}
+              decelerationRate={1}
+              firstItem={arr.length > 2 ? Math.floor(arr.length / 2) : 0}
+              // hasParallaxImages={true}
+            />
+            <Ionicons
+              name="md-arrow-dropright"
+              size={30}
+              color="white"
+              style={{ padding: "2%" }}
+            />
+          </View>
+          {/* <View style={{ top: -20 }}>
+            <Pagination
+              dotsLength={arr.length}
+              activeDotIndex={this.state.activeSlide}
+              containerStyle={{ backgroundColor: "transparent" }}
+              dotStyle={{
+                width: 10,
+                height: 10,
+                borderRadius: 5,
+                marginHorizontal: 3,
+                backgroundColor: "white",
+              }}
+              inactiveDotStyle={{}}
+              inactiveDotOpacity={0.4}
+              inactiveDotScale={0.6}
+            />
+          </View> */}
         </View>
-        {/* <View style={{ top: -20 }}>
-          <Pagination
-            dotsLength={arr.length}
-            activeDotIndex={this.state.activeSlide}
-            containerStyle={{ backgroundColor: "transparent" }}
-            dotStyle={{
-              width: 10,
-              height: 10,
-              borderRadius: 5,
-              marginHorizontal: 3,
-              backgroundColor: "white",
-            }}
-            inactiveDotStyle={{}}
-            inactiveDotOpacity={0.4}
-            inactiveDotScale={0.6}
+      );
+    }
+    return null;
+  };
+
+  singleTeamMemberItem = (member) => {
+    var item = this.state.teamMembers[member];
+    return (
+      <Card transparent style={{ width: width / 1.6 }}>
+        <CardItem cardBody>
+          <Image
+            source={
+              item.profile_image != ""
+                ? { uri: item.profile_image }
+                : require("../../assets/avatar.png")
+            }
+            style={styles.contactImage}
           />
-        </View> */}
-      </View>
+        </CardItem>
+        <CardItem style={{ backgroundColor: "rgba(0,0,0,0.2)" }}>
+          <Body style={{ backgroundColor: "transparent" }}>
+            {item.name != "" && (
+              <Text style={{ color: "white" }}>{item.name}</Text>
+            )}
+            {item.phone != "" && (
+              <Text
+                style={{ color: "yellow" }}
+                onPress={() => {
+                  Linking.openURL(`tel:${item.phone}`);
+                }}
+              >
+                {item.phone}
+              </Text>
+            )}
+            {item.email != "" && (
+              <Text
+                style={{ color: "yellow" }}
+                onPress={() => {
+                  Linking.openURL(`mailto:${item.email}`);
+                }}
+              >
+                {item.email}
+              </Text>
+            )}
+            {item.hostel != "" && (
+              <Text style={{ color: "white" }}>{item.hostel}</Text>
+            )}
+          </Body>
+        </CardItem>
+      </Card>
     );
   };
 }
@@ -230,6 +315,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  contactImage: {
+    // height: Math.round(Dimensions.get("window").width / 2),
+    // width: null,
+    // flex: 1,
+    height: height / 3,
+    width: width / 1.6,
+    resizeMode: "stretch",
+  },
+
+  contactItem: {
+    margin: 5,
+    width: Math.round(Dimensions.get("window").width / 2.2),
+    color: "white",
   },
 
   text: {
@@ -266,8 +366,8 @@ const styles = StyleSheet.create({
   },
 
   carouselImage: {
-    height: height / 5,
-    width: width / 2,
+    height: height / 4,
+    width: width / 1.6,
     resizeMode: "stretch",
   },
 

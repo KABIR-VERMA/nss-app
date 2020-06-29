@@ -29,6 +29,15 @@ var width = Dimensions.get("window").width;
 const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.subs = [
+      this.props.navigation.addListener("willFocus", () => {
+        this.componentDidMount();
+      }),
+    ];
+  }
+
   state = {
     tableData: [],
     tableHeader: null,
@@ -46,6 +55,8 @@ class Home extends Component {
   };
 
   componentDidMount = () => {
+    // used to refresh everytime
+    var tableData = [];
     console.log("Home page");
     firebase
       .firestore()
@@ -65,10 +76,10 @@ class Home extends Component {
             this.generateCell(doc.data().link, 3, false, doc.data())
           );
           i++;
-          // tableData.push(rowData);
+          tableData.push(rowData);
           // this.forceUpdate();
-          this.setState({ tableData: [...this.state.tableData, rowData] });
         });
+        this.setState({ tableData });
       })
       .catch((error) => {
         console.log(error);
@@ -124,7 +135,7 @@ class Home extends Component {
     tabheader.push(this.generateCell("S.no", 0, true));
     tabheader.push(this.generateCell("Name", 1, true));
     tabheader.push(this.generateCell("Date", 2, true));
-    tabheader.push(this.generateCell("Status", -1, true));
+    tabheader.push(this.generateCell("", -1, true));
     return (
       <View style={{ width: "90%", height: "40%", marginTop: "5%" }}>
         <Table borderStyle={{ borderColor: "white" }}>
@@ -189,8 +200,7 @@ class Home extends Component {
         overlayBackgroundColor="rgba(0,0,0,0.7)"
         isVisible={this.state.overlay}
         overlayStyle={{
-          padding: "10%",
-          paddingBottom: "5%",
+          padding: "2%",
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -203,23 +213,26 @@ class Home extends Component {
             borderColor: "white",
             borderWidth: 1,
             padding: "5%",
+            paddingBottom: "1%",
           }}
         >
           <ScrollView>
-            <View style={styles.container}>
-              <Text style={{ color: "white", fontSize: 25, textAlign: 'center' }}>{item.title}</Text>
-              <Text style={{ marginTop: "4%", color: "white", fontSize: 20 }}>
+            <View style={{ alignItems: "flex-start" }}>
+              {item.imageUrl != "" ? (
+                <Image
+                  source={{ uri: item.imageUrl }}
+                  style={{ width: "100%", height: 300, resizeMode: "contain" }}
+                />
+              ) : null}
+              <Text
+                style={{ color: "white", fontSize: 25, textAlign: "center" }}
+              >
+                {item.title}
+              </Text>
+              <Text style={{ color: "white", fontSize: 16, marginTop: 20 }}>
                 Event Date: {item.date}
               </Text>
-
-              <Text
-                style={{
-                  color: "white",
-                  fontSize: 16,
-                  textAlign: "center",
-                  marginTop: 20,
-                }}
-              >
+              <Text style={{ color: "white", fontSize: 16, marginTop: 20 }}>
                 {item.description}
               </Text>
             </View>
@@ -232,7 +245,7 @@ class Home extends Component {
               alignItems: "center",
             }}
           >
-            <View style={{ marginRight: "10%" }}>
+            <View style={{ marginRight: "3%" }}>
               <FormButton
                 title="Close"
                 onPress={() => {
@@ -248,6 +261,14 @@ class Home extends Component {
               }}
             />
           </View>
+          <View style={{ padding: 0, marginTop: "3%" }}>
+            <FormButton
+              title="Delete"
+              onPress={() => {
+                /* Delete Event */
+              }}
+            />
+          </View>
         </LinearGradient>
       </Overlay>
     );
@@ -255,7 +276,7 @@ class Home extends Component {
 
   addEventButton = () => {
     return (
-      <View style={{}} >
+      <View style={{}}>
         <FormButton
           title="Add Event"
           onPress={() => {

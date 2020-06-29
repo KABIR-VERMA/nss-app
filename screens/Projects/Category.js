@@ -51,9 +51,7 @@ class CategoryScreen extends Component {
             {/* {The iconUrl should be a png with black oultine..........
                 White tint color is applied here
             } */}
-            {item.iconUrl ? (
-              <Image source={{ uri: item.iconUrl }} style={styles.buttonIcon} />
-            ) : null}
+            {item.iconUrl}
             <Text style={styles.text}>{item.title}</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -61,29 +59,42 @@ class CategoryScreen extends Component {
     );
   };
 
+  // renderCategoryIcon = (url) => {
+  //   const t = url
+  //   console.log(t)
+  //   return (
+  //     <Image
+  //       source={require(t)}
+  //       style={styles.buttonIcon}
+  //     />
+  //   );
+  // };
+
   render() {
     return (
       <Gradient.diagonalGradient>
-        <SafeAreaView style={{ flex: 1 }}>
-          <ScrollView>
-            {PROJECTCATEGORIES.map((item, ind) => {
-              if (ind % 2 == 1) return null;
-              return (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-evenly",
-                  }}
-                >
-                  {this.roundButton(PROJECTCATEGORIES[ind])}
-                  {ind == PROJECTCATEGORIES.length - 1
-                    ? null
-                    : this.roundButton(PROJECTCATEGORIES[ind + 1])}
-                </View>
-              );
-            })}
-            {/* <FlatList
+        <SafeAreaView
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          {PROJECTCATEGORIES.map((item, ind) => {
+            if (ind % 2 == 1) return null;
+            return (
+              <View
+                key={ind}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                {this.roundButton(PROJECTCATEGORIES[ind])}
+                {ind == PROJECTCATEGORIES.length - 1
+                  ? null
+                  : this.roundButton(PROJECTCATEGORIES[ind + 1])}
+              </View>
+            );
+          })}
+          {/* <FlatList
             keyExtractor={(item) => item.id}
             data={PROJECTCATEGORIES}
             // renderItem={(itemData) => {
@@ -107,7 +118,7 @@ class CategoryScreen extends Component {
             // }}
             numColumns={2}
           /> */}
-            {/* <Button
+          {/* <Button
             title="BAck to home screen"
             onPress={() => {
               this.props.navigation.navigate("Home");
@@ -117,7 +128,7 @@ class CategoryScreen extends Component {
             }}
             type="clear"
           /> */}
-          </ScrollView>
+
           {this.addProjectButton()}
         </SafeAreaView>
       </Gradient.diagonalGradient>
