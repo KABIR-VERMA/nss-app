@@ -61,7 +61,11 @@ class AddEventScreen extends Component {
                       };
                       console.log("Final Upload Data", finalData);
                       const db = firebase.firestore().collection("Events");
-                      db.add(finalData);
+                      db.add(finalData).then(ref=>{
+                        ref.set({id:ref.id},{merge:true}).then(()=>{
+                          console.log( "data is added to database");
+                        })
+                      });
                       this.props.navigation.goBack()
                     },
                   },

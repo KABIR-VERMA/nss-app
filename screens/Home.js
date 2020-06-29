@@ -265,6 +265,14 @@ class Home extends Component {
             <FormButton
               title="Delete"
               onPress={() => {
+                
+                console.log(item.id);
+                firebase.firestore().collection("Events").doc(item.id).delete().then(()=>{
+                  console.log("data is deleted")
+                });
+                this.forceUpdate();
+                this.setState({ overlay: false, overlayItem: null });
+                
                 /* Delete Event */
               }}
             />
