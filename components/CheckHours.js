@@ -147,8 +147,8 @@ class CheckHours extends React.Component{
                 </Text>
                 <View style={{flexDirection:'row', paddingHorizontal:width/15}}>
                     <View style={{flexDirection:"column"}}>
-                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Left </Text>
-                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Completed</Text>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Completed </Text>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Left</Text>
                         <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Total </Text>
 
                     </View>
