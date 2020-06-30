@@ -1,7 +1,7 @@
 import React from "react"
-import {View, Button, Stylesheet, TextInput,  Dimensions, TouchableOpacity, Text, Switch, Image, StyleSheet} from "react-native"
+import {View, Button, Stylesheet, TextInput, ActivityIndicator, Dimensions, TouchableOpacity, Text, Switch, Image, StyleSheet} from "react-native"
 import { withFirebaseHOC } from "../config/Firebase"
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome'
 import { Thumbnail } from "native-base"
 
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         minWidth:width,
         height:height/8,
         justifyContent:'center',
-        alignItems:'center',
+        alignItems:'flex-start',
         borderColor:'white',
         borderTopWidth:width/500,
         borderBottomWidth:width/500
@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
         borderColor:'white',
         borderWidth:width/500,
         height: (925/1950)*height,
-        width:(75/105)*width,
+        width:(80/105)*width,
         top:height*(275/1970),
-        marginLeft:(175/1050)*width,
+        marginLeft:(125/1050)*width,
         borderRadius:width/100,
     },
     item:{
@@ -70,7 +70,17 @@ const styles = StyleSheet.create({
         textAlign:'center',
         fontSize:height/30,
         height:(height)*(1/20)
-    }
+    },
+    activityIndicatorWrapper: {
+        height: 100,
+        width: 100,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        marginTop: height/5.3,
+        marginLeft:width/4.3
+      }
 })
 
 function Item(props)
@@ -89,7 +99,7 @@ class CheckHours extends React.Component{
         this.state={
             mode:'enter',
             buttonPress :false,
-            EntryNumber: '2019MT6074',
+            EntryNumber: '20',
             buttonDisable: true,
             resultFetched:false,
             name:'',
@@ -116,36 +126,54 @@ class CheckHours extends React.Component{
         {
             return(
                 <View>
-                <Text>
+                <Text style={{color:'#dc143c',textAlign:'center', fontWeight:'bold', fontSize:width/19, paddingVertical: height/10}}>
                     Error : {this.state.error}
                 </Text>
+                <View
+                style={{ width:width/8, height:height/8, marginHorizontal:width/3.3}}>
                 <Button
                 title='OK' 
                 color='#6e63c4' 
                 onPress={()=>this.handleButton('OK')}
                 />
                 </View>
+                </View>
             )
         }
         else if(this.state.success===1){
             return(<View>
-                <Text style={{textAlign:'center', fontSize: 25, color:'white'}}>
+                <Text style={{textAlign:'center', fontSize: 25, color:'white', paddingVertical:height/36}}>
                     {this.state.name}
                 </Text>
-                <Item title='Completed Hours : ' val={this.state.hrs_completed}/>
-                <Item title='Hours Left              : ' val={this.state.hrs_left}/>
-                <Item title='Total Hours              : ' val={this.state.hrs_total}/>
+                <View style={{flexDirection:'row', paddingHorizontal:width/15}}>
+                    <View style={{flexDirection:"column"}}>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Left </Text>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Completed</Text>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>Hours Total </Text>
+
+                    </View>
+                    <View style={{flexDirection:'column', fontSize:width/6, paddingHorizontal:width/10}}>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>{': '+this.state.hrs_completed}</Text>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>{': '+this.state.hrs_left}</Text>
+                        <Text style={{fontSize:width/19, color:'white', fontWeight:'bold', }}>{': '+this.state.hrs_total}</Text>
+                    </View>
+                </View>
+                <View
+                style={{paddingVertical:height/17, width:width/8, height:height/8, marginHorizontal:width/3.3}}>
                 <Button
                 title='OK' 
                 color='#6e63c4' 
                 onPress={()=>this.handleButton('OK')}
                 />
+                </View>
             </View>)
         }
         else{
-            return(<Text>
-                Loading...
-            </Text>)
+            return(<View style={styles.activityIndicatorWrapper}>
+                <ActivityIndicator
+                    size='large'
+                  animating={true} />
+              </View>)
         }
     }
 
@@ -156,11 +184,22 @@ class CheckHours extends React.Component{
             fetch('https://nss-hours.herokuapp.com/hours?entry='+this.state.EntryNumber)
             .then(res=>res.json())
             .then(data=>{
-                this.setState({resultFetched:true, ...data})
+                if(data.success)
+                    this.setState({resultFetched:true, ...data,})
+                else{
+                    console.log('Error')
+                    this.setState({resultFetched:true, error:"Invalid Entry Number", success:0})
+                }
+            })
+            .catch(()=>{
+                console.log('Error')
+                this.setState({resultFetched:true, error:"Invalid Entry Number or Network Error", success:0})
             })
         }
         else{
             const newdata={
+                buttonDisable:true,
+                EntryNumber:'20',
                 name:'',
                 hrs_completed:'',
                 hrs_total:'',
@@ -178,16 +217,16 @@ class CheckHours extends React.Component{
                             <TextInput onChangeText={this.handleChangeText} value={this.state.EntryNumber} style={styles.textbox}/>
                             <TouchableOpacity 
                             disabled={this.state.buttonDisable} 
-                            style={{...styles.button, top:height/12, left: width/6}} 
+                            style={{...styles.button, top:height/12, left: width/5.5}} 
                             onPress={()=>this.handleButton('check')}>
                                 <Image name='check' style={styles.button} source={require('../assets/CheckButton1.jpg')}/>
                         </TouchableOpacity></View>
-        const loading = <Text>Loading...</Text>
 
         return(
             <View style={{flexDirection:'column', height:height*(0.85)}}>
-                <View style={styles.upperContainer}>
-                    <FontAwesomeIcon style={styles.icon} size={width/6} icon={faSearch}  color='white'/>
+                <View style={{...styles.upperContainer, flexDirection:'row'}}>
+                    <FontAwesomeIcon onPress={this.props.handlePressBack} style={{...styles.icon,right:width/4.4, marginVertical:height/72}} size={width/6} color='white' icon={faArrowLeft}/>
+                    <FontAwesomeIcon style={{...styles.icon,paddingLeft:width/3,right:width/11, marginVertical:height/72}} size={width/6} icon={faSearch}  color='white'/>
                 </View>
                 <View style={styles.formContainer}>
                         <Text style={styles.text1}>

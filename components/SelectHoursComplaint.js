@@ -23,6 +23,7 @@ class HoursSelect extends React.Component{
         this.getComp=this.getComp.bind(this)
         this.handlePressCheck=this.handlePressCheck.bind(this)
         this.handlePressComplaint=this.handlePressComplaint.bind(this)
+        this.handlePressBack=this.handlePressBack.bind(this)
     }
 
     handlePressCheck(){
@@ -31,6 +32,10 @@ class HoursSelect extends React.Component{
 
     handlePressComplaint(){
         this.setState({mode:'complaint'})
+    }
+
+    handlePressBack(){
+        this.setState({mode:'select'})
     }
 
     getComp=()=>{
@@ -51,9 +56,9 @@ class HoursSelect extends React.Component{
                         <HoursButton width={width/2} height={width/2} pTop={p/(5)} pBottom={p/5} bRadius={width/3} txt={'HOURS\nCOMPLAINT'} msg={'Complaint has been Pressed'} icon={faExclamationTriangle} handlePress={this.handlePressComplaint}/>
                     </View>)
         else if(this.state.mode=='check')
-            return (<CheckHours/>)
+            return (<CheckHours handlePressBack={this.handlePressBack} />)
         else
-                return(<Complaint/>)
+                return(<Complaint handlePressBack={this.handlePressBack} />)
         
     }
 

@@ -38,7 +38,7 @@ function HoursButton(props)
         text:{
             fontWeight:'bold',
             bottom:0,
-            top: width/10,
+            top: width/12,
             left:-width/11,
             fontSize:props.width/8,
             color:'white',

@@ -2,7 +2,7 @@ import React from "react"
 import {View, Button, Stylesheet, TextInput,ScrollView, Dimensions, TouchableOpacity,Linking, Text, FlatList, Switch, Image, StyleSheet} from "react-native"
 import { withFirebaseHOC } from "../config/Firebase"
 import {Icon, withTheme} from 'react-native-elements'
-import { faSearch, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
+import { faSearch, faArrowLeft, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome'
 import { SafeAreaView } from "react-navigation"
 
@@ -17,7 +17,8 @@ const styles = StyleSheet.create({
         borderTopWidth:width/500,
         borderBottomWidth:width/500,
         flexDirection:'row',
-        justifyContent:'center'
+        justifyContent:'center',
+        paddingTop:5
     },
     icon1:{
         top:height/50,
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         textAlign:'center',
         color:'white',
-        fontSize:height/30,
+        fontSize:height/35,
         paddingBottom:height/144,
     },
     text2:{
@@ -136,11 +137,12 @@ class CheckHours extends React.Component{
         return(
             <View style={{flexDirection:'column'}}>
                 <View style={styles.upperContainer}>
-                    <FontAwesomeIcon style={styles.icon1} size={width/6} icon={faExclamationTriangle}  color='white'/>
+                <FontAwesomeIcon onPress={this.props.handlePressBack} style={{...styles.icon,left:0,marginVertical:10}} size={width/6} color='white' icon={faArrowLeft}/>
+                    <FontAwesomeIcon style={styles.icon1} size={width/8} icon={faExclamationTriangle}  color='white'/>
                     <Text style={styles.text1}>
                         HOURS COMPLAINT
                     </Text>
-                    <FontAwesomeIcon style={styles.icon2} size={width/6} icon={faExclamationTriangle}  color='white'/>
+                    <FontAwesomeIcon style={styles.icon2} size={width/8} icon={faExclamationTriangle}  color='white'/>
                 </View>
                     <ScrollView style={styles.infoContainer}>
                         {list}
