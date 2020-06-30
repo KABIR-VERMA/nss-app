@@ -31,11 +31,13 @@ const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.subs = [
-      this.props.navigation.addListener("willFocus", () => {
-        this.componentDidMount();
-      }),
-    ];
+    if (global.isAdmin) {
+      this.subs = [
+        this.props.navigation.addListener("willFocus", () => {
+          this.componentDidMount();
+        }),
+      ];
+    }
   }
 
   state = {
@@ -67,7 +69,7 @@ class Home extends Component {
         e.forEach((doc) => {
           const rowData = [];
           // console.log(doc.data());
-          console.log("Date", doc.data().Date);
+          // console.log("Date", doc.data().Date);
           rowData.push(this.generateCell(i, 0));
           rowData.push(this.generateCell(doc.data().title, 1));
           rowData.push(this.generateCell(doc.data().date, 2));
@@ -84,18 +86,6 @@ class Home extends Component {
       .catch((error) => {
         console.log(error);
       });
-
-    // this.setState({ tableData: tableData, tableHeader: header });
-
-    // for (let i = 0; i < 30; i += 1) {
-    //   const rowData = [];
-    //   for (let j = 0; j < 4; j += 1) {
-    //     if (j == 0) rowData.push(this.generateCell(i + 1, j));
-    //     else rowData.push(this.generateCell("hello", j));
-    //   }
-    //   tableData.push(rowData);
-    // }
-    // console.log(tableData);
   };
 
   generateCell = (text, column, head = false, item = null) => {
@@ -137,7 +127,13 @@ class Home extends Component {
     tabheader.push(this.generateCell("Date", 2, true));
     tabheader.push(this.generateCell("", -1, true));
     return (
-      <View style={{ width: "90%", height: "40%", marginTop: "5%" }}>
+      <View
+        style={{
+          width: "90%",
+          height: global.isAdmin ? "40%" : "50%",
+          marginTop: "5%",
+        }}
+      >
         <Table borderStyle={{ borderColor: "white" }}>
           <Row
             key={100000}
@@ -308,7 +304,7 @@ class Home extends Component {
           <Text style={styles.description}>{description}</Text>
           <View style={styles.hr} />
           {this.state.tableData ? this.tableView(this.state.tableData) : null}
-          {this.addEventButton()}
+          {global.isAdmin ? this.addEventButton() : null}
         </View>
       </Gradient.diagonalGradient>
     );

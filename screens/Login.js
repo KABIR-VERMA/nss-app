@@ -205,7 +205,7 @@ class Login extends Component {
                         <FormButton
                           buttonType="outline"
                           onPress={handleSubmit}
-                          title="LOGIN"
+                          title="LOG IN"
                           // buttonColor="#039BE5"
                           buttonColor="#7256B1"
                           disabled={!isValid || isSubmitting}

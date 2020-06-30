@@ -1,4 +1,4 @@
-import * as firebase from  "firebase";
+import * as firebase from "firebase";
 import "firebase/auth";
 import "firebase/firestore";
 import firebaseConfig from "./firebaseConfig";
@@ -42,6 +42,19 @@ const Firebase = {
   // send a verification email to the user
   verifyEmail: () => {
     return firebase.auth().currentUser.sendEmailVerification({});
+  },
+  isAdmin: async () => {
+    const userId = firebase.auth().currentUser.uid;
+    console.log("while admining")
+    return await firebase
+      .firestore()
+      .collection("users")
+      .doc(userId)
+      .get()
+      .then((e) => {
+        // console.log(e.data())
+        return e.data().isAdmin;
+      });
   },
 };
 

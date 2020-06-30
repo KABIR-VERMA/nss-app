@@ -184,7 +184,7 @@ class Signup extends Component {
               <ErrorMessage
                 errorValue={touched.confirmPassword && errors.confirmPassword}
               />
-              <CheckBox
+              {/* <CheckBox
                 containerStyle={styles.checkBoxContainer}
                 checkedIcon="check-box"
                 iconType="material"
@@ -195,12 +195,12 @@ class Signup extends Component {
                 checkedTitle="You agreed to our terms and conditions"
                 checked={values.check}
                 onPress={() => setFieldValue("check", !values.check)}
-              />
+              /> */}
               <View style={styles.buttonContainer}>
                 <FormButton
                   buttonType="outline"
                   onPress={handleSubmit}
-                  title="SIGNUP"
+                  title="SIGN UP"
                   buttonColor="#7256B1"
                   disabled={!isValid || isSubmitting}
                   loading={isSubmitting}

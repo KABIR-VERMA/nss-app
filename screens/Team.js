@@ -165,7 +165,7 @@ class Team extends Component {
         <View style={{ marginVertical: 10 }}>
           {this.renderModal()}
           {this.renderSectionList()}
-          {this.addMemberButton()}
+          {global.isAdmin ? this.addMemberButton() : null}
         </View>
       </Gradient.diagonalGradient>
     );
