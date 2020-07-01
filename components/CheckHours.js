@@ -83,14 +83,6 @@ const styles = StyleSheet.create({
       }
 })
 
-function Item(props)
-{
-    return(
-            <Text style={{textAlign:'center',color:'white', fontSize:20}}>
-                {props.title} {props.val}
-            </Text>
-    )
-}
 
 
 class CheckHours extends React.Component{
@@ -126,7 +118,7 @@ class CheckHours extends React.Component{
         {
             return(
                 <View>
-                <Text style={{color:'#dc143c',textAlign:'center', fontWeight:'bold', fontSize:width/19, paddingVertical: height/10}}>
+                <Text style={{color:'yellow',textAlign:'center', fontWeight:'bold', fontSize:width/19, paddingVertical: height/10}}>
                     Error : {this.state.error}
                 </Text>
                 <View
@@ -225,7 +217,7 @@ class CheckHours extends React.Component{
         return(
             <View style={{flexDirection:'column', height:height*(0.85)}}>
                 <View style={{...styles.upperContainer, flexDirection:'row'}}>
-                    <FontAwesomeIcon onPress={this.props.handlePressBack} style={{...styles.icon,right:width/4.4, marginVertical:height/72}} size={width/6} color='white' icon={faArrowLeft}/>
+                    <FontAwesomeIcon onPress={this.props.handlePressBack} style={{...styles.icon,right:width/4.4, marginVertical:height/36}} size={width/8} color='white' icon={faArrowLeft}/>
                     <FontAwesomeIcon style={{...styles.icon,paddingLeft:width/3,right:width/11, marginVertical:height/72}} size={width/6} icon={faSearch}  color='white'/>
                 </View>
                 <View style={styles.formContainer}>

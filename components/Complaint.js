@@ -137,7 +137,7 @@ class CheckHours extends React.Component{
         return(
             <View style={{flexDirection:'column'}}>
                 <View style={styles.upperContainer}>
-                <FontAwesomeIcon onPress={this.props.handlePressBack} style={{...styles.icon,left:0,marginVertical:10}} size={width/6} color='white' icon={faArrowLeft}/>
+                <FontAwesomeIcon onPress={this.props.handlePressBack} style={{...styles.icon,left:-10,marginVertical:12}} size={width/8} color='white' icon={faArrowLeft}/>
                     <FontAwesomeIcon style={styles.icon1} size={width/8} icon={faExclamationTriangle}  color='white'/>
                     <Text style={styles.text1}>
                         HOURS COMPLAINT
