@@ -32,7 +32,11 @@ class AddEventScreen extends Component {
   render() {
     return (
       <Gradient.diagonalGradient>
-        <ScrollView>
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
+          style={{ flex: 1 }}
+        >
           <Formik
             initialValues={{
               title: "",
@@ -61,12 +65,12 @@ class AddEventScreen extends Component {
                       };
                       console.log("Final Upload Data", finalData);
                       const db = firebase.firestore().collection("Events");
-                      db.add(finalData).then(ref=>{
-                        ref.set({id:ref.id},{merge:true}).then(()=>{
-                          console.log( "data is added to database");
-                        })
+                      db.add(finalData).then((ref) => {
+                        ref.set({ id: ref.id }, { merge: true }).then(() => {
+                          alert("Added Event");
+                          this.props.navigation.goBack();
+                        });
                       });
-                      this.props.navigation.goBack()
                     },
                   },
                 ],
@@ -114,11 +118,12 @@ class AddEventScreen extends Component {
                   placeholder="Image Url"
                 />
                 <TextInput
-                  style={styles.input}
+                  style={{ ...styles.input, maxHeight: 400 }}
                   onChangeText={handleChange("description")}
                   onBlur={handleBlur("description")}
                   value={values.description}
                   multiline={true}
+                  numberOfLines={5}
                   placeholder="description"
                 />
 

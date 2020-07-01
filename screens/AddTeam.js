@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { withFirebaseHOC } from "../config/Firebase";
 import * as firebase from "firebase";
@@ -49,11 +49,28 @@ class AddTeam extends Component {
   }
 
   handleOnSubmit = async (values, actions) => {
-    if (this.state.image) {
-      this.uploadImage(this.state.image, values, actions);
-    } else {
-      this.addMember(values, actions);
-    }
+    Alert.alert(
+      "",
+      "Are you sure you want to add this team member?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            if (this.state.image) {
+              this.uploadImage(this.state.image, values, actions);
+            } else {
+              this.addMember(values, actions);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   addMember = async (values, actions) => {
@@ -108,7 +125,7 @@ class AddTeam extends Component {
   render() {
     return (
       <Gradient.diagonalGradient>
-        <ScrollView style={{padding: 10}} >
+        <ScrollView style={{ padding: 10 }} keyboardShouldPersistTaps="handled" >
           <View style={{ alignItems: "center" }}>
             {this.state.image == "" && (
               <Image
@@ -178,7 +195,7 @@ class AddTeam extends Component {
                 <Picker
                   note
                   mode="dropdown"
-                  style={{color: 'white', marginRight: 15, marginLeft: 15 }}
+                  style={{ color: "white", marginRight: 15, marginLeft: 15 }}
                   selectedValue={this.state.selected}
                   onValueChange={this.onValueChange.bind(this)}
                 >
@@ -280,7 +297,7 @@ class AddTeam extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <Icon name="md-attach" style={{color: 'white'}}/>
+                  <Icon name="md-attach" style={{ color: "white" }} />
                   <Text
                     style={{
                       fontSize: 16,
@@ -297,11 +314,12 @@ class AddTeam extends Component {
                   // value={values.bio}
                   name="bio"
                   value={values.bio}
-                  multiline={true}
                   onChangeText={handleChange("bio")}
                   placeholder="Type Here"
                   onBlur={handleBlur("name")}
-                  inputStyle={{ color: "white" }}
+                  multiline={true}
+                  numberOfLines={5}
+                  inputStyle={{ color: "white", maxHeight: 300 }}
                 />
                 <ErrorMessage errorValue={touched.bio && errors.bio} />
                 <View style={{ margin: 25 }}>

@@ -13,6 +13,10 @@ const HoursNavigation = createStackNavigator(
         }
       } 
     }
+  },{
+    defaultNavigationOptions: {
+      headerTintColor: "white",
+    },
   }
 );
 export default HoursNavigation;

@@ -33,22 +33,20 @@ var width = Dimensions.get("window").width;
 var height = Dimensions.get("window").height;
 
 class ProjectListScreen extends React.Component {
-  // static navigationOptions = ({ navigation, screenProps }) => ({
-  //   title: navigation.state.params.name + "'s Profile!",
-  //   headerRight: <Button color={screenProps.tintColor} />,
+  static navigationOptions = ({ navigation, screenProps }) => ({
+    title: "Hellooo",
+  });
 
-  // });
-  // static navigationOptions = ({ navigation, navigationOptions }) => {
-  //   const { params } = navigation.state;
-  //   return {
-  //     title: params ? params.name : "Project",
-  //     /* These values are used instead of the shared configuration! */
-  //     headerStyle: {
-  //       backgroundColor: "Red",
-  //     },
-  //     // headerTintColor: navigationOptions.headerStyle.backgroundColor,
-  //   };
-  // };
+  static navigationOptions = ({ navigation, navigationOptions }) => {
+    // const { params } = navigation.state;
+    return {
+      // title: params ? params.name : "Project",
+      title: "hello",
+      headerStyle: {
+        backgroundColor: "Red",
+      },
+    };
+  };
 
   constructor(props) {
     super();
@@ -201,7 +199,7 @@ class ProjectListScreen extends React.Component {
   imageSlidingView = (arr, team = false) => {
     if (arr) {
       return (
-        <View style={[styles.screen, { paddingTop: "8%" }]}>
+        <View style={[styles.screen, { marginTop: "8%" }]}>
           <View style={[styles.screen, { flexDirection: "row" }]}>
             <Ionicons
               name="md-arrow-dropleft"

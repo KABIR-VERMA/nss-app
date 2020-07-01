@@ -9,19 +9,15 @@ import {
   TouchableOpacity,
   Alert,
   Linking,
-  ActivityIndicator,
-  StatusBar,
 } from "react-native";
 import { Button, Overlay } from "react-native-elements";
 import { withFirebaseHOC } from "../config/Firebase";
 import { Table, TableWrapper, Row } from "react-native-table-component";
-import Expo from "expo";
 import { LinearGradient } from "expo-linear-gradient";
 import Gradient from "../components/Gradient";
 import firebase from "firebase";
 import FormButton from "../components/FormButton";
-import { FlatList } from "react-native-gesture-handler";
-import { createStackNavigator, createAppContainer } from "react-navigation";
+
 const bgcolor = "#426885";
 // rgb(66, 104, 133)
 
@@ -35,12 +31,6 @@ var height = Dimensions.get("window").height;
 const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
 
 class Home extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: "Main",
-    };
-  };
-  
   constructor(props) {
     super(props);
     if (global.isAdmin) {
@@ -57,7 +47,6 @@ class Home extends Component {
     tableHeader: null,
     overlayItem: null,
     overlay: false,
-    refreshing: true,
   };
 
   handleSignout = async () => {
@@ -70,8 +59,7 @@ class Home extends Component {
   };
 
   componentDidMount = () => {
-    StatusBar.setBarStyle("light-content", true);
-    StatusBar.setBackgroundColor("#404c59");
+    // used to refresh everytime
     var tableData = [];
     console.log("Home page");
     firebase
@@ -82,8 +70,8 @@ class Home extends Component {
         var i = 1;
         e.forEach((doc) => {
           const rowData = [];
-          //   console.log(doc.data());
-          console.log("Date", doc.data().Date);
+          // console.log(doc.data());
+          // console.log("Date", doc.data().Date);
           rowData.push(this.generateCell(i, 0));
           rowData.push(this.generateCell(doc.data().title, 1));
           rowData.push(this.generateCell(doc.data().date, 2));
@@ -92,11 +80,10 @@ class Home extends Component {
             this.generateCell(doc.data().link, 3, false, doc.data())
           );
           i++;
-          //   tableData.push(doc.data());
-          //   this.forceUpdate();
           tableData.push(rowData);
+          // this.forceUpdate();
         });
-        this.setState({ tableData, refreshing: false });
+        this.setState({ tableData });
       })
       .catch((error) => {
         console.log(error);
@@ -135,7 +122,7 @@ class Home extends Component {
     );
   };
 
-  tableView = () => {
+  tableView = (tableData) => {
     const tabheader = [];
     tabheader.push(this.generateCell("S.no", 0, true));
     tabheader.push(this.generateCell("Name", 1, true));
@@ -158,26 +145,9 @@ class Home extends Component {
             textStyle={{ textAlign: "center", color: "white" }}
           />
         </Table>
-        <View style={{ flex: 1 }}>
-          <FlatList
-            data={this.state.tableData}
-            keyExtractor={(item, ind) => ind.toString()}
-            renderItem={({ item, index }) => {
-              return (
-                <Row
-                  key={index}
-                  data={item}
-                  widthArr={rowWidth}
-                  // style={{ height: 35 }}
-                  textStyle={{ textAlign: "center", color: "white" }}
-                />
-              );
-            }}
-          />
-        </View>
-        {/* <ScrollView style={{}}>
+        <ScrollView style={{}}>
           <Table borderStyle={{ borderColor: "white" }}>
-            {this.state.tableData.map((rowData, index) => (
+            {tableData.map((rowData, index) => (
               <Row
                 key={index}
                 data={rowData}
@@ -187,7 +157,7 @@ class Home extends Component {
               />
             ))}
           </Table>
-        </ScrollView> */}
+        </ScrollView>
       </View>
     );
   };
@@ -221,7 +191,7 @@ class Home extends Component {
 
   renderOverlay = () => {
     const item = this.state.overlayItem;
-    // console.log("item", item);
+    console.log("item", item);
     var aspectRat = 1;
     Image.getSize(item.imageUrl, (wid, hei) => {
       aspectRat = wid / hei;

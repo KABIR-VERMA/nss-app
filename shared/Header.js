@@ -1,25 +1,30 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Dimensions } from "react-native";
 import { MaterialIcons } from "react-native-vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import Gradient from "../components/Gradient";
 
 export default function Header({ navigation, title, drawer }) {
   var isdrawer = drawer;
   return (
-    <View style={styles.header}>
-      {isdrawer && (
-        <MaterialIcons
-          name="menu"
-          size={28}
-          onPress={navigation.openDrawer}
-          style={styles.icon}
-        />
-      )}
-      <View>
-        <Text style={[styles.headerText, { right: isdrawer ? 0 : "25%" }]}>
-          {title}
-        </Text>
+    <LinearGradient colors={Gradient.headerGradient} style={{ flex: 1 }}>
+      <View style={styles.header}>
+        {isdrawer && (
+          <MaterialIcons
+            name="menu"
+            color="white"
+            size={28}
+            onPress={navigation.openDrawer}
+            style={styles.icon}
+          />
+        )}
+        <View>
+          <Text style={[styles.headerText, { right: isdrawer ? 0 : 28 }]}>
+            {title}
+          </Text>
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 

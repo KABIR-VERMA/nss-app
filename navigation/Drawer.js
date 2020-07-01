@@ -27,16 +27,12 @@ const RootDrawerNavigator = createDrawerNavigator(
     Home: {
       screen: AppNavigation,
     },
-    About: {
-      screen: AboutUsNavigation,
-    },
     Gallery: {
       screen: GalleryNavigation,
     },
-    Project: {
+    Projects: {
       screen: ProjectNavigation,
     },
-
     Team: {
       screen: TeamNavigation,
     },

@@ -13,6 +13,10 @@ const ContactUsNavigation = createStackNavigator(
         }
       } 
     }
+  },{
+    defaultNavigationOptions: {
+      headerTintColor: "white",
+    },
   }
 );
 export default ContactUsNavigation;

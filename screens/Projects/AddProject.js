@@ -28,7 +28,9 @@ class AddProjectScreen extends React.Component {
   render() {
     return (
       <Gradient.diagonalGradient>
-        <ScrollView>{this.renderForm()}</ScrollView>
+        <ScrollView keyboardShouldPersistTaps="handled">
+          {this.renderForm()}
+        </ScrollView>
       </Gradient.diagonalGradient>
     );
   }
@@ -236,7 +238,15 @@ class AddProjectScreen extends React.Component {
                   };
                   // console.log("Final Upload Data", finalData);
                   const db = firebase.firestore().collection("Projects");
-                  db.add(finalData);
+                  db.add(finalData)
+                    .then(() => {
+                      alert("Event Added");
+                      this.props.navigation.goBack();
+                    })
+                    .catch((err) => {
+                      console.log("Error adding Event", err);
+                      alert("Error Adding Event");
+                    });
                 },
               },
             ],
@@ -295,11 +305,12 @@ class AddProjectScreen extends React.Component {
               placeholder="iconUrl"
             />
             <TextInput
-              style={styles.input}
+              style={{ ...styles.input, maxHeight: 400 }}
               onChangeText={handleChange("description")}
               onBlur={handleBlur("description")}
               value={values.description}
               multiline={true}
+              numberOfLines={5}
               placeholder="description"
             />
             {this.renderTeamMemberPicker()}

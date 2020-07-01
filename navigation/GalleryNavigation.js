@@ -13,6 +13,11 @@ const GalleryNavigation = createStackNavigator(
         }
       } 
     }
+  },
+  {
+    defaultNavigationOptions: {
+      headerTintColor: "white",
+    },
   }
 );
 export default GalleryNavigation;
