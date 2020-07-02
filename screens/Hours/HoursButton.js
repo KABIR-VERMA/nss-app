@@ -25,7 +25,7 @@ function handlePress(msg) {
 }
 
 function HoursButton(props) {
-  const icon_left = props.txt === "CHECK\nHOURS" ? width / 12 : width / 6;
+  const icon_left = props.txt === "CHECK\nHOURS" ? width / 12 : width / 6.25;
   const styles = StyleSheet.create({
     button: {
       flex: 1,
@@ -50,15 +50,15 @@ function HoursButton(props) {
       fontWeight: "bold",
       bottom: 0,
       top: width / 12,
-      left: -width / 11,
-      fontSize: props.width / 8,
+      left: -width / 12,
+      fontSize: 20,
       color: "white",
       fontStyle: "normal",
       textAlign: "center",
       textAlignVertical: "bottom",
     },
     icon: {
-      marginLeft: 10,
+      marginLeft: 0,
       bottom: width / 10,
       position: "relative",
       left: icon_left,
@@ -78,3 +78,43 @@ function HoursButton(props) {
 }
 
 export default withFirebaseHOC(HoursButton);
+
+// const icon_left = props.txt === "CHECK\nHOURS" ? width / 12 : width / 6;
+// const styles = StyleSheet.create({
+//   button: {
+//     flex: 1,
+//     borderWidth: 1,
+//     borderColor: "white",
+//     borderWidth: width / 100,
+//     width: props.width,
+//     height: props.height,
+//     marginTop: props.pTop,
+//     marginBottom: props.pBottom,
+//     borderRadius: props.bRadius,
+//     backgroundColor: "#38434f",
+//     justifyContent: "center",
+//     alignItems: "center",
+//     alignSelf: "center",
+//     textAlign: "center",
+//     alignContent: "center",
+//     overflow: "visible",
+//     paddingLeft: 0,
+//   },
+//   text: {
+//     fontWeight: "bold",
+//     bottom: 0,
+//     top: width / 12,
+//     left: -width / 11,
+//     fontSize: props.width / 8,
+//     color: "white",
+//     fontStyle: "normal",
+//     textAlign: "center",
+//     textAlignVertical: "bottom",
+//   },
+//   icon: {
+//     marginLeft: 10,
+//     bottom: width / 10,
+//     position: "relative",
+//     left: icon_left,
+//   },
+// });
