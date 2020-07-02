@@ -155,7 +155,7 @@ class Team extends Component{
                 <Body>
                   <Text >{this.state.item.name}</Text>
                   <Text >{this.state.item.designation}</Text>
-                  {(this.state.item.phone!="") &&<Text >{this.state.item.phone}</Text>}
+                  {(this.state.item.phone!="") &&<Text >{this.state.item.phone}</Text>}slide
                   {(this.state.item.email!="") &&<Text >{this.state.item.email}</Text>}
                   {(this.state.item.hostel!="") &&<Text >{this.state.item.hostel}</Text>}
                   {(this.state.item.website!="") &&<Text style={{color: 'blue'}} onPress={() => Linking.openURL(this.state.item.website)}>{this.state.item.website}</Text>}
