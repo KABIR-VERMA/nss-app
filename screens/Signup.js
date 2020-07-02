@@ -124,7 +124,7 @@ class Signup extends Component {
             check: false,
           }}
           onSubmit={(values, actions) => {
-            console.log("Singing Up")
+            console.log("Singing Up");
             this.handleOnSignup(values, actions);
           }}
           validationSchema={validationSchema}
