@@ -45,7 +45,6 @@ const Firebase = {
   },
   isAdmin: async () => {
     const userId = firebase.auth().currentUser.uid;
-    console.log("while admining")
     return await firebase
       .firestore()
       .collection("users")

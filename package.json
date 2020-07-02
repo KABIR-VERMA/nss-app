@@ -30,6 +30,7 @@
     "react-native-collapsible": "^1.5.2",
     "react-native-drop-down-item": "^1.1.0",
     "react-native-elements": "^1.2.7",
+    "react-native-fast-image": "^8.1.5",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-hide-show-password-input": "^1.1.0",
     "react-native-hide-with-keyboard": "^1.2.1",

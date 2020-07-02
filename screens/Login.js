@@ -75,6 +75,10 @@ class Login extends Component {
     pressedLogin: false,
   };
 
+  comeBackAfterSignUp = () => {
+    this.setState({ login: true });
+  };
+
   goToSignup = () => this.props.navigation.navigate("Signup");
 
   goToForgotPassword = () => this.props.navigation.navigate("ForgotPassword");
@@ -94,7 +98,9 @@ class Login extends Component {
         email,
         password
       );
-
+      if (!this.props.firebase.isUserVerified()) {
+        actions.setFieldError("general", "User not Verified");
+      }
       if (response.user && this.props.firebase.isUserVerified()) {
         this.props.navigation.navigate("App");
       }
@@ -236,7 +242,7 @@ class Login extends Component {
                 />
               </View>
             ) : (
-              <Signup></Signup>
+              <Signup onPress={this.comeBackAfterSignUp}></Signup>
             )}
           </View>
         </ScrollView>

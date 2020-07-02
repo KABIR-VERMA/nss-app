@@ -1,7 +1,13 @@
 import React, { Component, Fragment } from "react";
-import { StyleSheet, SafeAreaView,ActivityIndicator, View, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { Button, CheckBox, Overlay } from "react-native-elements";
-import {} from 'react-native-gesture-handler'
+import {} from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -62,7 +68,7 @@ class Signup extends Component {
   };
 
   handleOnSignup = async (values, actions) => {
-    console.log("Clicked SignUp")
+    console.log("Clicked SignUp");
     const { name, email, password } = values;
     this.setState({ overlay: true });
     try {
@@ -83,7 +89,8 @@ class Signup extends Component {
         // TODO
         // Add a new screeen showing - A verification email has been sent, Please verify then login
         alert("A verification email has been sent, Please verify then login");
-        this.props.navigation.navigate("Initial");
+        this.props.onPress();
+        // this.props.navigation.navigate("Initial");
       }
     } catch (error) {
       // console.error(error)
@@ -121,10 +128,9 @@ class Signup extends Component {
             email: "",
             password: "",
             confirmPassword: "",
-            check: false,
           }}
           onSubmit={(values, actions) => {
-            console.log("Singing Up")
+            console.log("Singing Up");
             this.handleOnSignup(values, actions);
           }}
           validationSchema={validationSchema}
@@ -218,6 +224,7 @@ class Signup extends Component {
                 <FormButton
                   buttonType="outline"
                   onPress={handleSubmit}
+                  // onPress={() => alert("Hello")}
                   title="SIGN UP"
                   buttonColor="#7256B1"
                   disabled={!isValid || isSubmitting}
@@ -230,7 +237,7 @@ class Signup extends Component {
         </Formik>
         {/* <Button
           title="Have an account? Login"
-          onPress={this.goToLogin}
+          onPress={() => alert("hello")}
           titleStyle={{
             color: "#039BE5",
           }}

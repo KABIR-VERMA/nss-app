@@ -56,7 +56,7 @@ class Contact extends React.Component {
               Linking.openURL(`mailto:nssgsec@admin.iitd.ac.in`);
             }}
           >
-            <Text style={{ fontSize: 23, color: "white" }}>
+            <Text style={{ fontSize: 23, color: "white", textAlign:'center' }}>
               Email: nssgsec@admin.iitd.ac.in
             </Text>
           </TouchableOpacity>
