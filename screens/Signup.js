@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
-import { StyleSheet, SafeAreaView, View, TouchableOpacity } from "react-native";
-import { Button, CheckBox } from "react-native-elements";
+import { StyleSheet, SafeAreaView,ActivityIndicator, View, TouchableOpacity } from "react-native";
+import { Button, CheckBox, Overlay } from "react-native-elements";
+import {} from 'react-native-gesture-handler'
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -39,6 +40,7 @@ class Signup extends Component {
     confirmPasswordVisibility: true,
     passwordIcon: "ios-eye",
     confirmPasswordIcon: "ios-eye",
+    overlay: false,
   };
 
   goToLogin = () => this.props.navigation.navigate("Login");
@@ -60,8 +62,9 @@ class Signup extends Component {
   };
 
   handleOnSignup = async (values, actions) => {
+    console.log("Clicked SignUp")
     const { name, email, password } = values;
-
+    this.setState({ overlay: true });
     try {
       const response = await this.props.firebase.signupWithEmail(
         email,
@@ -79,12 +82,14 @@ class Signup extends Component {
         // this.props.firebase.signOut();
         // TODO
         // Add a new screeen showing - A verification email has been sent, Please verify then login
+        alert("A verification email has been sent, Please verify then login");
         this.props.navigation.navigate("Initial");
       }
     } catch (error) {
       // console.error(error)
       actions.setFieldError("general", error.message);
     } finally {
+      this.setState({ overlay: false });
       actions.setSubmitting(false);
     }
   };
@@ -98,6 +103,18 @@ class Signup extends Component {
     } = this.state;
     return (
       <SafeAreaView style={styles.container}>
+        <Overlay
+          isVisible={this.state.overlay}
+          fullScreen={true}
+          overlayStyle={{
+            backgroundColor: "transparent",
+            opacity: 0.9,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size={50} color="white" />
+        </Overlay>
         <Formik
           initialValues={{
             name: "",
@@ -107,6 +124,7 @@ class Signup extends Component {
             check: false,
           }}
           onSubmit={(values, actions) => {
+            console.log("Singing Up")
             this.handleOnSignup(values, actions);
           }}
           validationSchema={validationSchema}

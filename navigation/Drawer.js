@@ -49,6 +49,7 @@ const RootDrawerNavigator = createDrawerNavigator(
         <SafeAreaView style={styles.container}>
           <View
             style={{
+              marginTop: 10,
               height: "25%",
               alignItems: "center",
               justifyContent: "center",
@@ -62,12 +63,14 @@ const RootDrawerNavigator = createDrawerNavigator(
                 resizeMode: "stretch",
               }}
             ></Image>
+            <View style={{marginTop: 10}} ></View>
           </View>
           <ScrollView>
             <DrawerItems
               {...props}
-              activeLabelStyle={{ color: "white" }}
-              inactiveLabelStyle={{ color: "white" }}
+              labelStyle={{ color: "white", fontSize: 16 }}
+              activeLabelStyle={{ color: "lightblue" }}
+              // inactiveLabelStyle={{ color: "white" }}
             />
             <View style={{ margin: 8, marginTop: "6%" }}>
               <TouchableOpacity
@@ -101,6 +104,7 @@ const RootDrawerNavigator = createDrawerNavigator(
                     paddingLeft: "4%",
                     fontWeight: "bold",
                     color: "lightblue",
+                    fontSize: 16,
                   }}
                 >
                   Log Out

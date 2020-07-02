@@ -10,6 +10,7 @@ import {
   Alert,
   Linking,
   ActivityIndicator,
+  YellowBox,
   StatusBar,
 } from "react-native";
 import { Button, Overlay } from "react-native-elements";
@@ -21,7 +22,8 @@ import Gradient from "../components/Gradient";
 import firebase from "firebase";
 import FormButton from "../components/FormButton";
 import { FlatList } from "react-native-gesture-handler";
-import { createStackNavigator, createAppContainer } from "react-navigation";
+import _ from "lodash";
+
 const bgcolor = "#426885";
 // rgb(66, 104, 133)
 
@@ -34,13 +36,21 @@ var height = Dimensions.get("window").height;
 // console.log(width);
 const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
 
+YellowBox.ignoreWarnings(["Setting a timer"]);
+const _console = _.clone(console);
+console.warn = (message) => {
+  if (message.indexOf("Setting a timer") <= -1) {
+    _console.warn(message);
+  }
+};
+
 class Home extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: "Main",
     };
   };
-  
+
   constructor(props) {
     super(props);
     if (global.isAdmin) {
@@ -73,7 +83,6 @@ class Home extends Component {
     StatusBar.setBarStyle("light-content", true);
     StatusBar.setBackgroundColor("#404c59");
     var tableData = [];
-    console.log("Home page");
     firebase
       .firestore()
       .collection("Events")
@@ -83,7 +92,6 @@ class Home extends Component {
         e.forEach((doc) => {
           const rowData = [];
           //   console.log(doc.data());
-          console.log("Date", doc.data().Date);
           rowData.push(this.generateCell(i, 0));
           rowData.push(this.generateCell(doc.data().title, 1));
           rowData.push(this.generateCell(doc.data().date, 2));
@@ -159,21 +167,29 @@ class Home extends Component {
           />
         </Table>
         <View style={{ flex: 1 }}>
-          <FlatList
-            data={this.state.tableData}
-            keyExtractor={(item, ind) => ind.toString()}
-            renderItem={({ item, index }) => {
-              return (
-                <Row
-                  key={index}
-                  data={item}
-                  widthArr={rowWidth}
-                  // style={{ height: 35 }}
-                  textStyle={{ textAlign: "center", color: "white" }}
-                />
-              );
-            }}
-          />
+          {this.state.tableData.length > 0 ? (
+            <FlatList
+              data={this.state.tableData}
+              keyExtractor={(item, ind) => ind.toString()}
+              renderItem={({ item, index }) => {
+                return (
+                  <Row
+                    key={index}
+                    data={item}
+                    widthArr={rowWidth}
+                    // style={{ height: 35 }}
+                    textStyle={{ textAlign: "center", color: "white" }}
+                  />
+                );
+              }}
+            />
+          ) : (
+            <ActivityIndicator
+              style={{ marginTop: "15%" }}
+              size={30}
+              color="white"
+            />
+          )}
         </View>
         {/* <ScrollView style={{}}>
           <Table borderStyle={{ borderColor: "white" }}>
@@ -295,7 +311,7 @@ class Home extends Component {
               onPress={() => {
                 this.setState({ overlay: false, overlayItem: null });
                 var isHttp =
-                  item.link.substring(0, 4).localCompare("http") == 0;
+                  item.link.substring(0, 4).localeCompare("http") == 0;
                 Linking.openURL(isHttp ? item.link : "https://" + item.link);
               }}
             />

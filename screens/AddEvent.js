@@ -35,7 +35,7 @@ class AddEventScreen extends Component {
         <ScrollView
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive"
-          style={{ flex: 1 }}
+          style={{ flex: 1,marginBottom: 10 }}
         >
           <Formik
             initialValues={{
@@ -211,49 +211,6 @@ const styles = StyleSheet.create({
 });
 
 export default AddEventScreen;
-
-// pickDate = () => {
-//   return (
-//     <View style={{ flexDirection: "row", width: "100%" }}>
-//       <TextInput
-//         placeholder={"Select Apply Date"}
-//         editable={false}
-//         value={this.state.applyDate}
-//         style={{ width: "70%" }}
-//       />
-//       <Fontisto
-//         onPress={() => {
-//           this.setState({ mode: "date" });
-//         }}
-//         name="date"
-//         size={30}
-//         color="white"
-//       />
-
-//       {this.state.mode && (
-//         <DateTimePicker
-//           testID="dateTimePicker"
-//           value={new Date()}
-//           mode={"date"}
-//           is24Hour={true}
-//           display="default"
-//           onChange={(event, selectDate) => {
-//             console.log(
-//               "event",
-//               event,
-//               "selectDate",
-//               selectDate.toLocaleDateString()
-//             );
-//             this.setState({
-//               applyDate: selectDate.toLocaleDateString(),
-//               mode: null,
-//             });
-//           }}
-//         />
-//       )}
-//     </View>
-//   );
-// };
 
 // pickTime = () => {
 //   return (

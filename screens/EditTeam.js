@@ -120,7 +120,7 @@ class EditTeam extends Component {
   render() {
     return (
       <Gradient.diagonalGradient>
-        <ScrollView style={{padding: 10}} >
+        <ScrollView style={{padding: 10}} keyboardShouldPersistTaps="handled">
           <View style={{ alignItems: "center", marginTop: 20 }}>
             {/* do similar change in ass team member*/}
             {this.state.image == "" && (

@@ -13,6 +13,7 @@ import {
   Dimensions,
   Linking,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { Button, Icon, Fab, Card, CardItem, Body } from "native-base";
 import { withFirebaseHOC } from "../config/Firebase";
@@ -162,7 +163,7 @@ class Team extends Component {
   render() {
     return (
       <Gradient.diagonalGradient>
-        <View style={{ marginVertical: 10 }}>
+        <View style={{ marginVertical: 10, flex: 1 }}>
           {this.renderModal()}
           {this.renderSectionList()}
           {global.isAdmin ? this.addMemberButton() : null}
@@ -172,6 +173,13 @@ class Team extends Component {
   }
 
   renderSectionList = () => {
+    if (this.state.Executive.length == 0) {
+      return (
+        <View style={styles.screen}>
+          <ActivityIndicator size={40} color="white" />
+        </View>
+      );
+    }
     return (
       <SectionList
         refreshControl={

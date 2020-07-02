@@ -11,6 +11,7 @@ import {
   Image,
   Linking,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { ListItem, Icon } from "react-native-elements";
 import DropDownItem from "react-native-drop-down-item";
@@ -36,17 +37,6 @@ class ProjectListScreen extends React.Component {
   static navigationOptions = ({ navigation, screenProps }) => ({
     title: "Hellooo",
   });
-
-  static navigationOptions = ({ navigation, navigationOptions }) => {
-    // const { params } = navigation.state;
-    return {
-      // title: params ? params.name : "Project",
-      title: "hello",
-      headerStyle: {
-        backgroundColor: "Red",
-      },
-    };
-  };
 
   constructor(props) {
     super();
@@ -117,48 +107,10 @@ class ProjectListScreen extends React.Component {
             }
             keyExtractor={(item, ind) => ind.toString()}
           />
-        ) : null}
+        ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white"/></View>}
       </Gradient.diagonalGradient>
     );
   }
-
-  renderHeaderFlatListItem = (project, ind) => {
-    return (
-      <View
-        style={[
-          styles.dropDownHeader,
-          {
-            borderTopWidth: 1,
-            borderBottomWidth:
-              ind == this.state.projectList.length - 1
-                ? 1
-                : this.state.isOpened[ind]
-                ? 0.3
-                : 0,
-            borderBottomColor: this.state.isOpened[ind]
-              ? "grey"
-              : ind == this.state.projectList.length - 1
-              ? "white"
-              : "none",
-          },
-        ]}
-      >
-        <Image source={{ uri: project.iconUrl }} style={styles.projectIcon} />
-        <View>
-          <Text style={styles.ProjectTitle}>{project.title}</Text>
-          <Text style={{ fontSize: 14, color: "white", alignSelf: "center" }}>
-            ({project.address})
-          </Text>
-        </View>
-        <Ionicons
-          name="ios-arrow-down"
-          size={24}
-          color="white"
-          style={{ position: "absolute", right: "3%" }}
-        />
-      </View>
-    );
-  };
 
   renderFlatListItem = (project, ind) => {
     return (
@@ -192,6 +144,56 @@ class ProjectListScreen extends React.Component {
             ) : null}
           </View>
         ) : null}
+      </View>
+    );
+  };
+
+  renderHeaderFlatListItem = (project, ind) => {
+    return (
+      <View
+        style={[
+          styles.dropDownHeader,
+          {
+            borderTopWidth: 1,
+            borderBottomWidth:
+              ind == this.state.projectList.length - 1
+                ? 1
+                : this.state.isOpened[ind]
+                ? 0.3
+                : 0,
+            borderBottomColor: this.state.isOpened[ind]
+              ? "grey"
+              : ind == this.state.projectList.length - 1
+              ? "white"
+              : "none",
+          },
+        ]}
+      >
+        {project.iconUrl ? (
+          <Image source={{ uri: project.iconUrl }} style={styles.projectIcon} />
+        ) : null}
+        <View>
+          <Text style={styles.ProjectTitle}>{project.title}</Text>
+          {project.address.localeCompare("-") == 0 ? null : (
+            <Text
+              style={{
+                fontSize: 14,
+                color: "white",
+                alignSelf: "center",
+                textAlign: "center",
+                maxWidth: width / 1.7,
+              }}
+            >
+              ({project.address})
+            </Text>
+          )}
+        </View>
+        <Ionicons
+          name="ios-arrow-down"
+          size={24}
+          color="white"
+          style={{ position: "absolute", right: "3%" }}
+        />
       </View>
     );
   };
@@ -357,6 +359,8 @@ const styles = StyleSheet.create({
   },
 
   ProjectTitle: {
+    maxWidth: width / 1.7,
+    textAlign: "center",
     fontSize: 17,
     color: "white",
     alignSelf: "center",

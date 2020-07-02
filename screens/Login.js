@@ -115,14 +115,14 @@ class Login extends Component {
           fullScreen={true}
           overlayStyle={{
             backgroundColor: "transparent",
-            opacity: 0.5,
+            opacity: 0.9,
             justifyContent: "center",
             alignItems: "center",
           }}
         >
-          <ActivityIndicator size="large" color={bgcolor} />
+          <ActivityIndicator size={50} color="white" />
         </Overlay>
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} keyboardShouldPersistTaps="always">
           {this.state.login ? (
             <Image
               // source={require("../assets/IconWithBgColor.png")}
@@ -260,7 +260,12 @@ class Login extends Component {
           }}
           style={[
             styles.tabButton,
-            { borderBottomWidth: this.state.login ? 1 : 0 },
+            {
+              borderBottomWidth: this.state.login ? 1 : 0,
+              backgroundColor: this.state.login
+                ? "rgba(0,0,0,0.08)"
+                : "transparent",
+            },
           ]}
         >
           <Text
@@ -270,7 +275,7 @@ class Login extends Component {
               opacity: !this.state.login ? 0.6 : 1,
             }}
           >
-            Log in
+            Log In
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -279,7 +284,12 @@ class Login extends Component {
           }}
           style={[
             styles.tabButton,
-            { borderBottomWidth: this.state.login ? 0 : 1 },
+            {
+              borderBottomWidth: this.state.login ? 0 : 1,
+              backgroundColor: this.state.login
+                ? "transparent"
+                : "rgba(0,0,0,0.08)",
+            },
           ]}
         >
           <Text
@@ -323,6 +333,8 @@ const styles = StyleSheet.create({
     padding: "5%",
     paddingHorizontal: "10%",
     borderBottomColor: "white",
+    borderTopLeftRadius: 5,
+    borderTopRightRadius: 5,
   },
 });
 

@@ -8,6 +8,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.4",
+    "@fortawesome/free-solid-svg-icons": "^5.13.1",
+    "@fortawesome/react-native-fontawesome": "^0.2.5",
     "@react-native-community/datetimepicker": "^2.2.2",
     "@react-native-firebase/app": "^7.2.0",
     "@react-native-firebase/firestore": "^7.1.5",
@@ -34,6 +37,7 @@
     "react-native-reanimated": "^1.7.0",
     "react-native-screens": "^2.2.0",
     "react-native-snap-carousel": "^3.9.1",
+    "react-native-svg": "^11.0.1",
     "react-native-table-component": "^1.2.1",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.0.0",

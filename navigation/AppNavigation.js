@@ -41,6 +41,9 @@ const AppNavigation = createStackNavigator(
   {
     initialRouteName: "Home",
     defaultNavigationOptions: {
+      headerLeftContainerStyle: {
+        backgroundColor: "#404c59",
+      },
       headerTintColor: "white",
     },
   }
