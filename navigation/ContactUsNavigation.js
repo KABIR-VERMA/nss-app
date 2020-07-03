@@ -5,7 +5,7 @@ import React from 'react';
 
 const ContactUsNavigation = createStackNavigator(
   {
-    Contact: { 
+    "Contact Us": { 
       screen: Contact,
       navigationOptions:({navigation})=> {
         return{
@@ -13,6 +13,10 @@ const ContactUsNavigation = createStackNavigator(
         }
       } 
     }
+  },{
+    defaultNavigationOptions: {
+      headerTintColor: "white",
+    },
   }
 );
 export default ContactUsNavigation;

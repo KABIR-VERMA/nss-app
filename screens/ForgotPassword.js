@@ -6,6 +6,8 @@ import FormInput from "../components/FormInput";
 import FormButton from "../components/FormButton";
 import ErrorMessage from "../components/ErrorMessage";
 import { withFirebaseHOC } from "../config/Firebase";
+import Gradient from "../components/Gradient";
+import { LinearGradient } from "expo-linear-gradient";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
@@ -33,67 +35,77 @@ function ForgotPassword({ navigation, firebase }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.text}>Forgot Password?</Text>
-      <Formik
-        initialValues={{ email: "" }}
-        onSubmit={(values, actions) => {
-          handlePasswordReset(values, actions);
-        }}
-        validationSchema={validationSchema}
-      >
-        {({
-          handleChange,
-          values,
-          handleSubmit,
-          errors,
-          isValid,
-          touched,
-          handleBlur,
-          isSubmitting,
-        }) => (
-          <>
-            <FormInput
-              name="email"
-              value={values.email}
-              onChangeText={handleChange("email")}
-              placeholder="Enter email"
-              autoCapitalize="none"
-              iconName="ios-mail"
-              iconColor="#2C384A"
-              onBlur={handleBlur("email")}
-            />
-            <ErrorMessage errorValue={touched.email && errors.email} />
-            <View style={styles.buttonContainer}>
-              <FormButton
-                buttonType="outline"
-                onPress={handleSubmit}
-                title="Send Email"
-                buttonColor="#039BE5"
-                disabled={!isValid || isSubmitting}
+    <LinearGradient colors={Gradient.bgGradient} style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container}>
+        <Text style={styles.text}>Forgot Password?</Text>
+        <Formik
+          initialValues={{ email: "" }}
+          onSubmit={(values, actions) => {
+            handlePasswordReset(values, actions);
+          }}
+          validationSchema={validationSchema}
+        >
+          {({
+            handleChange,
+            values,
+            handleSubmit,
+            errors,
+            isValid,
+            touched,
+            handleBlur,
+            isSubmitting,
+          }) => (
+            <>
+              <FormInput
+                name="E-mail"
+                value={values.email}
+                onChangeText={handleChange("email")}
+                placeholder="Enter email"
+                autoCapitalize="none"
+                iconName="ios-mail"
+                iconColor="#2C384A"
+                onBlur={handleBlur("email")}
               />
-            </View>
-            <ErrorMessage errorValue={errors.general} />
-          </>
-        )}
-      </Formik>
-    </SafeAreaView>
+              <ErrorMessage errorValue={touched.email && errors.email} />
+              <View style={styles.buttonContainer}>
+                <FormButton
+                  buttonType="outline"
+                  onPress={handleSubmit}
+                  title="Send Email"
+                  buttonColor="#039BE5"
+                  disabled={!isValid || isSubmitting}
+                />
+              </View>
+              <ErrorMessage errorValue={errors.general} />
+            </>
+          )}
+        </Formik>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 150,
+    marginHorizontal: "10%",
+    marginVertical: "30%",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "white",
+    padding: "5%",
   },
   text: {
-    color: "#333",
+    marginTop: "50%",
+    textAlign: "center",
+    color: "white",
     fontSize: 24,
-    marginLeft: 25,
+    marginBottom: "20%",
   },
   buttonContainer: {
-    margin: 25,
+    margin: 20,
+    marginHorizontal: 35,
   },
 });
 

@@ -43,6 +43,18 @@ const Firebase = {
   verifyEmail: () => {
     return firebase.auth().currentUser.sendEmailVerification({});
   },
+  isAdmin: async () => {
+    const userId = firebase.auth().currentUser.uid;
+    return await firebase
+      .firestore()
+      .collection("users")
+      .doc(userId)
+      .get()
+      .then((e) => {
+        // console.log(e.data())
+        return e.data().isAdmin;
+      });
+  },
 };
 
 export default Firebase;

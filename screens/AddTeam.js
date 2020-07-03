@@ -1,286 +1,373 @@
-import React, {Component, Fragment } from 'react';
-import {StyleSheet, Text, View,Image} from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import React, { Component, Fragment } from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import { withFirebaseHOC } from "../config/Firebase";
 import * as firebase from "firebase";
-import { Icon, Picker,Button} from 'native-base';
+import { Icon, Picker, Button } from "native-base";
 import { Input } from "react-native-elements";
-import { Formik } from 'formik';
+import { Formik } from "formik";
 import * as Yup from "yup";
-import FormInput from '../components/FormInput';
+import FormInput from "../components/FormInput";
 import ErrorMessage from "../components/ErrorMessage";
 import FormButton from "../components/FormButton";
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from "react-native-gesture-handler";
+import Gradient from "../components/Gradient";
 
-
-// todo 1. unique name to images 2.yellow error 
+// todo 1. unique name to images 2.yellow error
 const validationSchema = Yup.object().shape({
-  name: Yup.string()
-    .required()
-    .min(3, "Name must have at least 3 characters"),
-  });
+  name: Yup.string().required().min(3, "Name must have at least 3 characters"),
+});
 
-class AddTeam extends Component{
-    constructor(props)
-    {
-        super(props);
-        this.state={
-            imageurl:"",
-            image:"",
-            selected: "Executive",
-        };      
-    }
+class AddTeam extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageurl: "",
+      image: "",
+      selected: "Executive",
+    };
+  }
 
-  
   pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
-    });   
+    });
     if (!result.cancelled) {
-       this.state.image = result.uri;
-       this.forceUpdate();
+      this.state.image = result.uri;
+      this.forceUpdate();
     }
   };
 
   onValueChange(value) {
     this.setState({
-        selected: value
+      selected: value,
     });
-    this.state.selected =  value;
-  }
-  
-  handleOnSubmit = async (values,actions) =>{
-    if(this.state.image)
-    {
-      this.uploadImage(this.state.image,values,actions);
-    }
-    else
-    {
-      this.addMember(values,actions);    
-    }
+    this.state.selected = value;
   }
 
-  addMember = async(values,actions) =>{
-    const{name, phone,email, website, hostel,bio}=values;
+  handleOnSubmit = async (values, actions) => {
+    Alert.alert(
+      "",
+      "Are you sure you want to add this team member?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            if (this.state.image) {
+              this.uploadImage(this.state.image, values, actions);
+            } else {
+              this.addMember(values, actions);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  addMember = async (values, actions) => {
+    const { name, phone, email, hostel, bio } = values;
     const profile_image = this.state.imageurl;
     const designation = this.state.selected;
-    const memeberData = {name, phone,email, website, hostel,bio, profile_image,designation };
-    await firebase.firestore().collection("TeamMember").doc(name).set(memeberData);
-    
+    const memeberData = {
+      name,
+      phone,
+      email,
+      hostel,
+      bio,
+      profile_image,
+      designation,
+    };
+    await firebase
+      .firestore()
+      .collection("TeamMember")
+      .doc(name)
+      .set(memeberData);
+
     try {
       this.props.navigation.goBack();
-    } catch (error) {
-    }
-  }
+    } catch (error) {}
+  };
 
-  uploadImage = async (uri,values,actions)=>{
+  uploadImage = async (uri, values, actions) => {
     const response = await fetch(uri);
-    const blob = await response.blob(); 
-    var ref = firebase.storage().ref().child("Member_Images/"+uri.split("/").pop());
-    ref.put(blob)
-      .on(
-        firebase.storage.TaskEvent.STATE_CHANGED,
-        snapshot =>{
-          if(snapshot.state==firebase.storage.TaskState.SUCCESS)
-          {
-          }
-        },
-        error => {
-          unsubscribe();
-        },
-        ()=>{
-          ref.getDownloadURL()
-          .then((downloadUrl)=>{
-            this.state.imageurl = downloadUrl;
-            this.addMember(values,actions)
-          })
+    const blob = await response.blob();
+    var ref = firebase
+      .storage()
+      .ref()
+      .child("Member_Images/" + uri.split("/").pop());
+    ref.put(blob).on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        if (snapshot.state == firebase.storage.TaskState.SUCCESS) {
         }
-      )
-  }
+      },
+      (error) => {
+        unsubscribe();
+      },
+      () => {
+        ref.getDownloadURL().then((downloadUrl) => {
+          this.state.imageurl = downloadUrl;
+          this.addMember(values, actions);
+        });
+      }
+    );
+  };
 
-  render(){
+  render() {
     return (
-        <ScrollView>
-            <View style={{alignItems:"center"}}>
-            {(this.state.image=="") && <Image source={require('../assets/avatar.png')} style={{height: 200, width:200, resizeMode: 'stretch', borderColor:"black", borderWidth:1}}/>}
-            {(this.state.image!="") && <Image source={{uri:this.state.image}} style={{ width: 200, height: 200, borderColor:"black", borderWidth:1}}/>}
-            <Button bordered iconLeft transparent dark onPress={this.pickImage}>
-              <Icon name="add" dark/>
-              <Text style={{marginLeft:10, marginRight:10}}>Pick Image</Text>
-            </Button>
-            </View>
-            <Formik
-                initialValues={{
-                    name:"",
-                    phone:"",
-                    email:"",
-                    website:"",
-                    hostel:"",
-                    bio:"",
+      <Gradient.diagonalGradient>
+        <ScrollView style={{ padding: 10 }} keyboardShouldPersistTaps="handled" >
+          <View style={{ alignItems: "center" }}>
+            {this.state.image == "" && (
+              <Image
+                source={require("../assets/avatar.png")}
+                style={{
+                  height: 200,
+                  width: 200,
+                  resizeMode: "stretch",
+                  borderColor: "black",
+                  borderWidth: 1,
                 }}
-                onSubmit={(values, actions) => {
-                  this.handleOnSubmit(values, actions);
+              />
+            )}
+            {this.state.image != "" && (
+              <Image
+                source={{ uri: this.state.image }}
+                style={{
+                  width: 200,
+                  height: 200,
+                  borderColor: "black",
+                  borderWidth: 1,
                 }}
-                validationSchema={validationSchema}
+              />
+            )}
+            <TouchableOpacity
+              style={{ padding: 3 }}
+              onPress={this.pickImage}
+              style={styles.pickImageButton}
             >
-                {({
-                    handleChange,
-                    values,
-                    handleBlur,
-                    handleSubmit,
-                    errors,
-                    isValid,
-                    touched,
-                    isSubmitting,
-                })=>(
-                    <Fragment>
-                        <Picker
-                        note
-                        mode="dropdown"
-                        style={{marginRight:15, marginLeft:15}}
-                        selectedValue={this.state.selected}
-                        onValueChange={this.onValueChange.bind(this)}
-                        >
-                        <Picker.Item label="Executive" value="Executive" />
-                        <Picker.Item label="Secretary" value="Secretary" />
-                        <Picker.Item label="General Secretary" value="General Secretary" />
-                        <Picker.Item label="Team Mentor" value="Team Mentor" />
-                        <Picker.Item label="PG Rep" value="PG Rep" />
-                        <Picker.Item label="Faculty Advisor (Education)" value="Faculty Advisor (Education)" />
-                        <Picker.Item label="Faculty Advisor (Environment)" value="Faculty Advisor (Environment)" />
-                        <Picker.Item label="Faculty Advisor (Health)" value="Faculty Advisor (Health)" />
-                        <Picker.Item label="Faculty Advisor (Society)" value="Faculty Advisor (Society)" />
-                        <Picker.Item label="Co-ordinator NSS IIT Delhi" value="Co-ordinator NSS IIT Delhi" />
-                        </Picker>
-    
-                        <FormInput
-                            name="name"
-                            value={values.name}
-                            onChangeText={handleChange("name")}
-                            placeholder="Enter Name"
-                            iconName="md-person"
-                            iconColor="#2C384A"
-                            onBlur={handleBlur("name")}
-                        />
-                        <ErrorMessage errorValue={touched.name && errors.name} />
-        
-                        <FormInput
-                            name="phone"
-                            value={values.phone}
-                            onChangeText={handleChange("phone")}
-                            placeholder="Contact Number"
-                            iconName="md-call"
-                            iconColor="#2C384A"
-                            keyboardType={'numeric'}
-                            onBlur={handleBlur("name")}
-                        />
-                        <ErrorMessage errorValue={touched.phone && errors.phone} />
-              
+              <Icon name="add" style={{ color: "white", marginLeft: 5 }} />
+              <Text
+                style={{
+                  marginLeft: 10,
+                  marginRight: 10,
+                  color: "white",
+                  fontSize: 15,
+                }}
+              >
+                Pick Image
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Formik
+            initialValues={{
+              name: "",
+              phone: "",
+              email: "",
+              hostel: "",
+              bio: "",
+            }}
+            onSubmit={(values, actions) => {
+              this.handleOnSubmit(values, actions);
+            }}
+            validationSchema={validationSchema}
+          >
+            {({
+              handleChange,
+              values,
+              handleBlur,
+              handleSubmit,
+              errors,
+              isValid,
+              touched,
+              isSubmitting,
+            }) => (
+              <Fragment>
+                <Picker
+                  note
+                  mode="dropdown"
+                  style={{ color: "white", marginRight: 15, marginLeft: 15 }}
+                  selectedValue={this.state.selected}
+                  onValueChange={this.onValueChange.bind(this)}
+                >
+                  <Picker.Item label="Executive" value="Executive" />
+                  <Picker.Item label="Secretary" value="Secretary" />
+                  <Picker.Item
+                    label="General Secretary"
+                    value="General Secretary"
+                  />
+                  <Picker.Item label="Team Mentor" value="Team Mentor" />
+                  <Picker.Item label="PG Rep" value="PG Rep" />
+                  <Picker.Item
+                    label="Faculty Advisor (Education)"
+                    value="Faculty Advisor (Education)"
+                  />
+                  <Picker.Item
+                    label="Faculty Advisor (Environment)"
+                    value="Faculty Advisor (Environment)"
+                  />
+                  <Picker.Item
+                    label="Faculty Advisor (Health)"
+                    value="Faculty Advisor (Health)"
+                  />
+                  <Picker.Item
+                    label="Faculty Advisor (Society)"
+                    value="Faculty Advisor (Society)"
+                  />
+                  <Picker.Item
+                    label="Co-ordinator NSS IIT Delhi"
+                    value="Co-ordinator NSS IIT Delhi"
+                  />
+                </Picker>
 
-                        <FormInput
-                            name="email"
-                            value={values.email}
-                            onChangeText={handleChange("email")}
-                            placeholder="Email"
-                            iconName="md-mail"
-                            iconColor="#2C384A"
-                            onBlur={handleBlur("name")}
-                        />
-                        <ErrorMessage errorValue={touched.email && errors.email} />
-              
+                <FormInput
+                  name="Name"
+                  value={values.name}
+                  onChangeText={handleChange("name")}
+                  placeholder="Enter Name"
+                  iconName="md-person"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur("name")}
+                />
+                <ErrorMessage errorValue={touched.name && errors.name} />
 
-                        <FormInput
-                            name="website"
-                            value={values.website}
-                            onChangeText={handleChange("website")}
-                            placeholder="Website"
-                            iconName="md-link"
-                            iconColor="#2C384A"
-                            onBlur={handleBlur("name")}
-                        />
-                        <ErrorMessage errorValue={touched.website && errors.website} />
+                <FormInput
+                  name="Phone"
+                  value={values.phone}
+                  onChangeText={handleChange("phone")}
+                  placeholder="Contact Number"
+                  iconName="md-call"
+                  iconColor="#2C384A"
+                  keyboardType={"numeric"}
+                  onBlur={handleBlur("name")}
+                />
+                <ErrorMessage errorValue={touched.phone && errors.phone} />
 
-                        <FormInput
-                            name="hostel"
-                            value={values.hostel}
-                            onChangeText={handleChange("hostel")}
-                            placeholder="Hostel or Address"
-                            iconName="md-home"
-                            iconColor="#2C384A"
-                            onBlur={handleBlur("name")}
-                        />
-                        <ErrorMessage errorValue={touched.hostel && errors.hostel} />
-              
-                        
-                        <View style={{
-                            marginRight:15,
-                            marginLeft:15,
-                            paddingVertical: 15,
-                            paddingHorizontal: 10,
-                            flexDirection: "row",
-                            justifyContent: "flex-start",
-                            alignItems: "center"
-                        }}>
-                            <Icon name="md-print"/>
-                            <Text style={{
-                                    fontSize: 16,
-                                    margin:10,
-                                    color: "black"
-                                }}>Description :</Text>
-                            
-                        </View>
-                        <Input
-                            // style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                            // onChangeText={handleChange("bio")}
-                            // value={values.bio}
-                            name="bio"
-                            value={values.bio}
-                            multiline={true}
-                            onChangeText={handleChange("bio")}
-                            placeholder="Type Here"
-                            onBlur={handleBlur("name")}
-                            
-                        />
-                        <ErrorMessage errorValue={touched.bio && errors.bio} />  
-                        <View style={{margin:25}}>
-                          <FormButton
-                            buttonType="outline"
-                            title="DONE"
-                            onPress={handleSubmit}
-                            buttonColor="black"
-                            disabled={!isValid || isSubmitting}
-                            loading={isSubmitting}
-                          />
-                        </View>
-                        <ErrorMessage errorValue={errors.general} />     
-                                         
-                    </Fragment>
-                )}
-            </Formik>
+                <FormInput
+                  name="E-mail"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  placeholder="Email"
+                  iconName="md-mail"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur("name")}
+                />
+                <ErrorMessage errorValue={touched.email && errors.email} />
+
+                {/* {Removed Website} */}
+                {/* <FormInput
+                  name="Website"
+                  value={values.website}
+                  onChangeText={handleChange("website")}
+                  placeholder="Website"
+                  iconName="md-link"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur("name")}
+                />
+                <ErrorMessage errorValue={touched.website && errors.website} /> */}
+
+                <FormInput
+                  name="Hostel"
+                  value={values.hostel}
+                  onChangeText={handleChange("hostel")}
+                  placeholder="Hostel or Address"
+                  iconName="md-home"
+                  iconColor="#2C384A"
+                  onBlur={handleBlur("name")}
+                />
+                <ErrorMessage errorValue={touched.hostel && errors.hostel} />
+
+                <View
+                  style={{
+                    marginRight: 15,
+                    marginLeft: 15,
+                    paddingVertical: 15,
+                    paddingHorizontal: 10,
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignItems: "center",
+                  }}
+                >
+                  <Icon name="md-attach" style={{ color: "white" }} />
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      margin: 10,
+                      color: "white",
+                    }}
+                  >
+                    Description :
+                  </Text>
+                </View>
+                <Input
+                  // style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+                  // onChangeText={handleChange("bio")}
+                  // value={values.bio}
+                  name="bio"
+                  value={values.bio}
+                  onChangeText={handleChange("bio")}
+                  placeholder="Type Here"
+                  onBlur={handleBlur("name")}
+                  multiline={true}
+                  numberOfLines={5}
+                  inputStyle={{ color: "white", maxHeight: 300 }}
+                />
+                <ErrorMessage errorValue={touched.bio && errors.bio} />
+                <View style={{ margin: 25 }}>
+                  <FormButton
+                    buttonType="outline"
+                    title="DONE"
+                    onPress={handleSubmit}
+                    buttonColor="black"
+                    disabled={!isValid || isSubmitting}
+                    loading={isSubmitting}
+                  />
+                </View>
+                <ErrorMessage errorValue={errors.general} />
+              </Fragment>
+            )}
+          </Formik>
         </ScrollView>
-      );
+      </Gradient.diagonalGradient>
+    );
   }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-      fontSize: 20,
-      textAlign: 'center',
-      margin: 10,
-    },
-    instructions: {
-      textAlign: 'center',
-      color: '#333333',
-      marginBottom: 5,
-    },
-  });
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF",
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: "center",
+    margin: 10,
+  },
+  instructions: {
+    textAlign: "center",
+    color: "#333333",
+    marginBottom: 5,
+  },
+  pickImageButton: {
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 5,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 6,
+    marginTop: 7,
+  },
+});
 export default withFirebaseHOC(AddTeam);

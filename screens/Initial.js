@@ -4,6 +4,8 @@ import { Asset } from "expo-asset";
 import * as Font from "expo-font";
 import * as Icon from "@expo/vector-icons";
 import { withFirebaseHOC } from "../config/Firebase";
+import firebase from "firebase";
+import Fire from "../config/Firebase/firebase";
 
 class Initial extends Component {
   state = {
@@ -15,9 +17,10 @@ class Initial extends Component {
       // previously
       this.loadLocalAsync();
 
-      await this.props.firebase.checkUserAuth((user) => {
+      await this.props.firebase.checkUserAuth(async (user) => {
         if (user && this.props.firebase.isUserVerified()) {
           // if the user has previously logged in
+          global.isAdmin = await Fire.isAdmin();
           this.props.navigation.navigate("App");
         } else {
           // if the user has previously signed out from the app

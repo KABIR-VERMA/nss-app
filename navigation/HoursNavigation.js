@@ -1,5 +1,5 @@
 import { createStackNavigator } from "react-navigation-stack";
-import Hours from "../screens/Hours";
+import Hours from "../screens/Hours/Hours";
 import Header from "../shared/Header";
 import React from 'react';
 
@@ -13,6 +13,10 @@ const HoursNavigation = createStackNavigator(
         }
       } 
     }
+  },{
+    defaultNavigationOptions: {
+      headerTintColor: "white",
+    },
   }
 );
 export default HoursNavigation;

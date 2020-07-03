@@ -1,6 +1,13 @@
 import React, { Component, Fragment } from "react";
-import { StyleSheet, SafeAreaView, View, TouchableOpacity } from "react-native";
-import { Button, CheckBox } from "react-native-elements";
+import {
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+  View,
+  TouchableOpacity,
+} from "react-native";
+import { Button, CheckBox, Overlay } from "react-native-elements";
+import {} from "react-native-gesture-handler";
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -39,6 +46,7 @@ class Signup extends Component {
     confirmPasswordVisibility: true,
     passwordIcon: "ios-eye",
     confirmPasswordIcon: "ios-eye",
+    overlay: false,
   };
 
   goToLogin = () => this.props.navigation.navigate("Login");
@@ -60,8 +68,9 @@ class Signup extends Component {
   };
 
   handleOnSignup = async (values, actions) => {
+    console.log("Clicked SignUp");
     const { name, email, password } = values;
-
+    this.setState({ overlay: true });
     try {
       const response = await this.props.firebase.signupWithEmail(
         email,
@@ -79,12 +88,15 @@ class Signup extends Component {
         // this.props.firebase.signOut();
         // TODO
         // Add a new screeen showing - A verification email has been sent, Please verify then login
-        this.props.navigation.navigate("Initial");
+        alert("A verification email has been sent, Please verify then login");
+        this.props.onPress();
+        // this.props.navigation.navigate("Initial");
       }
     } catch (error) {
       // console.error(error)
       actions.setFieldError("general", error.message);
     } finally {
+      this.setState({ overlay: false });
       actions.setSubmitting(false);
     }
   };
@@ -98,15 +110,27 @@ class Signup extends Component {
     } = this.state;
     return (
       <SafeAreaView style={styles.container}>
+        <Overlay
+          isVisible={this.state.overlay}
+          fullScreen={true}
+          overlayStyle={{
+            backgroundColor: "transparent",
+            opacity: 0.9,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <ActivityIndicator size={50} color="white" />
+        </Overlay>
         <Formik
           initialValues={{
             name: "",
             email: "",
             password: "",
             confirmPassword: "",
-            check: false,
           }}
           onSubmit={(values, actions) => {
+            console.log("Singing Up");
             this.handleOnSignup(values, actions);
           }}
           validationSchema={validationSchema}
@@ -124,7 +148,7 @@ class Signup extends Component {
           }) => (
             <Fragment>
               <FormInput
-                name="name"
+                name="Name"
                 value={values.name}
                 onChangeText={handleChange("name")}
                 placeholder="Enter your full name"
@@ -134,7 +158,7 @@ class Signup extends Component {
               />
               <ErrorMessage errorValue={touched.name && errors.name} />
               <FormInput
-                name="email"
+                name="E-mail"
                 value={values.email}
                 onChangeText={handleChange("email")}
                 placeholder="Enter email"
@@ -145,7 +169,7 @@ class Signup extends Component {
               />
               <ErrorMessage errorValue={touched.email && errors.email} />
               <FormInput
-                name="password"
+                name="Password"
                 value={values.password}
                 onChangeText={handleChange("password")}
                 placeholder="Enter password"
@@ -161,7 +185,7 @@ class Signup extends Component {
               />
               <ErrorMessage errorValue={touched.password && errors.password} />
               <FormInput
-                name="password"
+                name="Confirm Password"
                 value={values.confirmPassword}
                 onChangeText={handleChange("confirmPassword")}
                 placeholder="Confirm password"
@@ -184,22 +208,25 @@ class Signup extends Component {
               <ErrorMessage
                 errorValue={touched.confirmPassword && errors.confirmPassword}
               />
-              <CheckBox
+              {/* <CheckBox
                 containerStyle={styles.checkBoxContainer}
                 checkedIcon="check-box"
                 iconType="material"
                 uncheckedIcon="check-box-outline-blank"
                 title="Agree to terms and conditions"
+                textStyle={{ color: "white" }}
+                checkedColor="white"
                 checkedTitle="You agreed to our terms and conditions"
                 checked={values.check}
                 onPress={() => setFieldValue("check", !values.check)}
-              />
+              /> */}
               <View style={styles.buttonContainer}>
                 <FormButton
                   buttonType="outline"
                   onPress={handleSubmit}
-                  title="SIGNUP"
-                  buttonColor="#F57C00"
+                  // onPress={() => alert("Hello")}
+                  title="SIGN UP"
+                  buttonColor="#7256B1"
                   disabled={!isValid || isSubmitting}
                   loading={isSubmitting}
                 />
@@ -208,35 +235,35 @@ class Signup extends Component {
             </Fragment>
           )}
         </Formik>
-        <Button
+        {/* <Button
           title="Have an account? Login"
-          onPress={this.goToLogin}
+          onPress={() => alert("hello")}
           titleStyle={{
             color: "#039BE5",
           }}
           type="clear"
-        />
+        /> */}
       </SafeAreaView>
     );
   }
 }
 
+const bgcolor = "#426885";
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 50,
   },
   logoContainer: {
     marginBottom: 15,
     alignItems: "center",
   },
   buttonContainer: {
-    margin: 25,
+    marginTop: "3%",
   },
   checkBoxContainer: {
-    backgroundColor: "#fff",
-    borderColor: "#fff",
+    backgroundColor: "transparent",
+    borderColor: "transparent",
   },
 });
 
