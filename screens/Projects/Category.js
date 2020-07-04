@@ -46,7 +46,6 @@ class CategoryScreen extends Component {
   };
 
   render() {
-    console.log("global", global.isAdmin);
     return (
       <Gradient.diagonalGradient>
         <SafeAreaView

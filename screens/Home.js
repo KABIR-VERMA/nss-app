@@ -45,12 +45,6 @@ console.warn = (message) => {
 };
 
 class Home extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: "Main",
-    };
-  };
-
   constructor(props) {
     super(props);
     if (global.isAdmin) {
@@ -88,27 +82,35 @@ class Home extends Component {
       .collection("Events")
       .get()
       .then((e) => {
-        var i = 1;
+        var events = [];
         e.forEach((doc) => {
-          const rowData = [];
-          //   console.log(doc.data());
-          rowData.push(this.generateCell(i, 0));
-          rowData.push(this.generateCell(doc.data().title, 1));
-          rowData.push(this.generateCell(doc.data().date, 2));
-          //----link is given for apply button----//
-          rowData.push(
-            this.generateCell(doc.data().link, 3, false, doc.data())
-          );
-          i++;
-          //   tableData.push(doc.data());
-          //   this.forceUpdate();
-          tableData.push(rowData);
+          events.push(doc.data());
         });
+
+        this.sortEvents(events);
+
+        for (let j = 0; j < events.length; j++) {
+          const rowData = [];
+          // console.log(events[j]);
+          rowData.push(this.generateCell(j + 1, 0));
+          rowData.push(this.generateCell(events[j].title, 1));
+          rowData.push(this.generateCell(events[j].date, 2));
+          rowData.push(this.generateCell(events[j].link, 3, false, events[j]));
+          tableData.push(rowData);
+        }
         this.setState({ tableData, refreshing: false });
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  sortEvents = (arr) => {
+    arr.sort((a, b) => {
+      var i = new Date(a.date).getTime();
+      var j = new Date(b.date).getTime();
+      return i - j;
+    });
   };
 
   generateCell = (text, column, head = false, item = null) => {
@@ -255,14 +257,7 @@ class Home extends Component {
       >
         <LinearGradient
           colors={Gradient.bgGradient}
-          style={{
-            minHeight: "50%",
-            borderRadius: 20,
-            borderColor: "white",
-            borderWidth: 1,
-            padding: "5%",
-            paddingBottom: "1%",
-          }}
+          style={styles.modalGradient}
         >
           <ScrollView>
             <View style={{ alignItems: "flex-start" }}>
@@ -316,15 +311,31 @@ class Home extends Component {
               }}
             />
           </View>
-          {global.isAdmin ? this.deleteEventButton(item) : null}
+          {global.isAdmin ? this.adminEventHandler(item) : null}
         </LinearGradient>
       </Overlay>
     );
   };
 
+  adminEventHandler = (item) => {
+    return (
+      <View
+        style={{
+          marginTop: 10,
+          justifyContent: "center",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        {this.deleteEventButton(item)}
+        {this.editEventButton(item)}
+      </View>
+    );
+  };
+
   deleteEventButton = (item) => {
     return (
-      <View style={{ padding: 0, marginTop: "3%" }}>
+      <View style={{ padding: 0, marginTop: "3%", marginRight: "3%" }}>
         <FormButton
           title="Delete"
           onPress={() => {
@@ -376,12 +387,25 @@ class Home extends Component {
         <FormButton
           title="Add Event"
           onPress={() => {
-            console.log("navigate");
             try {
               this.props.navigation.navigate("AddEventScreen");
             } catch (error) {
               console.log(error);
             }
+          }}
+        />
+      </View>
+    );
+  };
+
+  editEventButton = (item) => {
+    return (
+      <View style={{ padding: 0, marginTop: "3%" }}>
+        <FormButton
+          title="Edit"
+          onPress={() => {
+            this.setState({overlay: false})
+            this.props.navigation.navigate("AddEventScreen", item);
           }}
         />
       </View>
@@ -441,6 +465,14 @@ const styles = StyleSheet.create({
     height: "60%",
     borderRadius: 10,
     justifyContent: "center",
+  },
+  modalGradient: {
+    minHeight: "50%",
+    borderRadius: 20,
+    borderColor: "white",
+    borderWidth: 1,
+    padding: "5%",
+    paddingBottom: "1%",
   },
 });
 

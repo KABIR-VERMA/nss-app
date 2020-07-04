@@ -27,6 +27,14 @@ class AddEventScreen extends Component {
   state = {
     datePicker: null,
     date: "",
+    params: null,
+  };
+
+  componentWillMount = () => {
+    if (this.props.navigation.state.params != undefined) {
+      var params = this.props.navigation.state.params;
+      this.setState({ params, date: params.date });
+    }
   };
 
   render() {
@@ -35,18 +43,20 @@ class AddEventScreen extends Component {
         <ScrollView
           keyboardShouldPersistTaps="handled"
           keyboardDismissMode="interactive"
-          style={{ flex: 1,marginBottom: 10 }}
+          style={{ flex: 1, marginBottom: 10 }}
         >
           <Formik
-            initialValues={{
-              title: "",
-              link: "",
-              imageUrl: "",
-              description: "",
-            }}
+            initialValues={
+              this.state.params == null
+                ? {
+                    title: "",
+                    link: "",
+                    imageUrl: "",
+                    description: "",
+                  }
+                : this.state.params
+            }
             onSubmit={(values, actions) => {
-              // console.log(values);
-              // console.log(values, values.description)
               Alert.alert(
                 "Check before adding",
                 "Are you sure you want to add to database?",
@@ -65,12 +75,26 @@ class AddEventScreen extends Component {
                       };
                       console.log("Final Upload Data", finalData);
                       const db = firebase.firestore().collection("Events");
-                      db.add(finalData).then((ref) => {
-                        ref.set({ id: ref.id }, { merge: true }).then(() => {
-                          alert("Added Event");
-                          this.props.navigation.goBack();
+                      if (this.state.params == null) {
+                        console.log("Adding");
+                        db.add(finalData).then((ref) => {
+                          ref.set({ id: ref.id }, { merge: true }).then(() => {
+                            alert("Added Event");
+                            this.props.navigation.goBack();
+                          });
                         });
-                      });
+                      } else {
+                        db.doc(this.state.params.id)
+                          .update(finalData)
+                          .then((res) => {
+                            console.log("Response", res);
+                            alert("Edited Event");
+                            this.props.navigation.goBack();
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+                      }
                     },
                   },
                 ],
@@ -132,27 +156,6 @@ class AddEventScreen extends Component {
             )}
           </Formik>
         </ScrollView>
-        {this.state.datePicker && (
-          <DateTimePicker
-            testID="dateTimePicker"
-            value={new Date()}
-            mode={"date"}
-            is24Hour={true}
-            display="default"
-            onChange={(event, selectDate) => {
-              console.log(
-                "event",
-                event,
-                "selectDate",
-                selectDate.toLocaleDateString()
-              );
-              this.setState({
-                date: selectDate.toLocaleDateString(),
-                datePicker: null,
-              });
-            }}
-          />
-        )}
       </Gradient.diagonalGradient>
     );
   }
@@ -187,6 +190,23 @@ class AddEventScreen extends Component {
           />
           <Fontisto name="date" size={width / 12} color="white" style={{}} />
         </View>
+        {this.state.datePicker && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={
+              this.state.params == null ? new Date() : new Date(this.state.date)
+            }
+            mode={"date"}
+            is24Hour={true}
+            display="default"
+            onChange={(event, selectDate) => {
+              this.setState({
+                date: selectDate.toLocaleDateString(),
+                datePicker: null,
+              });
+            }}
+          />
+        )}
       </TouchableOpacity>
     );
   };

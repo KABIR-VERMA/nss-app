@@ -61,11 +61,11 @@ class ProjectListScreen extends React.Component {
         e.forEach((doc) => {
           items.push(doc.data());
           isOpened.push(false);
-          this.setState({
-            projectList: items,
-            isOpened: isOpened,
-          });
-          //   this.forceUpdate();
+        });
+        this.sortProjects(items);
+        this.setState({
+          projectList: items,
+          isOpened: isOpened,
         });
       })
       .catch((error) => {
@@ -93,6 +93,10 @@ class ProjectListScreen extends React.Component {
       });
   };
 
+  sortProjects = (arr) => {
+    arr.sort((a, b) => a.title.localeCompare(b.title));
+  };
+
   render() {
     let categoryTitle = this.props.navigation.getParam("title");
     // console.log("this.state", this.state);
@@ -107,7 +111,11 @@ class ProjectListScreen extends React.Component {
             }
             keyExtractor={(item, ind) => ind.toString()}
           />
-        ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white"/></View>}
+        ) : (
+          <View style={styles.screen}>
+            <ActivityIndicator size={50} color="white" />
+          </View>
+        )}
       </Gradient.diagonalGradient>
     );
   }
@@ -181,7 +189,7 @@ class ProjectListScreen extends React.Component {
                 color: "white",
                 alignSelf: "center",
                 textAlign: "center",
-                maxWidth: width / 1.7,
+                maxWidth: width / 2.1,
               }}
             >
               ({project.address})
@@ -359,7 +367,7 @@ const styles = StyleSheet.create({
   },
 
   ProjectTitle: {
-    maxWidth: width / 1.7,
+    maxWidth: width / 2,
     textAlign: "center",
     fontSize: 17,
     color: "white",
