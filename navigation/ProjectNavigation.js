@@ -24,11 +24,11 @@ const ProjectNavigation = createStackNavigator(
     },
     ProjectList: {
       screen: ProjectListScreen,
-      navigationOptions: ({ navigation }) => {
+      navigationOptions: ({ navigation, }) => {
         return {
           headerTintColor: "white",
           headerTitle: () => (
-            <Header navigation={navigation} title={"Projects"} />
+            <Header navigation={navigation} title={navigation.getParam("title")} />
           ),
         };
       },
