@@ -47,6 +47,7 @@ class ProjectListScreen extends React.Component {
       activeSlide: 0,
       isOpened: [],
       teamMembers: null,
+      noData: false,
     };
   }
 
@@ -62,11 +63,15 @@ class ProjectListScreen extends React.Component {
         e.forEach((doc) => {
           items.push(doc.data());
           isOpened.push(false);
-          this.setState({
-            projectList: items,
-            isOpened: isOpened,
-          });
-          //   this.forceUpdate();
+        });
+        this.sortProjects(items);
+        if (items.length == 0) {
+          this.setState({ noData: true });
+          return;
+        }
+        this.setState({
+          projectList: items,
+          isOpened: isOpened,
         });
       })
       .catch((error) => {
@@ -94,6 +99,10 @@ class ProjectListScreen extends React.Component {
       });
   };
 
+  sortProjects = (arr) => {
+    arr.sort((a, b) => a.title.localeCompare(b.title));
+  };
+
   render() {
     let categoryTitle = this.props.navigation.getParam("title");
     // console.log("this.state", this.state);
@@ -108,7 +117,19 @@ class ProjectListScreen extends React.Component {
             }
             keyExtractor={(item, ind) => ind.toString()}
           />
+<<<<<<< HEAD
         ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white" /></View>}
+=======
+        ) : this.state.noData == false ? (
+          <View style={styles.screen}>
+            <ActivityIndicator size={50} color="white" />
+          </View>
+        ) : (
+          <View style={styles.screen}>
+            <Text style={styles.text}>No Projects Currently</Text>
+          </View>
+        )}
+>>>>>>> 61f80cb09e84be19bdadfe71995e58db5cc66b0a
       </Gradient.diagonalGradient>
     );
   }
@@ -127,13 +148,13 @@ class ProjectListScreen extends React.Component {
         </TouchableOpacity>
         {this.state.isOpened[ind] ? (
           <View style={{ paddingBottom: "3%" }}>
-            {project.imageArray != "-"
+            {project.imageArray != "-" && project.imageArray != ""
               ? this.imageSlidingView(project.imageArray)
               : null}
-            {project.description != "-" ? (
+            {project.description != "-" && project.description != "" ? (
               <Text style={styles.text}>{project.description}</Text>
             ) : null}
-            {project.members != "-" ? (
+            {project.members != "-" && project.members != "" ? (
               <View>
                 <Text
                   style={{ ...styles.text, fontSize: 17, textAlign: "left" }}
@@ -200,14 +221,15 @@ class ProjectListScreen extends React.Component {
         ) : null}
         <View>
           <Text style={styles.ProjectTitle}>{project.title}</Text>
-          {project.address.localeCompare("-") == 0 ? null : (
+          {project.address.localeCompare("-") == 0 ||
+          project.address.localeCompare("") == 0 ? null : (
             <Text
               style={{
                 fontSize: 14,
                 color: "white",
                 alignSelf: "center",
                 textAlign: "center",
-                maxWidth: width / 1.7,
+                maxWidth: width / 2.1,
               }}
             >
               ({project.address})
@@ -388,7 +410,7 @@ const styles = StyleSheet.create({
   },
 
   ProjectTitle: {
-    maxWidth: width / 1.7,
+    maxWidth: width / 2,
     textAlign: "center",
     fontSize: 17,
     color: "white",

@@ -242,7 +242,7 @@ class CheckHours extends React.Component {
           {this.state.mode === "enter" ? search : this.view()}
         </View>
         <View style={{ marginTop: height / 5 }}>
-          <FormButton title="Go Back" onPress={this.props.handlePressBack} />
+          <FormButton title="Back" onPress={this.props.handlePressBack} />
         </View>
       </View>
     );
