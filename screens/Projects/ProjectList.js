@@ -117,9 +117,9 @@ class ProjectListScreen extends React.Component {
             }
             keyExtractor={(item, ind) => ind.toString()}
           />
-<<<<<<< HEAD
+
         ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white" /></View>}
-=======
+
         ) : this.state.noData == false ? (
           <View style={styles.screen}>
             <ActivityIndicator size={50} color="white" />
@@ -128,8 +128,8 @@ class ProjectListScreen extends React.Component {
           <View style={styles.screen}>
             <Text style={styles.text}>No Projects Currently</Text>
           </View>
-        )}
->>>>>>> 61f80cb09e84be19bdadfe71995e58db5cc66b0a
+        )
+
       </Gradient.diagonalGradient>
     );
   }
