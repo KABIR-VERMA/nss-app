@@ -46,6 +46,7 @@ class ProjectListScreen extends React.Component {
       activeSlide: 0,
       isOpened: [],
       teamMembers: null,
+      noData: false,
     };
   }
 
@@ -63,6 +64,10 @@ class ProjectListScreen extends React.Component {
           isOpened.push(false);
         });
         this.sortProjects(items);
+        if (items.length == 0) {
+          this.setState({ noData: true });
+          return;
+        }
         this.setState({
           projectList: items,
           isOpened: isOpened,
@@ -111,9 +116,13 @@ class ProjectListScreen extends React.Component {
             }
             keyExtractor={(item, ind) => ind.toString()}
           />
-        ) : (
+        ) : this.state.noData == false ? (
           <View style={styles.screen}>
             <ActivityIndicator size={50} color="white" />
+          </View>
+        ) : (
+          <View style={styles.screen}>
+            <Text style={styles.text}>No Projects Currently</Text>
           </View>
         )}
       </Gradient.diagonalGradient>
@@ -134,13 +143,13 @@ class ProjectListScreen extends React.Component {
         </TouchableOpacity>
         {this.state.isOpened[ind] ? (
           <View style={{ paddingBottom: "3%" }}>
-            {project.imageArray != "-"
+            {project.imageArray != "-" && project.imageArray != ""
               ? this.imageSlidingView(project.imageArray)
               : null}
-            {project.description != "-" ? (
+            {project.description != "-" && project.description != "" ? (
               <Text style={styles.text}>{project.description}</Text>
             ) : null}
-            {project.members != "-" ? (
+            {project.members != "-" && project.members != "" ? (
               <View>
                 <Text
                   style={{ ...styles.text, fontSize: 17, textAlign: "left" }}
@@ -182,7 +191,8 @@ class ProjectListScreen extends React.Component {
         ) : null}
         <View>
           <Text style={styles.ProjectTitle}>{project.title}</Text>
-          {project.address.localeCompare("-") == 0 ? null : (
+          {project.address.localeCompare("-") == 0 ||
+          project.address.localeCompare("") == 0 ? null : (
             <Text
               style={{
                 fontSize: 14,

@@ -37,6 +37,52 @@ class AddEventScreen extends Component {
     }
   };
 
+  submitData = (values) => {
+    Alert.alert(
+      "Check before adding",
+      "Are you sure you want to add to database?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: () => {
+            const finalData = {
+              ...values,
+              date: this.state.date,
+            };
+            console.log("Final Upload Data", finalData);
+            const db = firebase.firestore().collection("Events");
+            if (this.state.params == null) {
+              console.log("Adding");
+              db.add(finalData).then((ref) => {
+                ref.set({ id: ref.id }, { merge: true }).then(() => {
+                  alert("Added Event");
+                  this.props.navigation.goBack();
+                });
+              });
+            } else {
+              db.doc(this.state.params.id)
+                .update(finalData)
+                .then((res) => {
+                  console.log("Response", res);
+                  alert("Edited Event");
+                  this.props.navigation.goBack();
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   render() {
     return (
       <Gradient.diagonalGradient>
@@ -57,49 +103,7 @@ class AddEventScreen extends Component {
                 : this.state.params
             }
             onSubmit={(values, actions) => {
-              Alert.alert(
-                "Check before adding",
-                "Are you sure you want to add to database?",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  {
-                    text: "Yes",
-                    onPress: () => {
-                      const finalData = {
-                        ...values,
-                        date: this.state.date,
-                      };
-                      console.log("Final Upload Data", finalData);
-                      const db = firebase.firestore().collection("Events");
-                      if (this.state.params == null) {
-                        console.log("Adding");
-                        db.add(finalData).then((ref) => {
-                          ref.set({ id: ref.id }, { merge: true }).then(() => {
-                            alert("Added Event");
-                            this.props.navigation.goBack();
-                          });
-                        });
-                      } else {
-                        db.doc(this.state.params.id)
-                          .update(finalData)
-                          .then((res) => {
-                            console.log("Response", res);
-                            alert("Edited Event");
-                            this.props.navigation.goBack();
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
-                      }
-                    },
-                  },
-                ],
-                { cancelable: false }
-              );
+              this.submitData(values);
             }}
           >
             {({
@@ -194,7 +198,7 @@ class AddEventScreen extends Component {
           <DateTimePicker
             testID="dateTimePicker"
             value={
-              this.state.params == null ? new Date() : new Date(this.state.date)
+              this.state.date == "" ? new Date() : new Date(this.state.date)
             }
             mode={"date"}
             is24Hour={true}

@@ -79,7 +79,7 @@ class Gallery extends Component {
               : index % 12 == 11
               ? "https://images.unsplash.com/photo-1515664069236-68a74c369d97?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
               : "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60";
-              
+
           return {
             id: item._id,
             src: item.Images.url,
@@ -169,10 +169,7 @@ class Gallery extends Component {
 
   renderSingleImage = (item) => {
     return (
-      <View
-        key={item.id}
-        style={{ height: "100%", ...styles.common }}
-      >
+      <View key={item.id} style={{ height: "100%", ...styles.common }}>
         <Text
           style={{
             textAlign: "center",

@@ -420,8 +420,12 @@ class Team extends Component {
                     }}
                   >
                     {this.myButton("Close", this.closeModal)}
-                    {global.isAdmin ? this.myButton("Edit", this.editMember) : null}
-                    {global.isAdmin ? this.myButton("Delete", this.deleteMember) : null}
+                    {global.isAdmin
+                      ? this.myButton("Edit", this.editMember)
+                      : null}
+                    {global.isAdmin
+                      ? this.myButton("Delete", this.deleteMember)
+                      : null}
                   </CardItem>
                 </Card>
               )}
