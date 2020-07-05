@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
+  Button,
   SafeAreaView,
   TouchableScale,
   // LinearGradient,
@@ -107,7 +108,7 @@ class ProjectListScreen extends React.Component {
             }
             keyExtractor={(item, ind) => ind.toString()}
           />
-        ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white"/></View>}
+        ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white" /></View>}
       </Gradient.diagonalGradient>
     );
   }
@@ -142,8 +143,33 @@ class ProjectListScreen extends React.Component {
                 {this.imageSlidingView(project.members, true)}
               </View>
             ) : null}
+            {global.isAdmin ? <Button
+              onPress={() => {
+                try {
+                  this.props.navigation.navigate("EditProject", {
+                    address: project.address,
+                    category: project.category,
+                    description: project.description,
+                    iconUrl: project.iconUrl,
+                    imageArray: project.imageArray,
+                    members: project.members,
+                    title: project.title,
+
+                  });
+                } catch (error) {
+                  console.log(error);
+                }
+              }
+              }
+              title="Edit"
+              color="black"
+              accessibilityLabel="Learn more about this purple button"
+            /> : null}
+
           </View>
+
         ) : null}
+
       </View>
     );
   };
@@ -159,13 +185,13 @@ class ProjectListScreen extends React.Component {
               ind == this.state.projectList.length - 1
                 ? 1
                 : this.state.isOpened[ind]
-                ? 0.3
-                : 0,
+                  ? 0.3
+                  : 0,
             borderBottomColor: this.state.isOpened[ind]
               ? "grey"
               : ind == this.state.projectList.length - 1
-              ? "white"
-              : "none",
+                ? "white"
+                : "none",
           },
         ]}
       >
@@ -187,7 +213,10 @@ class ProjectListScreen extends React.Component {
               ({project.address})
             </Text>
           )}
+
+
         </View>
+
         <Ionicons
           name="ios-arrow-down"
           size={24}
@@ -229,7 +258,7 @@ class ProjectListScreen extends React.Component {
               loop={arr.length > 3 ? true : false}
               decelerationRate={1}
               firstItem={arr.length > 2 ? Math.floor(arr.length / 2) : 0}
-              // hasParallaxImages={true}
+            // hasParallaxImages={true}
             />
             <Ionicons
               name="md-arrow-dropright"
