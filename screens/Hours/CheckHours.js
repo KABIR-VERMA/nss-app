@@ -84,31 +84,35 @@ class CheckHours extends React.Component {
           >
             {this.state.name}
           </Text>
-          <View style={{ flexDirection: "row", paddingHorizontal: width / 15 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              backgroundColor: "rgba(0,0,0,0.1)",
+              justifyContent: "center",
+              paddingVertical: "5%",
+            }}
+          >
             <View style={{ flexDirection: "column" }}>
               <Text
                 style={{
-                  fontSize: width / 19,
+                  fontSize: 20,
                   color: "white",
-                  fontWeight: "bold",
                 }}
               >
                 Hours Completed{" "}
               </Text>
               <Text
                 style={{
-                  fontSize: width / 19,
+                  fontSize: 20,
                   color: "white",
-                  fontWeight: "bold",
                 }}
               >
                 Hours Left
               </Text>
               <Text
                 style={{
-                  fontSize: width / 19,
+                  fontSize: 20,
                   color: "white",
-                  fontWeight: "bold",
                 }}
               >
                 Hours Total{" "}
@@ -117,33 +121,30 @@ class CheckHours extends React.Component {
             <View
               style={{
                 flexDirection: "column",
-                fontSize: width / 6,
-                paddingHorizontal: width / 10,
+                fontSize: 20,
+                // paddingHorizontal: width / 10,
               }}
             >
               <Text
                 style={{
-                  fontSize: width / 19,
+                  fontSize: 20,
                   color: "white",
-                  fontWeight: "bold",
                 }}
               >
                 {": " + this.state.hrs_completed}
               </Text>
               <Text
                 style={{
-                  fontSize: width / 19,
+                  fontSize: 20,
                   color: "white",
-                  fontWeight: "bold",
                 }}
               >
                 {": " + this.state.hrs_left}
               </Text>
               <Text
                 style={{
-                  fontSize: width / 19,
+                  fontSize: 20,
                   color: "white",
-                  fontWeight: "bold",
                 }}
               >
                 {": " + this.state.hrs_total}
@@ -235,14 +236,14 @@ class CheckHours extends React.Component {
     );
 
     return (
-      <View style={{ flexDirection: "column", height: height * 0.85 }}>
+      <View style={{ flexDirection: "column", height: height * 1 }}>
         {/* {this.renderHeader()} */}
         <View style={styles.formContainer}>
           <Text style={styles.text1}>CHECK NSS HOURS</Text>
           {this.state.mode === "enter" ? search : this.view()}
         </View>
         <View style={{ marginTop: height / 5 }}>
-          <FormButton title="Go Back" onPress={this.props.handlePressBack} />
+          <FormButton title="Back" onPress={this.props.handlePressBack} />
         </View>
       </View>
     );

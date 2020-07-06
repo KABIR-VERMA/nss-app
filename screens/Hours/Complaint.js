@@ -108,7 +108,7 @@ class CheckHours extends React.Component {
           }
         />
         <View style={{ marginBottom: 20 }} />
-        <FormButton title="Go Back" onPress={this.props.handlePressBack} />
+        <FormButton title="Back" onPress={this.props.handlePressBack} />
         <View style={{ marginBottom: 20 }} />
       </View>
     );

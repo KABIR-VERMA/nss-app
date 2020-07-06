@@ -4,6 +4,7 @@ import {
   Text,
   StyleSheet,
   FlatList,
+  Button,
   SafeAreaView,
   TouchableScale,
   // LinearGradient,
@@ -22,13 +23,10 @@ import { withFirebaseHOC } from "../../config/Firebase";
 import Gradient from "../../components/Gradient";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { Card, CardItem, Body } from "native-base";
+import { object } from "yup";
+import FormButton from "../../components/FormButton";
 
-// import { render } from "react-dom";
-// import { render } from 'react-dom';
-
-// import { PROJECTLIST } from "../../data/dummy-data";
-// import ProjectCategoryGridTile from '../../components/ProjectGridTile';
-// import { SafeAreaView } from 'react-navigation';
+//
 
 var width = Dimensions.get("window").width;
 var height = Dimensions.get("window").height;
@@ -46,6 +44,7 @@ class ProjectListScreen extends React.Component {
       activeSlide: 0,
       isOpened: [],
       teamMembers: null,
+      noData: false,
     };
   }
 
@@ -61,11 +60,15 @@ class ProjectListScreen extends React.Component {
         e.forEach((doc) => {
           items.push(doc.data());
           isOpened.push(false);
-          this.setState({
-            projectList: items,
-            isOpened: isOpened,
-          });
-          //   this.forceUpdate();
+        });
+        this.sortProjects(items);
+        if (items.length == 0) {
+          this.setState({ noData: true });
+          return;
+        }
+        this.setState({
+          projectList: items,
+          isOpened: isOpened,
         });
       })
       .catch((error) => {
@@ -93,9 +96,13 @@ class ProjectListScreen extends React.Component {
       });
   };
 
+  sortProjects = (arr) => {
+    arr.sort((a, b) => a.title.localeCompare(b.title));
+  };
+
   render() {
     let categoryTitle = this.props.navigation.getParam("title");
-    // console.log("this.state", this.state);
+    // console.log('this.state', this.state);
     return (
       <Gradient.diagonalGradient>
         {this.state.projectList.length > 0 ? (
@@ -107,46 +114,18 @@ class ProjectListScreen extends React.Component {
             }
             keyExtractor={(item, ind) => ind.toString()}
           />
-        ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white"/></View>}
+        ) : this.state.noData == false ? (
+          <View style={styles.screen}>
+            <ActivityIndicator size={50} color="white" />
+          </View>
+        ) : (
+          <View style={styles.screen}>
+            <Text style={styles.text}>No Projects Currently</Text>
+          </View>
+        )}
       </Gradient.diagonalGradient>
     );
   }
-
-  renderFlatListItem = (project, ind) => {
-    return (
-      <View style={{}}>
-        <TouchableOpacity
-          onPress={() => {
-            var open = this.state.isOpened;
-            open[ind] = !open[ind];
-            this.setState({ isOpened: open });
-          }}
-        >
-          {this.renderHeaderFlatListItem(project, ind)}
-        </TouchableOpacity>
-        {this.state.isOpened[ind] ? (
-          <View style={{ paddingBottom: "3%" }}>
-            {project.imageArray != "-"
-              ? this.imageSlidingView(project.imageArray)
-              : null}
-            {project.description != "-" ? (
-              <Text style={styles.text}>{project.description}</Text>
-            ) : null}
-            {project.members != "-" ? (
-              <View>
-                <Text
-                  style={{ ...styles.text, fontSize: 17, textAlign: "left" }}
-                >
-                  Contact Details:
-                </Text>
-                {this.imageSlidingView(project.members, true)}
-              </View>
-            ) : null}
-          </View>
-        ) : null}
-      </View>
-    );
-  };
 
   renderHeaderFlatListItem = (project, ind) => {
     return (
@@ -174,26 +153,95 @@ class ProjectListScreen extends React.Component {
         ) : null}
         <View>
           <Text style={styles.ProjectTitle}>{project.title}</Text>
-          {project.address.localeCompare("-") == 0 ? null : (
+          {project.address.localeCompare("-") == 0 ||
+          project.address.localeCompare("") == 0 ? null : (
             <Text
               style={{
                 fontSize: 14,
                 color: "white",
                 alignSelf: "center",
                 textAlign: "center",
-                maxWidth: width / 1.7,
+                maxWidth: width / 2.1,
               }}
             >
               ({project.address})
             </Text>
           )}
         </View>
+
         <Ionicons
           name="ios-arrow-down"
           size={24}
           color="white"
           style={{ position: "absolute", right: "3%" }}
         />
+      </View>
+    );
+  };
+
+  renderFlatListItem = (project, ind) => {
+    return (
+      <View style={{}}>
+        <TouchableOpacity
+          onPress={() => {
+            var open = this.state.isOpened;
+            open[ind] = !open[ind];
+            this.setState({ isOpened: open });
+          }}
+        >
+          {this.renderHeaderFlatListItem(project, ind)}
+        </TouchableOpacity>
+        {this.state.isOpened[ind] ? (
+          <View style={{ paddingBottom: "3%" }}>
+            {project.imageArray != "-" && project.imageArray != ""
+              ? this.imageSlidingView(project.imageArray)
+              : null}
+            {project.description != "-" && project.description != "" ? (
+              <Text style={styles.text}>{project.description}</Text>
+            ) : null}
+            {project.members != "-" && project.members != "" ? (
+              <View>
+                <Text
+                  style={{ ...styles.text, fontSize: 17, textAlign: "left" }}
+                >
+                  Contact Details:
+                </Text>
+                {this.imageSlidingView(project.members, true)}
+              </View>
+            ) : null}
+            {global.isAdmin ? (
+              <FormButton
+                title="Edit"
+                onPress={() => {
+                  // console.log(project)
+                  // console.log(typeof(project.members))
+                  if (project.members == "-") {
+                    project.members = [];
+                  }
+                  if (project.imageArray == "-") {
+                    if (project.imageUrl != undefined) {
+                      project.imageArray = [project.imageUrl];
+                    }
+                    // console.log(project.imageArray)
+                  }
+                  try {
+                    this.props.navigation.navigate("EditProject", {
+                      address: project.address,
+                      category: project.category,
+                      description: project.description,
+                      iconUrl: project.iconUrl,
+                      imageArray: project.imageArray,
+                      members: project.members,
+                      title: project.title,
+                    });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              />
+            ) : null}
+          </View>
+        ) : null}
       </View>
     );
   };
@@ -242,13 +290,13 @@ class ProjectListScreen extends React.Component {
             <Pagination
               dotsLength={arr.length}
               activeDotIndex={this.state.activeSlide}
-              containerStyle={{ backgroundColor: "transparent" }}
+              containerStyle={{ backgroundColor: 'transparent' }}
               dotStyle={{
                 width: 10,
                 height: 10,
                 borderRadius: 5,
                 marginHorizontal: 3,
-                backgroundColor: "white",
+                backgroundColor: 'white',
               }}
               inactiveDotStyle={{}}
               inactiveDotOpacity={0.4}
@@ -318,7 +366,7 @@ const styles = StyleSheet.create({
   },
 
   contactImage: {
-    // height: Math.round(Dimensions.get("window").width / 2),
+    // height: Math.round(Dimensions.get('window').width / 2),
     // width: null,
     // flex: 1,
     height: height / 3,
@@ -359,7 +407,7 @@ const styles = StyleSheet.create({
   },
 
   ProjectTitle: {
-    maxWidth: width / 1.7,
+    maxWidth: width / 2,
     textAlign: "center",
     fontSize: 17,
     color: "white",
@@ -397,8 +445,8 @@ export default withFirebaseHOC(ProjectListScreen);
 //       <Text
 //         style={{
 //           fontSize: 15,
-//           textAlign: "center",
-//           color: "white",
+//           textAlign: 'center',
+//           color: 'white',
 //           top: -10,
 //           padding: 2,
 //         }}

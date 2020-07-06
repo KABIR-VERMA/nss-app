@@ -17,13 +17,26 @@ import { boolean } from "yup";
 import Gradient from "../../components/Gradient";
 import FormButton from "../../components/FormButton";
 
-class AddProjectScreen extends React.Component {
-  state = {
-    imageArray: [""],
-    membersPicked: [""],
-    teamMembers: [],
-    category: "",
-  };
+class EditProjectScreen extends React.Component {
+  constructor(props) {
+    super();
+    this.category = props.navigation.getParam("category");
+    this.title = props.navigation.getParam("title");
+    this.address = props.navigation.getParam("address");
+    this.iconUrl = props.navigation.getParam("iconUrl");
+    this.description = props.navigation.getParam("description");
+    this.members = props.navigation.getParam("members");
+    this.imageArray = props.navigation.getParam("imageArray");
+    this.state = {
+      imageArray: [],
+      membersPicked: this.members != undefined ? this.members : [],
+      teamMembers: [],
+      category: this.category,
+      title: this.title,
+      iconUrl: this.iconUrl,
+      description: "",
+    };
+  }
 
   render() {
     return (
@@ -51,13 +64,29 @@ class AddProjectScreen extends React.Component {
           teamMembers.push(data);
         });
         teamMembers.sort((a, b) => {
-          return a.name.localeCompare(b.name);
+          return b.name.localeCompare(a.name);
         });
         this.setState({ teamMembers });
       })
       .catch((err) => {
         console.log("Error getting documents", err);
       });
+
+    if (true) {
+      console.log("hello");
+      var params = this.props.navigation.state.params;
+      console.log("ppppppaaaarrraaammssss", params);
+      this.setState({
+        params,
+        title: params.title,
+        iconUrl: params.iconUrl,
+        description: params.description,
+        address: params.address,
+        membersPicked: params.members,
+        imageArray: params.imageArray,
+      });
+      this.forceUpdate();
+    }
   };
 
   renderTeamMemberPicker = () => {
@@ -70,6 +99,8 @@ class AddProjectScreen extends React.Component {
           <FormButton
             title={"Add Team\nMember"}
             onPress={() => {
+              var address = this.props.navigation.getParam("address");
+              console.log("address", address);
               this.setState({
                 membersPicked: [...this.state.membersPicked, ""],
               });
@@ -114,8 +145,10 @@ class AddProjectScreen extends React.Component {
             value="Select Member"
             color="grey"
           />
-          {this.state.teamMembers.map((member, index) => {
-            return <Picker.Item key={index + 8890} label={member.name} value={member.name} />;
+          {this.state.teamMembers.map((designation) => {
+            return designation.map((member) => {
+              return <Picker.Item label={member.name} value={member.name} />;
+            });
           })}
         </Picker>
       </View>
@@ -168,10 +201,15 @@ class AddProjectScreen extends React.Component {
   renderForm = () => {
     return (
       <Formik
-        initialValues={
-          ({ title: "" }, { address: "" }, { iconUrl: "" }, { description: "" })
-        }
+        enableReinitialize
+        initialValues={this.state}
         onSubmit={(values) => {
+          // console.log('values-----------------------------',values)
+          // console.log(this.title,this.iconUrl,this.address)
+          console.log("-----------------------------");
+          console.log(this.state);
+          console.log("-------------values-------------------");
+          console.log(values);
           Alert.alert(
             "Check before adding",
             "Are you sure you want to add to database?",
@@ -185,21 +223,33 @@ class AddProjectScreen extends React.Component {
                 text: "Yes",
                 onPress: () => {
                   const finalData = {
-                    ...values,
+                    title: values.title,
                     imageArray: this.state.imageArray,
                     members: this.state.membersPicked,
                     category: this.state.category,
+                    description: values.description,
+                    iconUrl: values.iconUrl,
+                    address: values.address,
                   };
-                  // console.log("Final Upload Data", finalData);
-                  const db = firebase.firestore().collection("Projects");
-                  db.add(finalData)
-                    .then(() => {
-                      alert("Event Added");
-                      this.props.navigation.goBack();
+                  // console.log('Final Upload Data', finalData);
+                  var db = firebase.firestore();
+                  firebase
+                    .firestore()
+                    .collection("Projects")
+                    .where("title", "==", this.state.title)
+                    .get()
+                    .then((querySnapshot) => {
+                      querySnapshot.forEach((doc) => {
+                        console.log(doc.id, " => ", doc.data());
+                        // Build doc ref from doc.id
+                        db.collection("Projects").doc(doc.id).update(finalData);
+                        alert("Edited Project");
+                        this.props.navigation.goBack();
+                      });
                     })
-                    .catch((err) => {
-                      console.log("Error adding Event", err);
-                      alert("Error Adding Event");
+
+                    .catch((error) => {
+                      console.log(error);
                     });
                 },
               },
@@ -306,4 +356,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddProjectScreen;
+export default EditProjectScreen;

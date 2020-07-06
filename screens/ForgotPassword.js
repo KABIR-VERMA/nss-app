@@ -80,6 +80,7 @@ function ForgotPassword({ navigation, firebase }) {
             </>
           )}
         </Formik>
+        <FormButton onPress={() => {navigation.goBack()}} title="Back" />
       </SafeAreaView>
     </LinearGradient>
   );

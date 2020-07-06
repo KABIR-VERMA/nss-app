@@ -24,6 +24,7 @@ class CategoryScreen extends Component {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => {
+            console.log('global',global.isAdmin)
             try {
               this.props.navigation.navigate("ProjectList", {
                 title: item.title,
@@ -46,7 +47,6 @@ class CategoryScreen extends Component {
   };
 
   render() {
-    console.log("global", global.isAdmin);
     return (
       <Gradient.diagonalGradient>
         <SafeAreaView

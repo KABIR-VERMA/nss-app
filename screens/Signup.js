@@ -88,7 +88,9 @@ class Signup extends Component {
         // this.props.firebase.signOut();
         // TODO
         // Add a new screeen showing - A verification email has been sent, Please verify then login
-        alert("A verification email has been sent, Please verify then login");
+        alert(
+          "A verification email has been sent.\nPlease verify your email to login."
+        );
         this.props.onPress();
         // this.props.navigation.navigate("Initial");
       }
