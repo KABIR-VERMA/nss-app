@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
     View,
     Text,
@@ -8,14 +8,14 @@ import {
     Button,
     Image,
     Alert,
-} from "react-native";
-import { Picker } from "native-base";
-import { Formik, Form, Field, FieldArray } from "formik";
+} from 'react-native';
+import { Picker } from 'native-base';
+import { Formik, Form, Field, FieldArray } from 'formik';
 // import firestore from '@react-native-firebase/firestore';
-import firebase from "firebase";
-import { boolean } from "yup";
-import Gradient from "../../components/Gradient";
-import FormButton from "../../components/FormButton";
+import firebase from 'firebase';
+import { boolean } from 'yup';
+import Gradient from '../../components/Gradient';
+import FormButton from '../../components/FormButton';
 
 
 
@@ -23,13 +23,13 @@ import FormButton from "../../components/FormButton";
 class EditProjectScreen extends React.Component {
     constructor(props) {
         super();
-        this.category = props.navigation.getParam("category");
-        this.title = props.navigation.getParam("title");
-        this.address = props.navigation.getParam("address");
-        this.iconUrl = props.navigation.getParam("iconUrl");
-        this.description = props.navigation.getParam("description");
-        this.members = props.navigation.getParam("members");
-        this.imageArray = props.navigation.getParam("imageArray");
+        this.category = props.navigation.getParam('category');
+        this.title = props.navigation.getParam('title');
+        this.address = props.navigation.getParam('address');
+        this.iconUrl = props.navigation.getParam('iconUrl');
+        this.description = props.navigation.getParam('description');
+        this.members = props.navigation.getParam('members');
+        this.imageArray = props.navigation.getParam('imageArray');
         this.state = {
             imageArray: [],
             membersPicked: this.members!=undefined?this.members:[],
@@ -37,7 +37,7 @@ class EditProjectScreen extends React.Component {
             category: this.category,
             title: this.title,
             iconUrl: this.iconUrl,
-            description: ""
+            description: ''
         };
     }
 
@@ -51,7 +51,7 @@ class EditProjectScreen extends React.Component {
     render() {
         return (
             <Gradient.diagonalGradient>
-                <ScrollView keyboardShouldPersistTaps="handled">
+                <ScrollView keyboardShouldPersistTaps='handled'>
                     {this.renderForm()}
                 </ScrollView>
             </Gradient.diagonalGradient>
@@ -62,11 +62,11 @@ class EditProjectScreen extends React.Component {
 
         let query = firebase
             .firestore()
-            .collection("TeamMember")
+            .collection('TeamMember')
             .get()
             .then((snapshot) => {
                 if (snapshot.empty) {
-                    console.log("No matching documents.");
+                    console.log('No matching documents.');
                     return;
                 }
                 var designationArr = [];
@@ -80,34 +80,34 @@ class EditProjectScreen extends React.Component {
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     switch (data.designation) {
-                        case "PG Rep":
+                        case 'PG Rep':
                             PGRep.push(data);
                             break;
-                        case "Executive":
+                        case 'Executive':
                             Executive.push(data);
                             break;
-                        case "Secretary":
+                        case 'Secretary':
                             Secretary.push(data);
                             break;
-                        case "General Secretary":
+                        case 'General Secretary':
                             GeneralSecretary.push(data);
                             break;
-                        case "Team Mentor":
+                        case 'Team Mentor':
                             TeamMentor.push(data);
                             break;
-                        case "Faculty Advisor (Education)":
+                        case 'Faculty Advisor (Education)':
                             FacultyAdvisor.push(data);
                             break;
-                        case "Faculty Advisor (Environment)":
+                        case 'Faculty Advisor (Environment)':
                             FacultyAdvisor.push(data);
                             break;
-                        case "Faculty Advisor (Health)":
+                        case 'Faculty Advisor (Health)':
                             FacultyAdvisor.push(data);
                             break;
-                        case "Faculty Advisor (Society)":
+                        case 'Faculty Advisor (Society)':
                             FacultyAdvisor.push(data);
                             break;
-                        case "Co-ordinator NSS IIT Delhi":
+                        case 'Co-ordinator NSS IIT Delhi':
                             Coordinator.push(data);
                             break;
                         default:
@@ -124,15 +124,15 @@ class EditProjectScreen extends React.Component {
                 this.setState({ designationArr });
             })
             .catch((err) => {
-                console.log("Error getting documents", err);
+                console.log('Error getting documents', err);
             });
 
 
 
         if (true) {
-            console.log("hello")
+            console.log('hello')
             var params = this.props.navigation.state.params;
-            console.log("ppppppaaaarrraaammssss",params)
+            console.log('ppppppaaaarrraaammssss',params)
             this.setState({ params, title: params.title,
                 iconUrl: params.iconUrl,
                 description: params.description, 
@@ -150,20 +150,20 @@ class EditProjectScreen extends React.Component {
                 {this.state.membersPicked.map((item, index) => {
                     return this.renderSinglePicker(index);
                 })}
-                <View style={{ ...styles.screen, flexDirection: "row", margin: 10 }}>
+                <View style={{ ...styles.screen, flexDirection: 'row', margin: 10 }}>
                     <FormButton
-                        title={"Add Team\nMember"}
+                        title={'Add Team\nMember'}
                         onPress={() => {
-                            var address = this.props.navigation.getParam("address")
-                            console.log("address", address)
+                            var address = this.props.navigation.getParam('address')
+                            console.log('address', address)
                             this.setState({
-                                membersPicked: [...this.state.membersPicked, ""],
+                                membersPicked: [...this.state.membersPicked, ''],
                             });
                         }}
                     />
-                    <View style={{ margin: "3%" }} />
+                    <View style={{ margin: '3%' }} />
                     <FormButton
-                        title={"Delete Team\nMember"}
+                        title={'Delete Team\nMember'}
                         onPress={() => {
                             this.setState({
                                 membersPicked: this.state.membersPicked.slice(
@@ -182,9 +182,9 @@ class EditProjectScreen extends React.Component {
         return (
             <View key={index + 9090} style={styles.picker}>
                 <Picker
-                    style={{ color: "white" }}
+                    style={{ color: 'white' }}
                     selectedValue={this.state.membersPicked[index]}
-                    placeholder="Select Member"
+                    placeholder='Select Member'
                     onValueChange={(itemValue, itemPosition) => {
                         if (itemPosition != 0) {
                             var temp = this.state.membersPicked;
@@ -196,9 +196,9 @@ class EditProjectScreen extends React.Component {
                     }}
                 >
                     <Picker.Item
-                        label="Select Member"
-                        value="Select Member"
-                        color="grey"
+                        label='Select Member'
+                        value='Select Member'
+                        color='grey'
                     />
                     {this.state.designationArr.map((designation) => {
                         return designation.map((member) => {
@@ -225,20 +225,20 @@ class EditProjectScreen extends React.Component {
                             }}
                             value={this.state.imageArray[index]}
                             multiline={true}
-                            placeholder={"image Url" + (index + 1)}
+                            placeholder={'image Url' + (index + 1)}
                         />
                     );
                 })}
-                <View style={{ ...styles.screen, flexDirection: "row", margin: 10 }}>
+                <View style={{ ...styles.screen, flexDirection: 'row', margin: 10 }}>
                     <FormButton
-                        title="Add Image"
+                        title='Add Image'
                         onPress={() => {
-                            this.setState({ imageArray: [...this.state.imageArray, ""] });
+                            this.setState({ imageArray: [...this.state.imageArray, ''] });
                         }}
                     />
-                    <View style={{ margin: "3%" }} />
+                    <View style={{ margin: '3%' }} />
                     <FormButton
-                        title="Delete Image"
+                        title='Delete Image'
                         onPress={() => {
                             this.setState({
                                 imageArray: this.state.imageArray.slice(
@@ -261,23 +261,23 @@ class EditProjectScreen extends React.Component {
                     (this.state)
                 }
                 onSubmit={(values) => {
-                    // console.log("values-----------------------------",values)
+                    // console.log('values-----------------------------',values)
                     // console.log(this.title,this.iconUrl,this.address)
                     console.log('-----------------------------')
                     console.log(this.state)
                     console.log('-------------values-------------------')
                     console.log(values)
                     Alert.alert(
-                        "Check before adding",
-                        "Are you sure you want to add to database?",
+                        'Check before adding',
+                        'Are you sure you want to add to database?',
                         [
                             {
-                                text: "Cancel",
-                                onPress: () => console.log("Cancel Pressed"),
-                                style: "cancel",
+                                text: 'Cancel',
+                                onPress: () => console.log('Cancel Pressed'),
+                                style: 'cancel',
                             },
                             {
-                                text: "Yes",
+                                text: 'Yes',
                                 onPress: () => {
                                     const finalData = {
                                         title: values.title,
@@ -289,14 +289,14 @@ class EditProjectScreen extends React.Component {
                                         address: values.address
 
                                     };
-                                    // console.log("Final Upload Data", finalData);
+                                    // console.log('Final Upload Data', finalData);
                                     var db = firebase.firestore();
-                                    firebase.firestore().collection("Projects").where("title", "==", this.state.title).get()
+                                    firebase.firestore().collection('Projects').where('title', '==', this.state.title).get()
                                         .then(function (querySnapshot) {
                                             querySnapshot.forEach(function (doc) {
-                                                console.log(doc.id, " => ", doc.data());
+                                                console.log(doc.id, ' => ', doc.data());
                                                 // Build doc ref from doc.id
-                                                db.collection("Projects").doc(doc.id).update(finalData);
+                                                db.collection('Projects').doc(doc.id).update(finalData);
                                             });
                                         })
 
@@ -318,66 +318,66 @@ class EditProjectScreen extends React.Component {
                     <View style={{}}>
                         <TextInput
                             style={styles.input}
-                            onChangeText={handleChange("title")}
-                            onBlur={handleBlur("title")}
+                            onChangeText={handleChange('title')}
+                            onBlur={handleBlur('title')}
                             value={values.title}
                             multiline={true}
-                            placeholder="Title"
+                            placeholder='Title'
                         />
 
                         <View style={styles.picker}>
                             <Picker
-                                style={{ color: "white" }}
+                                style={{ color: 'white' }}
                                 selectedValue={this.state.category}
-                                placeholder="Select Member"
+                                placeholder='Select Member'
                                 onValueChange={(itemValue, itemPosition) => {
                                     this.setState({ category: itemValue });
                                 }}
                             >
                                 <Picker.Item
-                                    label="Select Category"
-                                    value="Select Category"
-                                    color="grey"
+                                    label='Select Category'
+                                    value='Select Category'
+                                    color='grey'
                                 />
-                                <Picker.Item label={"Education"} value={"Education"} />
-                                <Picker.Item label={"Environment"} value={"Environment"} />
-                                <Picker.Item label={"Health"} value={"Health"} />
-                                <Picker.Item label={"Internships"} value={"Internships"} />
-                                <Picker.Item label={"Society"} value={"Society"} />
-                                <Picker.Item label={"Innovation"} value={"Innovation"} />
+                                <Picker.Item label={'Education'} value={'Education'} />
+                                <Picker.Item label={'Environment'} value={'Environment'} />
+                                <Picker.Item label={'Health'} value={'Health'} />
+                                <Picker.Item label={'Internships'} value={'Internships'} />
+                                <Picker.Item label={'Society'} value={'Society'} />
+                                <Picker.Item label={'Innovation'} value={'Innovation'} />
                             </Picker>
                         </View>
 
                         <TextInput
                             style={styles.input}
-                            onChangeText={handleChange("address")}
-                            onBlur={handleBlur("address")}
+                            onChangeText={handleChange('address')}
+                            onBlur={handleBlur('address')}
                             value={values.address}
                             multiline={true}
-                            placeholder="Address"
+                            placeholder='Address'
                         />
                         <TextInput
                             style={styles.input}
-                            onChangeText={handleChange("iconUrl")}
-                            onBlur={handleBlur("iconUrl")}
+                            onChangeText={handleChange('iconUrl')}
+                            onBlur={handleBlur('iconUrl')}
                             value={values.iconUrl}
                             multiline={true}
-                            placeholder="iconUrl"
+                            placeholder='iconUrl'
                         />
                         <TextInput
                             style={{ ...styles.input, maxHeight: 400 }}
-                            onChangeText={handleChange("description")}
-                            onBlur={handleBlur("description")}
+                            onChangeText={handleChange('description')}
+                            onBlur={handleBlur('description')}
                             value={values.description}
                             multiline={true}
                             numberOfLines={5}
-                            placeholder="description"
+                            placeholder='description'
                         />
                         {this.renderTeamMemberPicker()}
 
                         {this.renderInputImageArray()}
 
-                        <FormButton title="Submit" onPress={handleSubmit} />
+                        <FormButton title='Submit' onPress={handleSubmit} />
                     </View>
                 )}
             </Formik>
@@ -388,27 +388,27 @@ class EditProjectScreen extends React.Component {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     input: {
         // maxHeight: 100,
         marginVertical: 10,
         marginHorizontal: 20,
-        borderColor: "white",
+        borderColor: 'white',
         borderWidth: 1,
         borderRadius: 10,
-        padding: "5%",
-        color: "white",
+        padding: '5%',
+        color: 'white',
     },
 
     picker: {
-        borderColor: "white",
+        borderColor: 'white',
         borderWidth: 1,
         borderRadius: 10,
         marginVertical: 10,
         marginHorizontal: 20,
-        padding: "2%",
+        padding: '2%',
     },
 });
 
