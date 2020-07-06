@@ -23,13 +23,9 @@ import { withFirebaseHOC } from "../../config/Firebase";
 import Gradient from "../../components/Gradient";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { Card, CardItem, Body } from "native-base";
+import { object } from "yup";
 
-// import { render } from "react-dom";
-// import { render } from 'react-dom';
-
-// import { PROJECTLIST } from "../../data/dummy-data";
-// import ProjectCategoryGridTile from '../../components/ProjectGridTile';
-// import { SafeAreaView } from 'react-navigation';
+//
 
 var width = Dimensions.get("window").width;
 var height = Dimensions.get("window").height;
@@ -118,8 +114,6 @@ class ProjectListScreen extends React.Component {
             keyExtractor={(item, ind) => ind.toString()}
           />
 
-        ) : <View style={styles.screen} ><ActivityIndicator size={50} color="white" /></View>}
-
         ) : this.state.noData == false ? (
           <View style={styles.screen}>
             <ActivityIndicator size={50} color="white" />
@@ -128,7 +122,7 @@ class ProjectListScreen extends React.Component {
           <View style={styles.screen}>
             <Text style={styles.text}>No Projects Currently</Text>
           </View>
-        )
+        )}
 
       </Gradient.diagonalGradient>
     );
@@ -166,6 +160,14 @@ class ProjectListScreen extends React.Component {
             ) : null}
             {global.isAdmin ? <Button
               onPress={() => {
+                // console.log(project)
+                console.log(typeof(project.members))
+                if (project.members=='-'){
+                  project.members=[]
+                }
+                if(project.imageArray=="-"){
+                  project.imageArray=[]
+                }
                 try {
                   this.props.navigation.navigate("EditProject", {
                     address: project.address,

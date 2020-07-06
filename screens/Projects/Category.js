@@ -24,6 +24,7 @@ class CategoryScreen extends Component {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           onPress={() => {
+            console.log('global',global.isAdmin)
             try {
               this.props.navigation.navigate("ProjectList", {
                 title: item.title,
