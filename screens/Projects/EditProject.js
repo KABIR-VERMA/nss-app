@@ -30,7 +30,7 @@ class EditProjectScreen extends React.Component {
     this.state = {
       imageArray: [],
       membersPicked: this.members != undefined ? this.members : [],
-      designationArr: [],
+      teamMembers: [],
       category: this.category,
       title: this.title,
       iconUrl: this.iconUrl,
@@ -58,59 +58,15 @@ class EditProjectScreen extends React.Component {
           console.log("No matching documents.");
           return;
         }
-        var designationArr = [];
-        const Coordinator = [];
-        const FacultyAdvisor = [];
-        const TeamMentor = [];
-        const GeneralSecretary = [];
-        const Secretary = [];
-        const Executive = [];
-        const PGRep = [];
+        var teamMembers = [];
         snapshot.forEach((doc) => {
           const data = doc.data();
-          switch (data.designation) {
-            case "PG Rep":
-              PGRep.push(data);
-              break;
-            case "Executive":
-              Executive.push(data);
-              break;
-            case "Secretary":
-              Secretary.push(data);
-              break;
-            case "General Secretary":
-              GeneralSecretary.push(data);
-              break;
-            case "Team Mentor":
-              TeamMentor.push(data);
-              break;
-            case "Faculty Advisor (Education)":
-              FacultyAdvisor.push(data);
-              break;
-            case "Faculty Advisor (Environment)":
-              FacultyAdvisor.push(data);
-              break;
-            case "Faculty Advisor (Health)":
-              FacultyAdvisor.push(data);
-              break;
-            case "Faculty Advisor (Society)":
-              FacultyAdvisor.push(data);
-              break;
-            case "Co-ordinator NSS IIT Delhi":
-              Coordinator.push(data);
-              break;
-            default:
-          }
+          teamMembers.push(data);
         });
-        designationArr = [
-          Coordinator,
-          GeneralSecretary,
-          Secretary,
-          Executive,
-          TeamMentor,
-          PGRep,
-        ];
-        this.setState({ designationArr });
+        teamMembers.sort((a, b) => {
+          return b.name.localeCompare(a.name);
+        });
+        this.setState({ teamMembers });
       })
       .catch((err) => {
         console.log("Error getting documents", err);
@@ -189,7 +145,7 @@ class EditProjectScreen extends React.Component {
             value="Select Member"
             color="grey"
           />
-          {this.state.designationArr.map((designation) => {
+          {this.state.teamMembers.map((designation) => {
             return designation.map((member) => {
               return <Picker.Item label={member.name} value={member.name} />;
             });
