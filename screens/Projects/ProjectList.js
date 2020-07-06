@@ -161,12 +161,14 @@ class ProjectListScreen extends React.Component {
             {global.isAdmin ? <Button
               onPress={() => {
                 // console.log(project)
-                console.log(typeof(project.members))
+                // console.log(typeof(project.members))
                 if (project.members=='-'){
                   project.members=[]
                 }
                 if(project.imageArray=="-"){
-                  project.imageArray=[]
+                  if(project.imageUrl!=undefined){
+                  project.imageArray=[project.imageUrl,]}
+                  // console.log(project.imageArray)
                 }
                 try {
                   this.props.navigation.navigate("EditProject", {
