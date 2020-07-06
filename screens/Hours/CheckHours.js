@@ -30,23 +30,16 @@ class CheckHours extends React.Component {
       return true;
     });
     this.state = {
-      // mode: "enter",
-      mode: "ok",
+      mode: "enter",
       buttonPress: false,
       EntryNumber: "",
       buttonDisable: true,
-      // resultFetched: false,
-      // name: "",
-      // hrs_completed: "",
-      // hrs_total: "",
-      // hrs_left: "",
-      // success: "",
-      resultFetched: true,
-      name: "Mudit Garg",
-      hrs_completed: "63",
-      hrs_total: "100",
-      hrs_left: "37",
-      success: 1,
+      resultFetched: false,
+      name: "",
+      hrs_completed: "",
+      hrs_total: "",
+      hrs_left: "",
+      success: "",
       error: "",
     };
     this.handleChangeText = this.handleChangeText.bind(this);
