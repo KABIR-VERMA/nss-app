@@ -267,7 +267,7 @@ class Team extends Component {
             // onBeforeSnapToItem={(index) =>
             //   this.setState({ activeSlide: index })
             // }
-            loop={arr.lenght > 3 ? true : false}
+            loop={arr.length > 3 ? true : false}
             decelerationRate={1}
             firstItem={arr.length > 2 ? Math.floor(arr.length / 2) : 0}
             // hasParallaxImages={true}
