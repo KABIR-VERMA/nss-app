@@ -71,9 +71,6 @@ class Team extends Component {
             case "PG Rep":
               PGRep.push(data);
               break;
-<<<<<<< HEAD
-            case "Executive":
-=======
             case 'Project Rep':
               ProjectRep.push(data);
               break;
@@ -81,7 +78,6 @@ class Team extends Component {
               TechnicalHead.push(data);
             
             case 'Executive':
->>>>>>> ee70db798e99799b37a8ed4e76f098381fce84ee
               Executive.push(data);
               break;
             case "Secretary":
@@ -208,15 +204,6 @@ class Team extends Component {
         contentContainerStyle={styles.grid}
         ItemSeparatorComponent={this.FlatListItemSeparator}
         sections={[
-<<<<<<< HEAD
-          { title: "CO-ORDINATOR", data: this.state.Coordinator },
-          { title: "FACULTY ADVISORS", data: this.state.FacultyAdvisor },
-          { title: "TEAM MENTORS", data: this.state.TeamMentor },
-          { title: "GENERAL SECRETARIES", data: this.state.GeneralSecretary },
-          { title: "SECRETARIES", data: this.state.Secretary },
-          { title: "EXECUTIVES", data: this.state.Executive },
-          { title: "PG REPRESENTATIVES", data: this.state.PGRep },
-=======
           { title: 'CO-ORDINATOR', data: this.state.Coordinator },
           { title: 'FACULTY ADVISORS', data: this.state.FacultyAdvisor },
           { title: 'TEAM MENTORS', data: this.state.TeamMentor },
@@ -226,7 +213,6 @@ class Team extends Component {
           { title: 'EXECUTIVES', data: this.state.Executive },
           { title: 'PG REPRESENTATIVES', data: this.state.PGRep },
           { title: 'PROJECT REPRESENTATIVES', data: this.state.ProjectRep },
->>>>>>> ee70db798e99799b37a8ed4e76f098381fce84ee
         ]}
         renderSectionHeader={({ section }) => {
           return this.renderSectionHeader(section);
