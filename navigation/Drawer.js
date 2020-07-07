@@ -5,7 +5,7 @@ import ContactUsNavigation from "./ContactUsNavigation";
 import GalleryNavigation from "./GalleryNavigation";
 import HoursNavigation from "./HoursNavigation";
 import TeamNavigation from "./TeamNavigation";
-
+import CreditNavigation from "./CreditNavigation"
 import ProjectNavigation from "./ProjectNavigation";
 import React, { Component } from "react";
 import { SafeAreaView } from "react-navigation";
@@ -41,6 +41,9 @@ const RootDrawerNavigator = createDrawerNavigator(
     },
     Hours: {
       screen: HoursNavigation,
+    },
+    Credits: {
+      screen: CreditNavigation,
     },
   },
   {
