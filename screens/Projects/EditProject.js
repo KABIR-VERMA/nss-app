@@ -30,7 +30,7 @@ class EditProjectScreen extends React.Component {
     this.state = {
       imageArray: [],
       membersPicked: this.members != undefined ? this.members : [],
-      teamMembers: [],
+      teamMembers: ["",""],
       category: this.category,
       title: this.title,
       iconUrl: this.iconUrl,
@@ -67,6 +67,9 @@ class EditProjectScreen extends React.Component {
           return b.name.localeCompare(a.name);
         });
         this.setState({ teamMembers });
+        console.log("-----324-----243----4-31----2414------------214---------------")
+        console.log(this.state)
+        
       })
       .catch((err) => {
         console.log("Error getting documents", err);
@@ -99,8 +102,6 @@ class EditProjectScreen extends React.Component {
           <FormButton
             title={"Add Team\nMember"}
             onPress={() => {
-              var address = this.props.navigation.getParam("address");
-              console.log("address", address);
               this.setState({
                 membersPicked: [...this.state.membersPicked, ""],
               });
@@ -145,16 +146,13 @@ class EditProjectScreen extends React.Component {
             value="Select Member"
             color="grey"
           />
-          {this.state.teamMembers.map((designation) => {
-            return designation.map((member) => {
-              return <Picker.Item label={member.name} value={member.name} />;
-            });
+          {this.state.teamMembers.map((member, index) => {
+            return <Picker.Item key={index + 8890} label={member.name} value={member.name} />;
           })}
         </Picker>
       </View>
     );
   };
-
   renderInputImageArray = () => {
     return (
       <View>
