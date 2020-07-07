@@ -41,6 +41,8 @@ class Team extends Component {
     Secretary: [],
     Executive: [],
     PGRep: [],
+    ProjectRep:[],
+    TechnicalHead:[],
     item: null,
     modalVisible: false,
   };
@@ -56,17 +58,25 @@ class Team extends Component {
         }
         const Coordinator = [];
         const FacultyAdvisor = [];
+        const ProjectRep=[];
         const TeamMentor = [];
         const GeneralSecretary = [];
         const Secretary = [];
         const Executive = [];
         const PGRep = [];
+        const TechnicalHead=[];
         snapshot.forEach((doc) => {
           const data = doc.data();
           switch (data.designation) {
             case 'PG Rep':
               PGRep.push(data);
               break;
+            case 'Project Rep':
+              ProjectRep.push(data);
+              break;
+            case 'Technical Head':
+              TechnicalHead.push(data);
+            
             case 'Executive':
               Executive.push(data);
               break;
@@ -104,6 +114,9 @@ class Team extends Component {
         this.state.Secretary = Secretary;
         this.state.Executive = Executive;
         this.state.PGRep = PGRep;
+        this.state.ProjectRep=ProjectRep;
+        this.state.TechnicalHead=TechnicalHead;
+
         this.forceUpdate();
       })
       .catch((err) => {
@@ -195,9 +208,11 @@ class Team extends Component {
           { title: 'FACULTY ADVISORS', data: this.state.FacultyAdvisor },
           { title: 'TEAM MENTORS', data: this.state.TeamMentor },
           { title: 'GENERAL SECRETARIES', data: this.state.GeneralSecretary },
+          { title: 'TECHNICAL HEAD', data: this.state.TechnicalHead },
           { title: 'SECRETARIES', data: this.state.Secretary },
           { title: 'EXECUTIVES', data: this.state.Executive },
           { title: 'PG REPRESENTATIVES', data: this.state.PGRep },
+          { title: 'PROJECT REPRESENTATIVES', data: this.state.ProjectRep },
         ]}
         renderSectionHeader={({ section }) => {
           return this.renderSectionHeader(section);

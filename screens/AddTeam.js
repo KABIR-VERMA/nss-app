@@ -205,6 +205,14 @@ class AddTeam extends Component {
                     label="General Secretary"
                     value="General Secretary"
                   />
+                  <Picker.Item
+                    label="Technical Head"
+                    value="Technical Head"
+                  />
+                  <Picker.Item
+                    label="Project Representatives"
+                    value="Project Rep"
+                  />
                   <Picker.Item label="Team Mentor" value="Team Mentor" />
                   <Picker.Item label="PG Rep" value="PG Rep" />
                   <Picker.Item
