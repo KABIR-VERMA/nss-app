@@ -23,6 +23,7 @@ import firebase from "firebase";
 import FormButton from "../components/FormButton";
 import { FlatList } from "react-native-gesture-handler";
 import _ from "lodash";
+import Hyperlink from "react-native-hyperlink";
 
 const bgcolor = "#426885";
 // rgb(66, 104, 133)
@@ -34,7 +35,8 @@ const tableHeader = ["S.no", "Name", "Date", "Status"];
 var width = Dimensions.get("window").width;
 var height = Dimensions.get("window").height;
 // console.log(width);
-const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
+// const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
+const rowWidth = [width / 2.8, width / 5.1, width / 5.2, width / 5.2];
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
@@ -64,15 +66,6 @@ class Home extends Component {
     refreshing: true,
   };
 
-  handleSignout = async () => {
-    try {
-      await this.props.firebase.signOut();
-      this.props.navigation.navigate("Auth");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   componentDidMount = () => {
     StatusBar.setBarStyle("light-content", true);
     StatusBar.setBackgroundColor("#404c59");
@@ -89,11 +82,21 @@ class Home extends Component {
 
         this.sortEvents(events);
 
+        // for (let j = 0; j < events.length; j++) {
+        //   const rowData = [];
+        //   // console.log(events[j]);
+        //   rowData.push(this.generateCell(j + 1, 0));
+        //   rowData.push(this.generateCell(events[j].title, 1));
+        //   rowData.push(this.generateCell(events[j].date, 2));
+        //   rowData.push(this.generateCell(events[j].link, 3, false, events[j]));
+        //   tableData.push(rowData);
+        // }
         for (let j = 0; j < events.length; j++) {
           const rowData = [];
           // console.log(events[j]);
-          rowData.push(this.generateCell(j + 1, 0));
-          rowData.push(this.generateCell(events[j].title, 1));
+          // rowData.push(this.generateCell(j + 1, 0));
+          rowData.push(this.generateCell(events[j].title, 0));
+          rowData.push(this.generateCell(events[j].deadline, 1));
           rowData.push(this.generateCell(events[j].date, 2));
           rowData.push(this.generateCell(events[j].link, 3, false, events[j]));
           tableData.push(rowData);
@@ -103,6 +106,37 @@ class Home extends Component {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  render() {
+    return (
+      <Gradient.diagonalGradient>
+        {this.state.overlay ? this.renderOverlay() : null}
+        <View style={styles.container}>
+          <Image
+            resizeMode="contain"
+            // source={require("../assets/IconWithBgColor.png")}
+            source={require("../assets/NSSlogoPng.png")}
+            style={{ width: "20%", height: "15%" }}
+          />
+          <Text style={styles.header}>NSS, IIT Delhi</Text>
+          <View style={styles.hr} />
+          <Text style={styles.description}>{description}</Text>
+          <View style={styles.hr} />
+          {this.state.tableData ? this.tableView(this.state.tableData) : null}
+          {global.isAdmin ? this.addEventButton() : null}
+        </View>
+      </Gradient.diagonalGradient>
+    );
+  }
+
+  handleSignout = async () => {
+    try {
+      await this.props.firebase.signOut();
+      this.props.navigation.navigate("Auth");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   sortEvents = (arr) => {
@@ -128,7 +162,7 @@ class Home extends Component {
             borderTopWidth: head ? 0 : 0.5,
             borderRightWidth: column == -1 ? 0 : 0.5,
             minHeight: 35,
-            padding: 1,
+            padding: 3,
           },
         ]}
       >
@@ -147,14 +181,18 @@ class Home extends Component {
 
   tableView = () => {
     const tabheader = [];
-    tabheader.push(this.generateCell("S.no", 0, true));
-    tabheader.push(this.generateCell("Name", 1, true));
-    tabheader.push(this.generateCell("Date", 2, true));
+    // tabheader.push(this.generateCell("S.no", 0, true));
+    // tabheader.push(this.generateCell("Name", 1, true));
+    // tabheader.push(this.generateCell("Date", 2, true));
+    // tabheader.push(this.generateCell("", -1, true));
+    tabheader.push(this.generateCell("Name", 0, true));
+    tabheader.push(this.generateCell("Apply\nDeadline", 1, true));
+    tabheader.push(this.generateCell("Event\nDate", 2, true));
     tabheader.push(this.generateCell("", -1, true));
     return (
       <View
         style={{
-          width: "90%",
+          width: "95%",
           height: global.isAdmin ? "40%" : "50%",
           marginTop: "5%",
         }}
@@ -277,12 +315,26 @@ class Home extends Component {
               >
                 {item.title}
               </Text>
-              <Text style={{ color: "white", fontSize: 16, marginTop: 20 }}>
-                Event Date: {item.date}
-              </Text>
-              <Text style={{ color: "white", fontSize: 16, marginTop: 20 }}>
-                {item.description}
-              </Text>
+              {item.date != "" && (
+                <Text style={{ color: "white", fontSize: 16, marginTop: 20 }}>
+                  Event Date: {item.date}
+                </Text>
+              )}
+              {item.deadline != "" && (
+                <Text style={{ color: "white", fontSize: 16, marginTop: 10 }}>
+                  Application deadline: {item.deadline}
+                </Text>
+              )}
+              <Hyperlink
+                linkStyle={{ color: "yellow" }}
+                onPress={(url, text) => {
+                  Linking.openURL(url);
+                }}
+              >
+                <Text style={{ color: "white", fontSize: 16, marginTop: 10 }}>
+                  {item.description}
+                </Text>
+              </Hyperlink>
             </View>
           </ScrollView>
           <View
@@ -404,35 +456,13 @@ class Home extends Component {
         <FormButton
           title="Edit"
           onPress={() => {
-            this.setState({overlay: false})
+            this.setState({ overlay: false });
             this.props.navigation.navigate("AddEventScreen", item);
           }}
         />
       </View>
     );
   };
-
-  render() {
-    return (
-      <Gradient.diagonalGradient>
-        {this.state.overlay ? this.renderOverlay() : null}
-        <View style={styles.container}>
-          <Image
-            resizeMode="contain"
-            // source={require("../assets/IconWithBgColor.png")}
-            source={require("../assets/NSSlogoPng.png")}
-            style={{ width: "20%", height: "15%" }}
-          />
-          <Text style={styles.header}>NSS, IIT Delhi</Text>
-          <View style={styles.hr} />
-          <Text style={styles.description}>{description}</Text>
-          <View style={styles.hr} />
-          {this.state.tableData ? this.tableView(this.state.tableData) : null}
-          {global.isAdmin ? this.addEventButton() : null}
-        </View>
-      </Gradient.diagonalGradient>
-    );
-  }
 }
 
 const styles = StyleSheet.create({

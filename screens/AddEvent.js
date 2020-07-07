@@ -26,14 +26,17 @@ var width = Dimensions.get("screen").width;
 class AddEventScreen extends Component {
   state = {
     datePicker: null,
-    date: "",
+    date: "NA",
+    deadline: "NA",
     params: null,
+    deadlinePicker: false,
   };
 
   componentWillMount = () => {
     if (this.props.navigation.state.params != undefined) {
       var params = this.props.navigation.state.params;
-      this.setState({ params, date: params.date });
+      console.log(params);
+      this.setState({ params, date: params.date, deadline: params.deadline });
     }
   };
 
@@ -53,6 +56,7 @@ class AddEventScreen extends Component {
             const finalData = {
               ...values,
               date: this.state.date,
+              deadline: this.state.deadline,
             };
             console.log("Final Upload Data", finalData);
             const db = firebase.firestore().collection("Events");
@@ -73,6 +77,8 @@ class AddEventScreen extends Component {
                   this.props.navigation.goBack();
                 })
                 .catch((err) => {
+                  alert("Error editing event. Please Check your connection.");
+                  this.props.navigation.goBack();
                   console.log(err);
                 });
             }
@@ -117,7 +123,8 @@ class AddEventScreen extends Component {
               isSubmitting,
               setFieldValue,
             }) => (
-              <View style={{}}>
+              <View style={{ marginVertical: 20 }}>
+                <Text style={{ marginLeft: 25, color: "white" }}>Title</Text>
                 <TextInput
                   style={styles.input}
                   onChangeText={handleChange("title")}
@@ -126,9 +133,17 @@ class AddEventScreen extends Component {
                   multiline={true}
                   placeholder="Title"
                 />
-
-                {this.pickDate()}
-
+                <Text style={{ marginLeft: 25, color: "white" }}>
+                  Event Date
+                </Text>
+                {this.pickDate(false)}
+                <Text style={{ marginLeft: 25, color: "white" }}>
+                  Apply Deadline
+                </Text>
+                {this.pickDate(true)}
+                <Text style={{ marginLeft: 25, color: "white" }}>
+                  Apply Link
+                </Text>
                 <TextInput
                   style={styles.input}
                   onChangeText={handleChange("link")}
@@ -137,6 +152,9 @@ class AddEventScreen extends Component {
                   multiline={true}
                   placeholder="Apply Link"
                 />
+                <Text style={{ marginLeft: 25, color: "white" }}>
+                  Image Url
+                </Text>
                 <TextInput
                   style={styles.input}
                   onChangeText={handleChange("imageUrl")}
@@ -145,6 +163,9 @@ class AddEventScreen extends Component {
                   multiline={true}
                   placeholder="Image Url"
                 />
+                <Text style={{ marginLeft: 25, color: "white" }}>
+                  Description
+                </Text>
                 <TextInput
                   style={{ ...styles.input, maxHeight: 400 }}
                   onChangeText={handleChange("description")}
@@ -164,18 +185,12 @@ class AddEventScreen extends Component {
     );
   }
 
-  pickDate = () => {
+  pickDate = (deadline) => {
     return (
       <TouchableOpacity
-        style={{
-          marginVertical: 10,
-          borderRadius: 10,
-          borderColor: "white",
-          borderWidth: 1,
-          marginHorizontal: 20,
-        }}
+        style={{ ...styles.input, padding: "0%" }}
         onPress={() => {
-          this.setState({ datePicker: "date" });
+          this.setState({ deadlinePicker: deadline, datePicker: "date" });
         }}
       >
         <View
@@ -187,9 +202,9 @@ class AddEventScreen extends Component {
           }}
         >
           <TextInput
-            placeholder={"Select Apply Date"}
+            // placeholder={"Select Apply Date"}
             editable={false}
-            value={this.state.date}
+            value={deadline == true ? this.state.deadline : this.state.date}
             style={{ color: "white", width: width / 1.33 }}
           />
           <Fontisto name="date" size={width / 12} color="white" style={{}} />
@@ -198,16 +213,39 @@ class AddEventScreen extends Component {
           <DateTimePicker
             testID="dateTimePicker"
             value={
-              this.state.date == "" ? new Date() : new Date(this.state.date)
+              deadline
+                ? this.state.deadline == "NA"
+                  ? new Date()
+                  : new Date(this.state.deadline)
+                : this.state.date == "NA"
+                ? new Date()
+                : new Date(this.state.date)
             }
             mode={"date"}
             is24Hour={true}
             display="default"
             onChange={(event, selectDate) => {
-              this.setState({
-                date: selectDate.toLocaleDateString(),
-                datePicker: null,
-              });
+              if (this.state.deadlinePicker == true) {
+                console.log("dead");
+                this.setState({
+                  deadline:
+                    selectDate == undefined
+                      ? "NA"
+                      : selectDate.toLocaleDateString(),
+                  datePicker: null,
+                });
+                console.log(this.state);
+              } else {
+                console.log("dateee");
+                this.setState({
+                  date:
+                    selectDate == undefined
+                      ? "NA"
+                      : selectDate.toLocaleDateString(),
+                  datePicker: null,
+                });
+                console.log(this.state);
+              }
             }}
           />
         )}
@@ -224,7 +262,8 @@ const styles = StyleSheet.create({
   },
   input: {
     // maxHeight: 100,
-    marginVertical: 10,
+    marginTop: 4,
+    marginBottom: 14,
     marginHorizontal: 20,
     borderColor: "white",
     borderWidth: 1,
