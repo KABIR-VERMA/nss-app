@@ -314,7 +314,7 @@ class Credits extends Component {
                             style={{padding:'3%'}}
                             color='white'
                           >
-                            <Text style={{fontSize:15, textAlignVertical:'center'}}>
+                            <Text style={{fontSize:15, textAlignVertical:'center',  textDecorationLine:'underline'}}>
                             {" " + this.state.item.phone}
                             </Text>
                           </Ionicons>
@@ -328,11 +328,11 @@ class Credits extends Component {
                               <FontAwesome
                               raised
                               name="whatsapp"
-                              style={{padding:'3%'}}
+                              style={{paddingVertical:'3%'}}
                               size={25}
                               color='white'
                               >
-                                <Text style={{fontSize:15}}>
+                                <Text style={{fontSize:15,textAlignVertical:'center', textDecorationLine:'underline'}}>
                             {" " + this.state.item.phone}
                             </Text>
                             </FontAwesome>
@@ -351,7 +351,7 @@ class Credits extends Component {
                             style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
                             color='white'
                           >
-                            <Text style={{fontSize:15}}>
+                            <Text style={{fontSize:15, textAlignVertical:'center',textDecorationLine:'underline'}}>
                             {" " + this.state.item.email}
                             </Text>
                           </Ionicons>
@@ -376,7 +376,7 @@ class Credits extends Component {
                           size={25}
                           style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
                         >
-                        <Text style={{fontSize:15}}>
+                        <Text style={{fontSize:15, textAlignVertical:'center', textDecorationLine:'underline'}}>
                             {" " + this.state.item.website}
                             </Text>
                         </AntDesign>

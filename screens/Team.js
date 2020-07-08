@@ -446,7 +446,7 @@ class Team extends Component {
                             style={{padding:'3%'}}
                             color='white'
                           >
-                            <Text style={{fontSize:15, textAlignVertical:'center'}}>
+                            <Text style={{fontSize:15, textAlignVertical:'center', textDecorationLine:'underline'}}>
                             {" " + this.state.item.phone}
                             </Text>
                           </Ionicons>
@@ -464,7 +464,7 @@ class Team extends Component {
                               size={25}
                               color='white'
                               >
-                                <Text style={{fontSize:15}}>
+                                <Text style={{fontSize:15, textDecorationLine:'underline'}}>
                             {" " + this.state.item.phone}
                             </Text>
                             </FontAwesome>
@@ -483,7 +483,7 @@ class Team extends Component {
                             style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
                             color='white'
                           >
-                            <Text style={{fontSize:15}}>
+                            <Text style={{fontSize:15,  textDecorationLine:'underline'}}>
                             {" " + this.state.item.email}
                             </Text>
                           </Ionicons>
@@ -508,7 +508,7 @@ class Team extends Component {
                           size={25}
                           style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
                         >
-                        <Text style={{fontSize:15}}>
+                        <Text style={{fontSize:15,  textDecorationLine:'underline'}}>
                             {" " + this.state.item.website}
                             </Text>
                         </AntDesign>
@@ -632,5 +632,10 @@ var styles = StyleSheet.create({
     color: "white",
     textAlign:'center'
   },
+  link: {
+    color: "white",
+    textAlign:'center',
+    textDecorationLine:"underline",
+  }
 });
 export default withFirebaseHOC(Team);

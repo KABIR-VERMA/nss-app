@@ -9,7 +9,7 @@ const data = [
         hostel:"Satpura",
         email:"singhayush4499@gmail.com",
         website:"www.github.com/webster-781",
-        bio:"I like enjoying good stuff that is good for me.\nHello World",
+        bio:"I like Maths and doing cool stuff with programming. I like to play chess, play drums and reading novels.",
     },
     {
         image_source:require('../assets/ayush-verma.jpg'),
