@@ -17,7 +17,7 @@ import {
 import { ListItem, Icon } from "react-native-elements";
 import DropDownItem from "react-native-drop-down-item";
 import Expo from "expo";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, FontAwesome } from "@expo/vector-icons";
 import firebase from "firebase";
 import { withFirebaseHOC } from "../../config/Firebase";
 import Gradient from "../../components/Gradient";
@@ -328,29 +328,46 @@ class ProjectListScreen extends React.Component {
             {item.name != "" && (
               <Text style={{ color: "white" }}>{item.name}</Text>
             )}
-            {item.phone != "" && (
-              <Text
-                style={{ color: "yellow" }}
-                onPress={() => {
-                  Linking.openURL(`tel:${item.phone}`);
-                }}
-              >
-                {item.phone}
-              </Text>
-            )}
-            {item.email != "" && (
-              <Text
-                style={{ color: "yellow" }}
-                onPress={() => {
-                  Linking.openURL(`mailto:${item.email}`);
-                }}
-              >
-                {item.email}
-              </Text>
-            )}
             {item.hostel != "" && (
               <Text style={{ color: "white" }}>{item.hostel}</Text>
             )}
+            <View style={{flexDirection:'row', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
+              {item.phone != "" && (
+                <Ionicons
+                  style={{padding:'10%'}}
+                  name="md-call"
+                  size={30}
+                  color='white'
+                  onPress={() => {
+                    Linking.openURL(`tel:${item.phone}`);
+                  }}
+                >
+                </Ionicons>
+              )}
+              {item.phone != "" && (
+                    <FontAwesome
+                    name="whatsapp"
+                    style={{padding: '10%'}}
+                    size={30}
+                    color='white'
+                      onPress={() => {
+                        Linking.openURL(`https://wa.me/91${item.phone}`);
+                      }}
+                    />
+                  )}
+              {item.email != "" && (
+                <Ionicons
+                  name="md-mail"
+                  style={{padding: '10%',}}
+                  size={30}
+                  color='white'
+                  onPress={() => {
+                    Linking.openURL(`mailto:${item.email}`);
+                  }}
+                >
+                </Ionicons>
+              )}
+              </View>
           </Body>
         </CardItem>
       </Card>
