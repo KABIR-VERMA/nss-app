@@ -176,7 +176,7 @@ class Credits extends Component {
               source={
                 item.profile_image != ""
                   ? { uri: item.profile_image }
-                  : require("../assets/avatar.png")
+                  : item.image_source
               }
               style={styles.cardImage}
             />
@@ -191,39 +191,46 @@ class Credits extends Component {
               </View>
               <View style={{flexDirection:'row', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
               {item.phone != "" && (
+                <TouchableOpacity
+                onPress={() => {
+                    Linking.openURL(`tel:${item.phone}`);
+                  }}
+                >
                 <Ionicons
                   style={{padding:'10%'}}
                   name="md-call"
                   size={30}
                   color='white'
-                  onPress={() => {
-                    Linking.openURL(`tel:${item.phone}`);
-                  }}
                 >
                 </Ionicons>
+                </TouchableOpacity>
               )}
               {item.phone != "" && (
+                    <TouchableOpacity
+                    onPress={() => {
+                        Linking.openURL(`https://wa.me/91${item.phone}`);
+                      }}
+                    >
                     <FontAwesome
                     name="whatsapp"
                     style={{padding: '10%'}}
                     size={30}
-                    color='white'
-                      onPress={() => {
-                        Linking.openURL(`https://wa.me/91${item.phone}`);
-                      }}
-                    />
+                    color='white'/>
+                    </TouchableOpacity>
                   )}
               {item.email != "" && (
+                <TouchableOpacity
+                onPress={() => {
+                    Linking.openURL(`mailto:${item.email}`);
+                  }}
+                >
                 <Ionicons
                   name="md-mail"
                   style={{padding: '10%',}}
                   size={30}
                   color='white'
-                  onPress={() => {
-                    Linking.openURL(`mailto:${item.email}`);
-                  }}
-                >
-                </Ionicons>
+                />
+                </TouchableOpacity>
               )}
               </View>
               <View style={{marginLeft:'auto',}}>
@@ -276,7 +283,7 @@ class Credits extends Component {
                       source={
                         this.state.item.profile_image.toString().length > 4
                           ? { uri: this.state.item.profile_image }
-                          : require("../assets/avatar.png")
+                          : this.state.item.image_source
                       }
                       style={{ height: 200, width: 200, flex: 1 }}
                     />
@@ -296,57 +303,63 @@ class Credits extends Component {
                       </View>
                       <View style={{flexDirection:'column', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
                         {this.state.item.phone != "" && (
+                        <TouchableOpacity 
+                        onPress={() => {
+                            Linking.openURL(`tel:${this.state.item.phone}`);
+                        }}>
                           <Ionicons
+                            raised
                             name="md-call"
                             size={25}
                             style={{padding:'3%'}}
                             color='white'
-                            onPress={() => {
-                              Linking.openURL(`tel:${this.state.item.phone}`);
-                            }}
                           >
                             <Text style={{fontSize:15, textAlignVertical:'center'}}>
                             {" " + this.state.item.phone}
                             </Text>
                           </Ionicons>
+                          </TouchableOpacity>
                         )}
                         {this.state.item.phone != "" && (
+                              <TouchableOpacity 
+                              onPress={() => {
+                                Linking.openURL(`https://wa.me/91${this.state.item.phone}`);
+                              }}>
                               <FontAwesome
+                              raised
                               name="whatsapp"
                               style={{padding:'3%'}}
                               size={25}
                               color='white'
-                                onPress={() => {
-                                  Linking.openURL(`https://wa.me/91${this.state.item.phone}`);
-                                }}
                               >
                                 <Text style={{fontSize:15}}>
                             {" " + this.state.item.phone}
                             </Text>
                             </FontAwesome>
+                            </TouchableOpacity>
                             )}
                         {this.state.item.email != "" && (
+                          <TouchableOpacity 
+                          onPress={() => {
+                            Linking.openURL(`mailto:${this.state.item.email}`);
+                          }}
+                          >
                           <Ionicons
+                            raised
                             name="md-mail"
                             size={25}
                             style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
                             color='white'
-                            onPress={() => {
-                              Linking.openURL(`mailto:${this.state.item.email}`);
-                            }}
                           >
                             <Text style={{fontSize:15}}>
                             {" " + this.state.item.email}
                             </Text>
                           </Ionicons>
+                          </TouchableOpacity>
                         )}
                         {(this.state.item.website != null && this.state.item.website !='') && (
-                        <AntDesign
-                          name='earth'
-                          color='white'
-                          size={25}
-                          style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
-                          onPress={() => {
+                        <TouchableOpacity
+                        onPress={() => {
                             var t = this.state.item.website;
                             t = t.substring(0, 4);
                             Linking.openURL(
@@ -354,11 +367,20 @@ class Credits extends Component {
                                 ? t
                                 : "https://" + this.state.item.website
                             );
-                          }}
+                        }}
+                        >
+                        <AntDesign
+                          raised
+                          name='earth'
+                          color='white'
+                          size={25}
+                          style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
                         >
                         <Text style={{fontSize:15}}>
                             {" " + this.state.item.website}
-                            </Text>                        </AntDesign>
+                            </Text>
+                        </AntDesign>
+                        </TouchableOpacity>
                       )}
                       </View>                      
                       

@@ -333,39 +333,46 @@ class ProjectListScreen extends React.Component {
             )}
             <View style={{flexDirection:'row', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
               {item.phone != "" && (
+                <TouchableOpacity
+                onPress={() => {
+                    Linking.openURL(`tel:${item.phone}`);
+                  }}
+                >
                 <Ionicons
                   style={{padding:'10%'}}
                   name="md-call"
                   size={30}
                   color='white'
-                  onPress={() => {
-                    Linking.openURL(`tel:${item.phone}`);
-                  }}
                 >
                 </Ionicons>
+                </TouchableOpacity>
               )}
               {item.phone != "" && (
+                    <TouchableOpacity
+                    onPress={() => {
+                        Linking.openURL(`https://wa.me/91${item.phone}`);
+                      }}
+                    >
                     <FontAwesome
                     name="whatsapp"
                     style={{padding: '10%'}}
                     size={30}
-                    color='white'
-                      onPress={() => {
-                        Linking.openURL(`https://wa.me/91${item.phone}`);
-                      }}
-                    />
+                    color='white'/>
+                    </TouchableOpacity>
                   )}
               {item.email != "" && (
+                <TouchableOpacity
+                onPress={() => {
+                    Linking.openURL(`mailto:${item.email}`);
+                  }}
+                >
                 <Ionicons
                   name="md-mail"
                   style={{padding: '10%',}}
                   size={30}
                   color='white'
-                  onPress={() => {
-                    Linking.openURL(`mailto:${item.email}`);
-                  }}
-                >
-                </Ionicons>
+                />
+                </TouchableOpacity>
               )}
               </View>
           </Body>
