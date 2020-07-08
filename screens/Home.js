@@ -326,7 +326,7 @@ class Home extends Component {
                 </Text>
               )}
               <Hyperlink
-                linkStyle={{ color: "yellow" }}
+                linkStyle={{ color: "yellow", textDecorationLine: 'underline'}}
                 onPress={(url, text) => {
                   Linking.openURL(url);
                 }}
