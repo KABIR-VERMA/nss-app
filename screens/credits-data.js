@@ -33,6 +33,17 @@ const data = [
         bio:"Sarcastic, Curious, Rational, Always ready to help. Love scientific discussions. Late night fun group chat with friends, mocking each other, makes my day.",
     },
     {
+        image_source:require('../assets/harshit-abrol.jpg'),
+        profile_image:"",
+        name:"Harshit Abrol",
+        designation:"Design",
+        phone:"",
+        hostel:"",
+        email:"",
+        website:"",
+        bio:"I was involved in curating the design features of the application.",        
+    },
+    {
         image_source:require('../assets/rahul-parmar.jpg'),
         profile_image:"",
         name:"Rahul Parmar",
