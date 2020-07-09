@@ -19,8 +19,9 @@ import { Button, Icon, Fab, Card, CardItem, Body } from "native-base";
 import { withFirebaseHOC } from "../config/Firebase";
 import * as firebase from "firebase";
 import Gradient from "../components/Gradient";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons,AntDesign, FontAwesome} from "@expo/vector-icons";
 import Carousel, { Pagination } from "react-native-snap-carousel";
+// import Icon from 'react-native-vector-icons/dist/FontAwesome';
 // import { TouchableOpacity } from 'react-native-gesture-handler';
 
 var width = Dimensions.get("window").width;
@@ -312,32 +313,63 @@ class Team extends Component {
               style={styles.cardImage}
             />
           </CardItem>
-          <CardItem style={{ backgroundColor: "rgba(0,0,0,0.2)" }}>
-            <Body style={{ backgroundColor: "transparent" }}>
+          <CardItem style={{ backgroundColor: "rgba(0,0,0,0.2)"}}>
+            <Body style={{ backgroundColor: "transparent"}}>
+              <View style={{marginLeft:'auto', marginRight:'auto'}}>
               {item.name != "" && <Text style={styles.text}>{item.name}</Text>}
-              {item.phone != "" && (
-                <Text
-                  style={{ color: "yellow" }}
-                  onPress={() => {
-                    Linking.openURL(`tel:${item.phone}`);
-                  }}
-                >
-                  {item.phone}
-                </Text>
-              )}
-              {item.email != "" && (
-                <Text
-                  style={{ color: "yellow" }}
-                  onPress={() => {
-                    Linking.openURL(`mailto:${item.email}`);
-                  }}
-                >
-                  {item.email}
-                </Text>
-              )}
               {item.hostel != "" && (
                 <Text style={styles.text}>{item.hostel}</Text>
               )}
+              </View>
+              <View style={{flexDirection:'row', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
+              {item.phone != "" && (
+                <TouchableOpacity
+                onPress={() => {
+                    Linking.openURL(`tel:${item.phone}`);
+                  }}
+                >
+                <Ionicons
+                  style={{padding:'10%'}}
+                  name="md-call"
+                  size={30}
+                  color='white'
+                >
+                </Ionicons>
+                </TouchableOpacity>
+              )}
+              {item.phone != "" && (
+                    <TouchableOpacity
+                    onPress={() => {
+                        Linking.openURL(`https://wa.me/91${item.phone}`);
+                      }}
+                    >
+                    <FontAwesome
+                    name="whatsapp"
+                    style={{padding: '10%'}}
+                    size={30}
+                    color='white'/>
+                    </TouchableOpacity>
+                  )}
+              {item.email != "" && (
+                <TouchableOpacity
+                onPress={() => {
+                    Linking.openURL(`mailto:${item.email}`);
+                  }}
+                >
+                <Ionicons
+                  name="md-mail"
+                  style={{padding: '10%',}}
+                  size={30}
+                  color='white'
+                />
+                </TouchableOpacity>
+              )}
+              </View>
+              <View style={{marginLeft:'auto',}}>
+              <Text style={{color:'yellow'}}>
+              Know More...
+              </Text>
+              </View>
             </Body>
           </CardItem>
         </Card>
@@ -390,25 +422,76 @@ class Team extends Component {
                   </CardItem>
                   <CardItem style={{ backgroundColor: "transparent" }}>
                     <Body>
+                      <View style={{marginLeft:'auto', marginRight:'auto'}}>
                       <Text style={styles.text}>{this.state.item.name}</Text>
                       <Text style={styles.text}>
                         {this.state.item.designation}
                       </Text>
-                      {this.state.item.phone != "" && (
-                        <Text style={styles.text}>{this.state.item.phone}</Text>
-                      )}
-                      {this.state.item.email != "" && (
-                        <Text style={styles.text}>{this.state.item.email}</Text>
-                      )}
                       {this.state.item.hostel != "" && (
                         <Text style={styles.text}>
                           {this.state.item.hostel}
                         </Text>
                       )}
-                      {this.state.item.website != "" && (
-                        <Text
-                          style={{ color: "yellow" }}
+                      </View>
+                      <View style={{flexDirection:'column', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
+                        {this.state.item.phone != "" && (
+                        <TouchableOpacity 
+                        onPress={() => {
+                            Linking.openURL(`tel:${this.state.item.phone}`);
+                        }}>
+                          <Ionicons
+                            raised
+                            name="md-call"
+                            size={25}
+                            style={{padding:'3%'}}
+                            color='white'
+                          >
+                            <Text style={{fontSize:15, textAlignVertical:'center', textDecorationLine:'underline'}}>
+                            {" " + this.state.item.phone}
+                            </Text>
+                          </Ionicons>
+                          </TouchableOpacity>
+                        )}
+                        {this.state.item.phone != "" && (
+                              <TouchableOpacity 
+                              onPress={() => {
+                                Linking.openURL(`https://wa.me/91${this.state.item.phone}`);
+                              }}>
+                              <FontAwesome
+                              raised
+                              name="whatsapp"
+                              style={{padding:'3%'}}
+                              size={25}
+                              color='white'
+                              >
+                                <Text style={{fontSize:15, textDecorationLine:'underline'}}>
+                            {" " + this.state.item.phone}
+                            </Text>
+                            </FontAwesome>
+                            </TouchableOpacity>
+                            )}
+                        {this.state.item.email != "" && (
+                          <TouchableOpacity 
                           onPress={() => {
+                            Linking.openURL(`mailto:${this.state.item.email}`);
+                          }}
+                          >
+                          <Ionicons
+                            raised
+                            name="md-mail"
+                            size={25}
+                            style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
+                            color='white'
+                          >
+                            <Text style={{fontSize:15,  textDecorationLine:'underline'}}>
+                            {" " + this.state.item.email}
+                            </Text>
+                          </Ionicons>
+                          </TouchableOpacity>
+                        )}
+                        {(this.state.item.website != null && this.state.item.website !='') && (
+                        <TouchableOpacity
+                        onPress={() => {
                             var t = this.state.item.website;
                             t = t.substring(0, 4);
                             Linking.openURL(
@@ -416,11 +499,23 @@ class Team extends Component {
                                 ? t
                                 : "https://" + this.state.item.website
                             );
-                          }}
+                        }}
                         >
-                          {this.state.item.website}
-                        </Text>
+                        <AntDesign
+                          raised
+                          name='earth'
+                          color='white'
+                          size={25}
+                          style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
+                        >
+                        <Text style={{fontSize:15,  textDecorationLine:'underline'}}>
+                            {" " + this.state.item.website}
+                            </Text>
+                        </AntDesign>
+                        </TouchableOpacity>
                       )}
+                      </View>                      
+                      
                       {this.state.item.bio != "" && (
                         <Text style={styles.text}>{this.state.item.bio}</Text>
                       )}
@@ -535,6 +630,12 @@ var styles = StyleSheet.create({
 
   text: {
     color: "white",
+    textAlign:'center'
   },
+  link: {
+    color: "white",
+    textAlign:'center',
+    textDecorationLine:"underline",
+  }
 });
 export default withFirebaseHOC(Team);
