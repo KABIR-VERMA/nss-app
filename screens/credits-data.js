@@ -2,8 +2,8 @@ import React from "react";
 
 const data = [
   {
-    profile_image:
-      "https://scontent.fdel9-1.fna.fbcdn.net/v/t1.0-0/p640x640/66278041_120821215857588_1518197185957593088_o.jpg?_nc_cat=111&_nc_sid=e3f864&_nc_ohc=kjgYT_-zbY8AX-8iiJv&_nc_ht=scontent.fdel9-1.fna&_nc_tp=6&oh=67756ac5d1aed2558e9ace5413a6976f&oe=5F2BB73E",
+    profile_image:"",
+    image_source:require("../assets/ayush-singh.jpg"),
     name: "Ayush Singh",
     designation: "Front-End",
     phone: "8860822471",
@@ -26,7 +26,7 @@ const data = [
       "Making the world better, one innovation at a time. Like to make things which touches the daily life of people. I love cinema, coffee and memes.",
   },
   {
-    image_source: require("../assets/muditgarg.jpg"),
+    image_source: require("../assets/mudit-garg.jpeg"),
     profile_image: "",
     name: "Mudit Garg",
     designation: "Full Stack Developer",

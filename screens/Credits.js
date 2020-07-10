@@ -77,7 +77,6 @@ class Credits extends Component {
         <View style={{ marginVertical: 10, flex: 1 }}>
           {this.renderModal()}
           {this.renderSectionList()}
-          {global.isAdmin ? this.addMemberButton() : null}
         </View>
       </Gradient.diagonalGradient>
     );
@@ -457,19 +456,6 @@ class Credits extends Component {
           </View>
         </Modal>
       </View>
-    );
-  };
-
-  addMemberButton = () => {
-    return (
-      <Fab
-        containerStyle={{}}
-        style={{ backgroundColor: "#5067FF" }}
-        position="bottomRight"
-        onPress={this.handleAddTeam}
-      >
-        <Icon name="md-person-add" />
-      </Fab>
     );
   };
 }

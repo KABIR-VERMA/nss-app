@@ -8,9 +8,9 @@
     "orientation": "portrait",
     "icon": "./assets/NSSlogoPng.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/nss-splash.png",
       "resizeMode": "cover",
-      "backgroundColor": "#F57C00"
+      "backgroundColor": "#426885"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
