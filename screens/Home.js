@@ -36,8 +36,9 @@ const tableHeader = ["S.no", "Name", "Date", "Status"];
 var width = Dimensions.get("window").width;
 var height = Dimensions.get("window").height;
 // console.log(width);
-// const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3];
-const rowWidth = [width / 2.8, width / 5.1, width / 5.2, width / 5.2];
+// const rowWidth = [width / 10, width / 2.5, width / 5.3, width / 5.3]; // With S.no
+// const rowWidth = [width / 2.8, width / 5.1, width / 5.2, width / 5.2]; // With Apply Deadline
+const rowWidth = [width / 2.8, width / 5.15, width / 5.2, width / 5.2];
 
 YellowBox.ignoreWarnings(["Setting a timer"]);
 const _console = _.clone(console);
@@ -82,24 +83,12 @@ class Home extends Component {
         });
 
         this.sortEvents(events);
-
-        // for (let j = 0; j < events.length; j++) {
-        //   const rowData = [];
-        //   // console.log(events[j]);
-        //   rowData.push(this.generateCell(j + 1, 0));
-        //   rowData.push(this.generateCell(events[j].title, 1));
-        //   rowData.push(this.generateCell(events[j].date, 2));
-        //   rowData.push(this.generateCell(events[j].link, 3, false, events[j]));
-        //   tableData.push(rowData);
-        // }
         for (let j = 0; j < events.length; j++) {
           const rowData = [];
-          // console.log(events[j]);
-          // rowData.push(this.generateCell(j + 1, 0));
-          rowData.push(this.generateCell(events[j].title, 0));
-          rowData.push(this.generateCell(events[j].deadline, 1));
-          rowData.push(this.generateCell(events[j].date, 2));
-          rowData.push(this.generateCell(events[j].link, 3, false, events[j]));
+          rowData.push(this.generateCell(j, events[j].title, 0));
+          rowData.push(this.generateCell(j, events[j].deadline, 1));
+          rowData.push(this.generateCell(j, events[j].date, 2));
+          rowData.push(this.generateCell(j, events[j].link, 3, events[j]));
           tableData.push(rowData);
         }
         this.setState({ tableData, refreshing: false });
@@ -113,20 +102,25 @@ class Home extends Component {
     return (
       <Gradient.diagonalGradient>
         {this.state.overlay ? this.renderOverlay() : null}
-        <View style={styles.container}>
-          <Image
-            resizeMode="contain"
-            // source={require("../assets/IconWithBgColor.png")}
-            source={require("../assets/NSSlogoPng.png")}
-            style={{ width: "20%", height: "15%" }}
-          />
-          <Text style={styles.header}>NSS, IIT Delhi</Text>
-          <View style={styles.hr} />
-          <Text style={styles.description}>{description}</Text>
-          <View style={styles.hr} />
-          {this.state.tableData ? this.tableView(this.state.tableData) : null}
-          {global.isAdmin ? this.addEventButton() : null}
-        </View>
+        <ScrollView removeClippedSubviews={true}>
+          <View
+            // style={styles.container}
+            style={{ alignItems: "center", padding: "1%" }}
+          >
+            <Image
+              resizeMode="contain"
+              // source={require("../assets/IconWithBgColor.png")}
+              source={require("../assets/NSSlogoPng.png")}
+              style={{ width: 100, height: 100 }}
+            />
+            <Text style={styles.header}>NSS, IIT Delhi</Text>
+            <View style={styles.hr} />
+            <Text style={styles.description}>{description}</Text>
+            <View style={styles.hr} />
+            {this.state.tableData ? this.tableView(this.state.tableData) : null}
+          </View>
+        </ScrollView>
+        {global.isAdmin ? this.addEventButton() : null}
       </Gradient.diagonalGradient>
     );
   }
@@ -148,19 +142,20 @@ class Home extends Component {
     });
   };
 
-  generateCell = (text, column, head = false, item = null) => {
+  generateCell = (sno, text, column, item = null) => {
     if (column == 3) {
-      return this.applyButton(item);
+      return this.applyButton(sno, item);
     }
     return (
       <View
+        key={sno}
         style={[
           styles.container,
           {
             borderColor: "white",
             borderWidth: 0.5,
             borderLeftWidth: column == 0 ? 0 : 0.5,
-            borderTopWidth: head ? 0 : 0.5,
+            borderTopWidth: sno == -1 ? 0 : 0.5,
             borderRightWidth: column == -1 ? 0 : 0.5,
             minHeight: 35,
             padding: 3,
@@ -171,7 +166,7 @@ class Home extends Component {
           style={{
             textAlign: "center",
             color: "white",
-            fontWeight: head ? "bold" : "normal",
+            fontWeight: sno == -1 ? "bold" : "normal",
           }}
         >
           {text}
@@ -186,14 +181,14 @@ class Home extends Component {
     // tabheader.push(this.generateCell("Name", 1, true));
     // tabheader.push(this.generateCell("Date", 2, true));
     // tabheader.push(this.generateCell("", -1, true));
-    tabheader.push(this.generateCell("Name", 0, true));
-    tabheader.push(this.generateCell("Apply\nDeadline", 1, true));
-    tabheader.push(this.generateCell("Event\nDate", 2, true));
-    tabheader.push(this.generateCell("", -1, true));
+    tabheader.push(this.generateCell(-1, "Name", 0));
+    tabheader.push(this.generateCell(-1, "Apply\nDeadline", 1));
+    tabheader.push(this.generateCell(-1, "Event\nDate", 2));
+    tabheader.push(this.generateCell(-1, "", -1));
     return (
       <View
         style={{
-          width: "95%",
+          // width: "95%",
           height: global.isAdmin ? "40%" : "50%",
           marginTop: "5%",
         }}
@@ -207,9 +202,11 @@ class Home extends Component {
             textStyle={{ textAlign: "center", color: "white" }}
           />
         </Table>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, minHeight: 100 }}>
           {this.state.tableData.length > 0 ? (
             <FlatList
+              nestedScrollEnabled={true}
+              removeClippedSubviews={true}
               data={this.state.tableData}
               keyExtractor={(item, ind) => ind.toString()}
               renderItem={({ item, index }) => {
@@ -226,7 +223,7 @@ class Home extends Component {
             />
           ) : (
             <ActivityIndicator
-              style={{ marginTop: "15%" }}
+              style={{ marginTop: 40 }}
               size={30}
               color="white"
             />
@@ -249,15 +246,17 @@ class Home extends Component {
     );
   };
 
-  applyButton = (item) => {
+  applyButton = (sno, item) => {
     return (
       <View
+        key={sno}
         style={[
           styles.container,
           { borderColor: "white", borderWidth: 0.5, borderRightWidth: 0 },
         ]}
       >
         <TouchableOpacity
+          key={sno}
           onPress={() => this.handleApply(item)}
           style={styles.applyButton}
         >
@@ -327,7 +326,7 @@ class Home extends Component {
                 </Text>
               )}
               <Hyperlink
-                linkStyle={{ color: "yellow", textDecorationLine: 'underline'}}
+                linkStyle={{ color: "yellow", textDecorationLine: "underline" }}
                 onPress={(url, text) => {
                   Linking.openURL(url);
                 }}
@@ -436,7 +435,7 @@ class Home extends Component {
 
   addEventButton = () => {
     return (
-      <View style={{}}>
+      <View style={{ padding: 5 }}>
         <FormButton
           title="Add Event"
           onPress={() => {
