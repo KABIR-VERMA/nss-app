@@ -25,7 +25,9 @@ class Contact extends React.Component {
           <TouchableOpacity
             style={{ paddingRight: "7%", marginTop: "6%" }}
             onPress={() => {
-              Linking.openURL("fb://page/110459238983201");
+              Linking.openURL("fb://page/110459238983201").catch(() => {
+                Linking.openURL("https://www.facebook.com/NSSIITDelhi/")
+              });
             }}
           >
             <Zocial name="facebook" size={70} color="white" />

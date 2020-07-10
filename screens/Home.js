@@ -24,6 +24,7 @@ import FormButton from "../components/FormButton";
 import { FlatList } from "react-native-gesture-handler";
 import _ from "lodash";
 import Hyperlink from "react-native-hyperlink";
+import * as AddCalendarEvent from "react-native-add-calendar-event";
 
 const bgcolor = "#426885";
 // rgb(66, 104, 133)
