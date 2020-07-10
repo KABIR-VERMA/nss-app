@@ -19,7 +19,7 @@ import { Button, Icon, Fab, Card, CardItem, Body } from "native-base";
 import { withFirebaseHOC } from "../config/Firebase";
 import * as firebase from "firebase";
 import Gradient from "../components/Gradient";
-import { Ionicons, FontAwesome, AntDesign} from "@expo/vector-icons";
+import { Ionicons, FontAwesome, AntDesign } from "@expo/vector-icons";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import creditsData from "./credits-data";
 // import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -94,9 +94,7 @@ class Credits extends Component {
         }
         contentContainerStyle={styles.grid}
         ItemSeparatorComponent={this.FlatListItemSeparator}
-        sections={[
-          { title: 'DEVELOPERS', data: this.state.developers },
-        ]}
+        sections={[{ title: "DEVELOPERS", data: this.state.developers }]}
         renderSectionHeader={({ section }) => {
           return this.renderSectionHeader(section);
         }}
@@ -153,7 +151,7 @@ class Credits extends Component {
             // }
             loop={arr.length > 3 ? true : false}
             decelerationRate={1}
-            firstItem={arr.length > 2 ? Math.floor(arr.length / 2) : 0}
+            firstItem={arr.length > 2 ? Math.floor(arr.length / 2) - 1 : 0}
             // hasParallaxImages={true}
           />
           <Ionicons
@@ -182,61 +180,68 @@ class Credits extends Component {
             />
           </CardItem>
           <CardItem style={{ backgroundColor: "rgba(0,0,0,0.2)" }}>
-          <Body style={{ backgroundColor: "transparent"}}>
-              <View style={{marginLeft:'auto', marginRight:'auto'}}>
-              {item.name != "" && <Text style={styles.text}>{item.name}</Text>}
-              {item.hostel != "" && (
-                <Text style={styles.text}>{item.hostel}</Text>
-              )}
+            <Body style={{ backgroundColor: "transparent" }}>
+              <View style={{ marginLeft: "auto", marginRight: "auto" }}>
+                {item.name != "" && (
+                  <Text style={styles.text}>{item.name}</Text>
+                )}
+                {item.hostel != "" && (
+                  <Text style={styles.text}>{item.hostel}</Text>
+                )}
               </View>
-              <View style={{flexDirection:'row', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
-              {item.phone != "" && (
-                <TouchableOpacity
-                onPress={() => {
-                    Linking.openURL(`tel:${item.phone}`);
-                  }}
-                >
-                <Ionicons
-                  style={{padding:'10%'}}
-                  name="md-call"
-                  size={30}
-                  color='white'
-                >
-                </Ionicons>
-                </TouchableOpacity>
-              )}
-              {item.phone != "" && (
-                    <TouchableOpacity
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignContent: "center",
+                  alignItems: "center",
+                  alignSelf: "center",
+                }}
+              >
+                {item.phone != "" && (
+                  <TouchableOpacity
                     onPress={() => {
-                        Linking.openURL(`https://wa.me/91${item.phone}`);
-                      }}
-                    >
+                      Linking.openURL(`tel:${item.phone}`);
+                    }}
+                  >
+                    <Ionicons
+                      style={{ padding: "10%" }}
+                      name="md-call"
+                      size={30}
+                      color="white"
+                    ></Ionicons>
+                  </TouchableOpacity>
+                )}
+                {item.phone != "" && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      Linking.openURL(`https://wa.me/91${item.phone}`);
+                    }}
+                  >
                     <FontAwesome
-                    name="whatsapp"
-                    style={{padding: '10%'}}
-                    size={30}
-                    color='white'/>
-                    </TouchableOpacity>
-                  )}
-              {item.email != "" && (
-                <TouchableOpacity
-                onPress={() => {
-                    Linking.openURL(`mailto:${item.email}`);
-                  }}
-                >
-                <Ionicons
-                  name="md-mail"
-                  style={{padding: '10%',}}
-                  size={30}
-                  color='white'
-                />
-                </TouchableOpacity>
-              )}
+                      name="whatsapp"
+                      style={{ padding: "10%" }}
+                      size={30}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                )}
+                {item.email != "" && (
+                  <TouchableOpacity
+                    onPress={() => {
+                      Linking.openURL(`mailto:${item.email}`);
+                    }}
+                  >
+                    <Ionicons
+                      name="md-mail"
+                      style={{ padding: "10%" }}
+                      size={30}
+                      color="white"
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
-              <View style={{marginLeft:'auto',}}>
-              <Text style={{color:'yellow'}}>
-              Know More...
-              </Text>
+              <View style={{ marginLeft: "auto" }}>
+                <Text style={{ color: "yellow" }}>Know More...</Text>
               </View>
             </Body>
           </CardItem>
@@ -251,7 +256,8 @@ class Credits extends Component {
         <View style={{ borderBottomColor: "white", borderBottomWidth: 1 }} />
         <Text style={{ alignSelf: "center", fontSize: 40, color: "white" }}>
           {"  "}
-          {section.title}{"  "}
+          {section.title}
+          {"  "}
         </Text>
         <View style={{ borderBottomColor: "white", borderBottomWidth: 1 }} />
       </View>
@@ -289,101 +295,147 @@ class Credits extends Component {
                     />
                   </CardItem>
                   <CardItem style={{ backgroundColor: "transparent" }}>
-                  <Body>
-                      <View style={{marginLeft:'auto', marginRight:'auto'}}>
-                      <Text style={styles.text}>{this.state.item.name}</Text>
-                      <Text style={styles.text}>
-                        {this.state.item.designation}
-                      </Text>
-                      {this.state.item.hostel != "" && (
+                    <Body>
+                      <View style={{ marginLeft: "auto", marginRight: "auto" }}>
+                        <Text style={styles.text}>{this.state.item.name}</Text>
                         <Text style={styles.text}>
-                          {this.state.item.hostel}
+                          {this.state.item.designation}
                         </Text>
-                      )}
+                        {this.state.item.hostel != "" && (
+                          <Text style={styles.text}>
+                            {this.state.item.hostel}
+                          </Text>
+                        )}
                       </View>
-                      <View style={{flexDirection:'column', alignContent:'center', alignItems:'center',alignSelf:'center'}}>
+                      <View
+                        style={{
+                          flexDirection: "column",
+                          alignContent: "center",
+                          alignItems: "center",
+                          alignSelf: "center",
+                        }}
+                      >
                         {this.state.item.phone != "" && (
-                        <TouchableOpacity 
-                        onPress={() => {
-                            Linking.openURL(`tel:${this.state.item.phone}`);
-                        }}>
-                          <Ionicons
-                            raised
-                            name="md-call"
-                            size={25}
-                            style={{padding:'3%'}}
-                            color='white'
+                          <TouchableOpacity
+                            onPress={() => {
+                              Linking.openURL(`tel:${this.state.item.phone}`);
+                            }}
                           >
-                            <Text style={{fontSize:15, textAlignVertical:'center',  textDecorationLine:'underline'}}>
-                            {" " + this.state.item.phone}
-                            </Text>
-                          </Ionicons>
+                            <Ionicons
+                              raised
+                              name="md-call"
+                              size={25}
+                              style={{ padding: "3%" }}
+                              color="white"
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  textAlignVertical: "center",
+                                  textDecorationLine: "underline",
+                                }}
+                              >
+                                {" " + this.state.item.phone}
+                              </Text>
+                            </Ionicons>
                           </TouchableOpacity>
                         )}
                         {this.state.item.phone != "" && (
-                              <TouchableOpacity 
-                              onPress={() => {
-                                Linking.openURL(`https://wa.me/91${this.state.item.phone}`);
-                              }}>
-                              <FontAwesome
+                          <TouchableOpacity
+                            onPress={() => {
+                              Linking.openURL(
+                                `https://wa.me/91${this.state.item.phone}`
+                              );
+                            }}
+                          >
+                            <FontAwesome
                               raised
                               name="whatsapp"
-                              style={{paddingVertical:'3%'}}
+                              style={{ paddingVertical: "3%" }}
                               size={25}
-                              color='white'
+                              color="white"
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  textAlignVertical: "center",
+                                  textDecorationLine: "underline",
+                                }}
                               >
-                                <Text style={{fontSize:15,textAlignVertical:'center', textDecorationLine:'underline'}}>
-                            {" " + this.state.item.phone}
-                            </Text>
+                                {" " + this.state.item.phone}
+                              </Text>
                             </FontAwesome>
-                            </TouchableOpacity>
-                            )}
-                        {this.state.item.email != "" && (
-                          <TouchableOpacity 
-                          onPress={() => {
-                            Linking.openURL(`mailto:${this.state.item.email}`);
-                          }}
-                          >
-                          <Ionicons
-                            raised
-                            name="md-mail"
-                            size={25}
-                            style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
-                            color='white'
-                          >
-                            <Text style={{fontSize:15, textAlignVertical:'center',textDecorationLine:'underline'}}>
-                            {" " + this.state.item.email}
-                            </Text>
-                          </Ionicons>
                           </TouchableOpacity>
                         )}
-                        {(this.state.item.website != null && this.state.item.website !='') && (
-                        <TouchableOpacity
-                        onPress={() => {
-                            var t = this.state.item.website;
-                            t = t.substring(0, 4);
-                            Linking.openURL(
-                              t.localeCompare("http") == 0
-                                ? t
-                                : "https://" + this.state.item.website
-                            );
-                        }}
-                        >
-                        <AntDesign
-                          raised
-                          name='earth'
-                          color='white'
-                          size={25}
-                          style={{paddingVertical:'3%',marginLeft:'auto', marginRight:'auto'}}
-                        >
-                        <Text style={{fontSize:15, textAlignVertical:'center', textDecorationLine:'underline'}}>
-                            {" " + this.state.item.website}
-                            </Text>
-                        </AntDesign>
-                        </TouchableOpacity>
-                      )}
-                      </View>                      
-                      
+                        {this.state.item.email != "" && (
+                          <TouchableOpacity
+                            onPress={() => {
+                              Linking.openURL(
+                                `mailto:${this.state.item.email}`
+                              );
+                            }}
+                          >
+                            <Ionicons
+                              raised
+                              name="md-mail"
+                              size={25}
+                              style={{
+                                paddingVertical: "3%",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                              }}
+                              color="white"
+                            >
+                              <Text
+                                style={{
+                                  fontSize: 15,
+                                  textAlignVertical: "center",
+                                  textDecorationLine: "underline",
+                                }}
+                              >
+                                {" " + this.state.item.email}
+                              </Text>
+                            </Ionicons>
+                          </TouchableOpacity>
+                        )}
+                        {this.state.item.website != null &&
+                          this.state.item.website != "" && (
+                            <TouchableOpacity
+                              onPress={() => {
+                                var t = this.state.item.website;
+                                t = t.substring(0, 4);
+                                Linking.openURL(
+                                  t.localeCompare("http") == 0
+                                    ? t
+                                    : "https://" + this.state.item.website
+                                );
+                              }}
+                            >
+                              <AntDesign
+                                raised
+                                name="earth"
+                                color="white"
+                                size={25}
+                                style={{
+                                  paddingVertical: "3%",
+                                  marginLeft: "auto",
+                                  marginRight: "auto",
+                                }}
+                              >
+                                <Text
+                                  style={{
+                                    fontSize: 15,
+                                    textAlignVertical: "center",
+                                    textDecorationLine: "underline",
+                                  }}
+                                >
+                                  {" " + this.state.item.website}
+                                </Text>
+                              </AntDesign>
+                            </TouchableOpacity>
+                          )}
+                      </View>
+
                       {this.state.item.bio != "" && (
                         <Text style={styles.text}>{this.state.item.bio}</Text>
                       )}
@@ -434,8 +486,8 @@ var styles = StyleSheet.create({
     color: "white",
   },
   grid: {
-    marginBottom: 'auto',
-    marginTop: 'auto',
+    marginBottom: "auto",
+    marginTop: "auto",
     alignItems: "center",
   },
   SectionHeaderStyle: {
@@ -492,7 +544,7 @@ var styles = StyleSheet.create({
 
   text: {
     color: "white",
-    textAlign:'center'
+    textAlign: "center",
   },
 });
 export default withFirebaseHOC(Credits);
