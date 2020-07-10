@@ -67,7 +67,7 @@ const data = [
   {
     id: "i94u37yry94t",
     info:
-      "If a complaint that you register is not resolved within 15 days, please drop a mail at nsshours©gmail.com. ",
+      "If a complaint that you register is not resolved within 15 days, please drop a mail at nsshours@gmail.com. ",
   },
 ];
 
